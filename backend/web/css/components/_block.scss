@@ -1,0 +1,9 @@
+@import '../colors';
+
+.block {
+  background-color: $additional-color;
+
+  -webkit-box-shadow: -4px 4px 8px 0px rgba(171, 171, 171, 0.2);
+  -moz-box-shadow: -4px 4px 8px 0px rgba(171, 171, 171, 0.2);
+  box-shadow: -4px 4px 8px 0px rgba(171, 171, 171, 0.2);
+}

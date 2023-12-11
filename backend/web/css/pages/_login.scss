@@ -1,0 +1,51 @@
+@import '../colors';
+
+.login {
+  &-page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &-logo {
+    text-align: center;
+    padding: 5rem 0;
+    font-size: 64px;
+  }
+}
+
+#login-form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 1.6rem;
+}
+
+.form-control {
+  color: #a2a2a2;
+  border-color: #a2a2a2;
+  border-radius: 15px;
+
+  &::placeholder {
+    font-style: italic;
+    color: #a2a2a2;
+  }
+}
+
+.help-block {
+  margin-left: .5rem;
+  font-size: 1.6rem;
+  color: $orange;
+}

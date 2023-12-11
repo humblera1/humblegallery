@@ -134,6 +134,7 @@ thead > tr > td {
   border-color: #a2a2a2;
   border-radius: 15px; }
   .form-control::placeholder {
+    font-size: 14px;
     font-style: italic;
     color: #a2a2a2; }
 

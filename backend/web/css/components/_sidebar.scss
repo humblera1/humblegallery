@@ -1,0 +1,49 @@
+.main-sidebar {
+  grid-row: 1/3;
+  padding: 2rem;
+}
+
+.sidebar {
+  height: 100%;
+  border-radius: 30px;
+  padding: 1.5rem 1rem;
+
+  &__content {
+    font-size: 18px;
+  }
+  &__logo {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0 1.5rem 0;
+    margin-bottom: 1rem;
+  }
+
+  .nav-item:hover {
+    background-color: lighten($additional-color, 1.5);
+  }
+}
+
+.nav {
+
+  &-item {
+
+    border-radius: 10px;
+    padding-left: 1.5rem;
+  }
+
+  &-link {
+    padding: .75rem 1rem;
+    color: grey;
+
+    &:hover {
+      color: darken(grey, 25);
+    }
+  }
+
+  &-icon {
+    width: 20px;
+    margin-right: .75rem;
+  }
+}

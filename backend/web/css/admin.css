@@ -74,17 +74,17 @@ fieldset {
     justify-content: center;
     padding: 1rem 0 1.5rem 0;
     margin-bottom: 1rem; }
+  .sidebar .nav-item:hover {
+    background-color: #fff7ed; }
 
 .nav-item {
   border-radius: 10px;
   padding-left: 1.5rem; }
-  .nav-item:hover {
-    background-color: #fff7ed; }
 .nav-link {
   padding: .75rem 1rem;
   color: grey; }
   .nav-link:hover {
-    color: #8d8d8d; }
+    color: #404040; }
 .nav-icon {
   width: 20px;
   margin-right: .75rem; }
@@ -95,7 +95,7 @@ fieldset {
 
 .navbar {
   border-radius: 15px;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 3.5rem;
   justify-content: space-between; }
 
 thead > tr > th {

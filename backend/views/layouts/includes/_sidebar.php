@@ -25,7 +25,7 @@ $admin = Yii::$app->user->identity;
                     [
                         'label' => 'Пользователи',
                         'icon' => 'users',
-                        'url' => ['']
+                        'url' => ['/user']
                     ],
                     [
                         'label' => 'Картины',

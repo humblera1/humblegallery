@@ -119,7 +119,7 @@
 
 .table-hover {
   > tbody > tr:hover {
-    --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-hover-bg);
+    --#{$variable-prefix}table-accent-bg: rgba(250, 233, 212, 0.5);
     color: var(--#{$variable-prefix}table-hover-color);
   }
 }

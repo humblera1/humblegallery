@@ -35,9 +35,9 @@
     color: #ffcd39; }
 
 .link-danger {
-  color: #dc3545; }
+  color: #c44754; }
   .link-danger:hover, .link-danger:focus {
-    color: #b02a37; }
+    color: #9d3943; }
 
 .link-light {
   color: #f8f9fa; }
@@ -332,7 +332,7 @@
   border-color: #ffc107 !important; }
 
 .border-danger {
-  border-color: #dc3545 !important; }
+  border-color: #c44754 !important; }
 
 .border-light {
   border-color: #f8f9fa !important; }
@@ -961,7 +961,7 @@
   color: #ffc107 !important; }
 
 .text-danger {
-  color: #dc3545 !important; }
+  color: #c44754 !important; }
 
 .text-light {
   color: #f8f9fa !important; }
@@ -1003,7 +1003,7 @@
   background-color: #ffc107 !important; }
 
 .bg-danger {
-  background-color: #dc3545 !important; }
+  background-color: #c44754 !important; }
 
 .bg-light {
   background-color: #f8f9fa !important; }

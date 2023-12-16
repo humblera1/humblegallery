@@ -9,14 +9,17 @@ html {
 }
 
 a:active,
-a:hover,
 a {
   text-decoration: none;
   color: grey;
+  &:hover {
+    color: $orange;
+  }
 }
 
 input, select, textarea {
   outline: none;
+  padding-left: 1.5rem !important;
 }
 
 body {

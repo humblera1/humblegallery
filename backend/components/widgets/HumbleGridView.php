@@ -12,6 +12,8 @@ use yii\helpers\Html;
 
 class HumbleGridView extends GridView
 {
+    public $tableOptions = ['class' => 'table table-hover'];
+
     protected function initColumns()
     {
         if (empty($this->columns)) {

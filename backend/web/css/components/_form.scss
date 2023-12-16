@@ -1,0 +1,9 @@
+.control-label {
+  padding-left: 1.25rem;
+  padding-bottom: .25rem;
+}
+
+.form-group.required label:after  {
+  content:" *";
+  color: darkred;
+}

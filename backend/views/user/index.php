@@ -16,32 +16,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="d-flex justify-content-between align-items-center py-4 px-5">
+        <h1><?= Html::encode($this->title) ?></h1>
+    </div>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= HumbleGridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+
         'columns' => [
-            [
-                'attribute' => 'id',
-            ],
             'username',
             'email:email',
-            'password_hash',
             'name',
-            //'surname',
-            //'is_verified',
-            //'is_blocked',
+            'surname',
             //'created_at',
             //'updated_at',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

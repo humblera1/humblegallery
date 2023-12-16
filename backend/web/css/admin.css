@@ -5,13 +5,16 @@ html {
   font-size: 10px; }
 
 a:active,
-a:hover,
 a {
   text-decoration: none;
   color: grey; }
+  a:active:hover,
+  a:hover {
+    color: #ECBC5E; }
 
 input, select, textarea {
-  outline: none; }
+  outline: none;
+  padding-left: 1.5rem !important; }
 
 body {
   margin: 0;
@@ -75,7 +78,7 @@ fieldset {
     padding: 1rem 0 1.5rem 0;
     margin-bottom: 1rem; }
   .sidebar .nav-item:hover {
-    background-color: #fff7ed; }
+    background-color: rgba(252, 234, 211, 0.75); }
 
 .nav-item {
   border-radius: 10px;
@@ -104,6 +107,37 @@ thead > tr > th {
 
 thead > tr > td {
   padding: 3rem 1.5rem !important; }
+
+.filters > :last-child {
+  width: 100px !important; }
+
+tbody > tr > td {
+  padding: 1.5rem 2rem !important; }
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #FFF4E5; }
+
+td:first-child,
+th:first-child {
+  border-radius: 15px 0 0 15px; }
+
+td:last-child,
+th:last-child {
+  border-radius: 0 15px 15px 0; }
+
+.table-bordered th, .table-bordered td {
+  border-bottom: 1px solid rgba(243, 220, 170, 0.5) !important; }
+
+.grid-view td {
+  white-space: nowrap; }
+
+.control-label {
+  padding-left: 1.25rem;
+  padding-bottom: .25rem; }
+
+.form-group.required label:after {
+  content: " *";
+  color: darkred; }
 
 .login-page {
   height: 100vh;

@@ -103,7 +103,7 @@ thead > tr > th {
   padding-top: 3rem !important; }
 
 thead > tr > td {
-  padding: 0 1.5rem 3rem 1.5rem !important; }
+  padding: 3rem 1.5rem !important; }
 
 .login-page {
   height: 100vh;

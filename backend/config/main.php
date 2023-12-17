@@ -1,4 +1,8 @@
 <?php
+
+use common\modules\painting\PaintingModule;
+use common\modules\user\UserModule;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -11,7 +15,18 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'user' => [
+            'class' => UserModule::class,
+            'controllerNamespace' => 'common\modules\user\controllers\admin',
+            'viewPath' => '@common/modules/user/views/admin',
+        ],
+        'painting' => [
+            'class' => PaintingModule::class,
+            'controllerNamespace' => 'common\modules\painting\controllers\admin',
+            'viewPath' => '@common/modules/painting/views/admin',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',

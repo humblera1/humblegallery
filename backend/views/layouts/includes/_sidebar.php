@@ -36,7 +36,7 @@ $admin = Yii::$app->user->identity;
                     [
                         'label' => 'Картины',
                         'icon' => 'image',
-                        'url' => ['']
+                        'url' => ['/painting']
                     ],
                 ]
             ]); ?>

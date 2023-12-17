@@ -1,12 +1,7 @@
 <?php
 
-namespace common\models\query;
+namespace common\modules\user\models\query;
 
-/**
- * This is the ActiveQuery class for [[\common\models\data\User]].
- *
- * @see \common\models\data\User
- */
 class UserQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
@@ -16,17 +11,13 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\data\User[]|array
+     * @return \common\modules\painting\data\User[]|array
      */
     public function all($db = null)
     {
         return parent::all($db);
     }
 
-    /**
-     * {@inheritdoc}
-     * @return \common\models\data\User|array|null
-     */
     public function one($db = null)
     {
         return parent::one($db);

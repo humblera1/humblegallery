@@ -1,21 +1,17 @@
 <?php
 
 use backend\components\widgets\HumbleGridView;
-use common\models\data\User;
+use common\modules\user\models\data\User;
+use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\search\UserSearch $searchModel */
+/** @var \common\modules\painting\search\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
-
-var_dump(Yii::$app->user);
-
 ?>
 <div class="user-index">
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace common\models\data;
+namespace common\modules\user\models\data;
 
-use common\models\query\UserQuery;
+use common\modules\user\models\query\UserQuery;
 use yii\db\ActiveRecord;
 
 /**

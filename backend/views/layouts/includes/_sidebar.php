@@ -23,6 +23,12 @@ $admin = Yii::$app->user->identity;
             <?= MyMenu::widget([
                 'items' => [
                     [
+                        'label' => 'Назначение ролей',
+                        'icon' => 'gear',
+                        'url' => ['/roles'],
+                        'visible' => Yii::$app->user->identity->isSuperadmin(),
+                    ],
+                    [
                         'label' => 'Пользователи',
                         'icon' => 'users',
                         'url' => ['/user']

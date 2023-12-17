@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -209,5 +210,12 @@ class Admin extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function isSuperadmin()
+    {
+        $auth = Yii::$app->authManager;
+
+        return in_array($auth->getRole('superadmin'), $auth->getRolesByUser($this->id));
     }
 }

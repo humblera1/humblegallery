@@ -34,6 +34,11 @@ $admin = Yii::$app->user->identity;
                         'url' => ['/user']
                     ],
                     [
+                        'label' => 'Художники',
+                        'icon' => 'brush',
+                        'url' => ['/artist']
+                    ],
+                    [
                         'label' => 'Картины',
                         'icon' => 'image',
                         'url' => ['/painting']

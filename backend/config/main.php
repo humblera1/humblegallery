@@ -1,5 +1,6 @@
 <?php
 
+use common\modules\artist\ArtistModule;
 use common\modules\painting\PaintingModule;
 use common\modules\user\UserModule;
 
@@ -25,6 +26,11 @@ return [
             'class' => PaintingModule::class,
             'controllerNamespace' => 'common\modules\painting\controllers\admin',
             'viewPath' => '@common/modules/painting/views/admin',
+        ],
+        'artist' => [
+            'class' => ArtistModule::class,
+            'controllerNamespace' => 'common\modules\artist\controllers\admin',
+            'viewPath' => '@common/modules/artist/views/admin',
         ],
     ],
     'components' => [

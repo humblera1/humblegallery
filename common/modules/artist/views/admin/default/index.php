@@ -2,6 +2,7 @@
 
 use backend\components\widgets\HumbleGridView;
 use common\modules\artist\models\data\Artist;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -13,6 +14,11 @@ use yii\widgets\Pjax;
 
 $this->title = 'Художники';
 $this->params['breadcrumbs'][] = $this->title;
+
+$layout = <<< HTML
+
+HTML;
+
 ?>
 <div class="artist-index">
 
@@ -30,22 +36,45 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
-            'id',
             'name',
-            'born',
-            'died',
-            'description',
-            //'image_path',
-            //'rating',
-            //'created_at',
+            [
+                'attribute' => 'born',
+                'filter' => DatePicker::widget([
+                    'attribute' => 'born',
+                    'layout' => '{picker}{input}{remove}',
+                    'model' => $searchModel,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'minViewMode'=>'years',
+                        'format' => 'yyyy',
+                    ],
+                    'options' => [
+                        'placeholder' => 'Дата рождения',
+                    ]
+                ]),
+            ],
+            [
+                'attribute' => 'died',
+
+                'filter' => DatePicker::widget([
+                    'attribute' => 'died',
+
+                    'layout' => '{picker}{input}{remove}',
+                    'model' => $searchModel,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'minViewMode'=>'years',
+                        'format' => 'yyyy',
+                    ],
+                    'options' => [
+                        'placeholder' => 'Дата смерти',
+                    ]
+                ]),
+            ],
             //'updated_at',
             //'is_deleted',
             [
                 'class' => ActionColumn::class,
-                'urlCreator' => function ($action, Artist $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
             ],
         ],
     ]); ?>

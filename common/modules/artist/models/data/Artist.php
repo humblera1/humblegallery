@@ -3,7 +3,7 @@
 namespace common\modules\artist\models\data;
 
 use common\modules\artist\models\query\ArtistQuery;
-use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -25,6 +25,15 @@ class Artist extends ActiveRecord
     public static function tableName(): string
     {
         return 'artist';
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+            ]
+        ];
     }
 
     public function rules(): array
@@ -49,7 +58,7 @@ class Artist extends ActiveRecord
             'rating' => 'Рейтинг',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
-            'is_deleted' => 'ID',
+            'is_deleted' => 'В архиве',
         ];
     }
 

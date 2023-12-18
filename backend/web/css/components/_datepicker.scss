@@ -1,0 +1,33 @@
+@import '../colors';
+
+.datepicker{
+
+  padding: 1.5rem;
+  border-radius: 2.5rem;
+  background-color: $additional-color;
+
+
+  & table {
+    & tr {
+      & td {
+        padding: .8rem !important;
+
+        & span {
+          border-radius: .75rem;
+          &:hover{
+            background-color: lighten($orange, 20%);
+          }
+          &.focused {
+            background-color: $orange;
+          }
+          &.active {
+            background-color: $orange !important;
+          }
+        }
+      }
+      & th {
+        padding: .8rem !important;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -9,31 +10,50 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="artist-form">
+    <div class="col-md-12 mt-5 row">
+        <div class="col-md-6">
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'born')->widget(DatePicker::class, [
+                'options' => [
+                    'id' => 'born',
+                    'placeholder' => 'Выберите дату рождения',
+                    'value' => Yii::$app->formatter->asDate($model->born, 'php:d.m.Y'),
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'minViewMode'=>'years',
+                    'format' => 'yyyy',
+                    'orientation' => 'bottom',
+                ],
+            ]) ?>
 
-    <?= $form->field($model, 'born')->textInput() ?>
+            <?= $form->field($model, 'died')->widget(DatePicker::class, [
+                'options' => [
+                    'id' => 'died',
+                    'placeholder' => 'Выберите дату рождения',
+                    'value' => Yii::$app->formatter->asDate($model->died, 'php:d.m.Y'),
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'minViewMode'=>'years',
+                    'format' => 'yyyy',
+                    'orientation' => 'bottom',
+                ],
+            ]) ?>
 
-    <?= $form->field($model, 'died')->textInput() ?>
+            <?= $form->field($model, 'description')->textarea(['rows' => '6']) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+            <div class="form-group">
+                <?= Html::submitButton('Save', ['class' => 'btn btn-orange']) ?>
+            </div>
+        </div>
+        <div class="col-md-6 px-5">
+            <?= $form->field($model, 'image_path')->fileInput() ?>
 
-    <?= $form->field($model, 'image_path')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'rating')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'is_deleted')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?php ActiveForm::end(); ?>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

@@ -139,6 +139,23 @@ th:last-child {
   content: " *";
   color: darkred; }
 
+.datepicker {
+  padding: 1.5rem;
+  border-radius: 2.5rem;
+  background-color: #FFF4E5; }
+  .datepicker table tr td {
+    padding: .8rem !important; }
+    .datepicker table tr td span {
+      border-radius: .75rem; }
+      .datepicker table tr td span:hover {
+        background-color: #f7e2b9; }
+      .datepicker table tr td span.focused {
+        background-color: #ECBC5E; }
+      .datepicker table tr td span.active {
+        background-color: #ECBC5E !important; }
+  .datepicker table tr th {
+    padding: .8rem !important; }
+
 .login-page {
   height: 100vh;
   width: 100vw;

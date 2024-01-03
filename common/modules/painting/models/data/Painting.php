@@ -3,9 +3,9 @@
 namespace common\modules\painting\models\data;
 
 use common\modules\artist\models\data\Artist;
+use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -21,7 +21,7 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  * @property int|null $start_date Дата начала
  * @property int|null $end_date Дата завершения
  * @property float|null $rating Рейтинг
- * @property string $image_path Путь к изображению
+ * @property string $image_name Путь к изображению
  * @property int $artist_id Художник
  * @property int $created_at Дата добавления
  * @property int $updated_at Дата обновления
@@ -31,8 +31,6 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  */
 class Painting extends ActiveRecord
 {
-    public ?array $movements = null;
-
     /**
      * @var UploadedFile
      */
@@ -58,9 +56,11 @@ class Painting extends ActiveRecord
             'timestamp' => [
                 'class' => TimestampBehavior::class,
             ],
-//            'linkMany' => [
-//                'class' => LinkManyBehavior::class,
-//            ],
+            'linkMany' => [
+                'class' => LinkManyBehavior::class,
+                'relation' => 'movements',
+                'relationReferenceAttribute' => 'movementIds',
+            ],
         ];
     }
 
@@ -74,6 +74,9 @@ class Painting extends ActiveRecord
             [['artist_id'], 'integer'],
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
+
+//            [['movements'], 'each', 'rule' => ['integer']],
+            [['movementIds'], 'safe'],
         ];
     }
 
@@ -90,12 +93,19 @@ class Painting extends ActiveRecord
             'updated_at' => 'Дата обновления',
             'is_deleted' => 'В архиве',
             'image' => 'Изображение',
+            'movementIds' => 'Направления',
         ];
     }
 
     public function getArtist(): ActiveQuery
     {
         return $this->hasOne(Artist::class, ['id' => 'artist_id']);
+    }
+
+    public function getMovements(): ActiveQuery
+    {
+        return $this->hasMany(Movement::class, ['id' => 'movement_id'])
+            ->viaTable('movement_painting', ['painting_id' => 'id']);
     }
 
     public static function find(): PaintingQuery
@@ -105,8 +115,8 @@ class Painting extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        if ($fileName = $this->saveImage()) {
-            $this->image_path = $fileName;
+        if ($imageName = $this->saveImage()) {
+            $this->image_name = $imageName;
             return parent::beforeSave($insert);
         }
 
@@ -118,10 +128,11 @@ class Painting extends ActiveRecord
         $this->image = UploadedFile::getInstance($this, 'image');
         $uploadPath = $this->getUploadPath();
 
-        $imagePath = $uploadPath . '/' . $this->title . '.' . $this->image->extension;
+        $imageName = $this->title . '.' . $this->image->extension;
+        $imagePath = $uploadPath . '/' . $imageName;
 
         if ($this->image->saveAs($imagePath)) {
-            return $imagePath;
+            return $imageName;
         }
 
         return false;
@@ -129,6 +140,6 @@ class Painting extends ActiveRecord
 
     public function getUploadPath(): string
     {
-        return Url::to('@backend/web/uploads/paintings');
+        return Url::to('@common/uploads/paintings');
     }
 }

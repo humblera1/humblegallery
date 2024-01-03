@@ -21,7 +21,7 @@ class m231217_124505_create_painting_table extends Migration
             'start_date' => $this->integer()->comment('Дата начала'),
             'end_date' => $this->integer()->comment('Дата завершения'),
             'rating' => $this->float()->defaultValue(0)->comment('Рейтинг'),
-            'image_path' => $this->string(255)->comment('Изображение'),
+            'image_name' => $this->string(255)->comment('Изображение'),
             'artist_id' => $this->integer()->notNull()->comment('Художник'),
             'created_at' => $this->integer()->notNull()->comment('Дата добавления'),
             'updated_at' => $this->integer()->notNull()->comment('Дата обновления'),

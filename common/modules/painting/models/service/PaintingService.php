@@ -8,6 +8,6 @@ class PaintingService extends Service
 {
     public function getImagePath(): string
     {
-        return '@web/uploads/paintings/' . $this->model->title . '.jpg';
+        return '/uploads/paintings/' . $this->model->image_name;
     }
 }

@@ -22,7 +22,7 @@ class DefaultController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -68,6 +68,11 @@ class DefaultController extends Controller
     public function actionCreate()
     {
         $model = new Painting();
+
+//        $model->load($this->request->post());
+//        $model->save();
+//
+//        $e = $model->getErrors();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

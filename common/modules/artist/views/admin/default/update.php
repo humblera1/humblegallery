@@ -1,9 +1,13 @@
 <?php
 
+use common\modules\artist\models\data\Artist;
 use yii\helpers\Html;
+use yii\web\View;
 
-/** @var yii\web\View $this */
-/** @var common\modules\artist\models\data\Artist $model */
+/**
+ * @var View $this
+ * @var Artist $model
+ */
 
 $this->title = 'Редактирование: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Artists', 'url' => ['index']];

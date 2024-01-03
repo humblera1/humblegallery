@@ -26,6 +26,7 @@ return [
                 '@app/migrations',
                 '@common/modules/artist/migrations',
                 '@common/modules/painting/migrations',
+                '@common/modules/movement/migrations',
             ]
         ],
         'fixture' => [

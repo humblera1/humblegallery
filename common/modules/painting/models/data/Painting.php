@@ -2,7 +2,13 @@
 
 namespace common\modules\painting\models\data;
 
+use common\modules\artist\models\data\Artist;
+use common\modules\painting\models\query\PaintingQuery;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+use yii2tech\ar\linkmany\LinkManyBehavior;
 
 /**
  * This is the model class for table "painting".
@@ -19,34 +25,40 @@ use Yii;
  *
  * @property Artist $artist
  */
-class Painting extends \yii\db\ActiveRecord
+class Painting extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public ?array $movements = null;
+
+    public static function tableName(): string
     {
         return 'painting';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
+    public function behaviors()
     {
         return [
-            [['title', 'artist_id', 'created_at', 'updated_at'], 'required'],
-            [['start_date', 'end_date', 'artist_id', 'created_at', 'updated_at', 'is_deleted'], 'integer'],
-            [['rating'], 'number'],
-            [['title'], 'string', 'max' => 255],
-            [['artist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Artist::class, 'targetAttribute' => ['artist_id' => 'id']],
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+            ],
+            'linkMany' => [
+                'class' => LinkManyBehavior::class,
+            ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
+    public function rules(): array
+    {
+        return [
+            [['title', 'end_date', 'artist_id'], 'required'],
+            [['title'], 'string', 'max' => 255],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:d.m.Y'],
+            [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
+            [['artist_id'], 'integer'],
+            [['artist_id'], 'exist', 'targetRelation' => 'artist'],
+        ];
+    }
+
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -61,22 +73,13 @@ class Painting extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[Artist]].
-     *
-     * @return \yii\db\ActiveQuery|\common\modules\painting\models\query\ArtistQuery
-     */
-    public function getArtist()
+    public function getArtist(): ActiveQuery
     {
         return $this->hasOne(Artist::class, ['id' => 'artist_id']);
     }
 
-    /**
-     * {@inheritdoc}
-     * @return \common\modules\painting\models\query\PaintingQuery the active query used by this AR class.
-     */
-    public static function find()
+    public static function find(): PaintingQuery
     {
-        return new \common\modules\painting\models\query\PaintingQuery(get_called_class());
+        return new PaintingQuery(get_called_class());
     }
 }

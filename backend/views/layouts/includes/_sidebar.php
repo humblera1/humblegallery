@@ -43,6 +43,11 @@ $admin = Yii::$app->user->identity;
                         'icon' => 'image',
                         'url' => ['/painting']
                     ],
+                    [
+                        'label' => 'Направления',
+                        'icon' => 'monument',
+                        'url' => ['/movement']
+                    ],
                 ]
             ]); ?>
         </nav>

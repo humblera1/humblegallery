@@ -1,14 +1,18 @@
 <?php
 
+use common\modules\painting\models\data\Painting;
 use yii\helpers\Html;
+use yii\web\View;
 
-/** @var yii\web\View $this */
-/** @var common\modules\painting\models\data\Painting $model */
+/**
+ * @var View $this
+ * @var Painting $model
+ */
 
 $this->title = 'Update Painting: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Paintings', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Редактирование');
 ?>
 <div class="painting-update">
 

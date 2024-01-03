@@ -17,8 +17,17 @@ class UserSearch extends User
     public function rules(): array
     {
         return [
-            [['id', 'is_verified', 'is_blocked', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'email', 'password_hash', 'name', 'surname'], 'safe'],
+            [
+                [
+                    'username',
+                    'email',
+                    'name',
+                    'surname',
+                    'created_at',
+                ],
+                'string',
+            ],
+            [['created_at'],  'filter', 'filter' => 'strtotime'],
         ];
     }
 
@@ -56,18 +65,17 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'is_verified' => $this->is_verified,
-            'is_blocked' => $this->is_blocked,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+        if ($this->created_at) {
+            $query->andFilterWhere([
+                'AND' => [
+                    ['>=','created_at', $this->created_at],
+                    ['<', 'created_at', $this->created_at + 24*60*60],
+                ],
+            ]);
+        }
 
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'surname', $this->surname]);
 

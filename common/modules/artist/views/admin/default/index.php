@@ -1,23 +1,22 @@
 <?php
 
 use backend\components\widgets\HumbleGridView;
-use common\modules\artist\models\data\Artist;
+use common\modules\artist\models\search\ArtistSearch;
 use kartik\date\DatePicker;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\Pjax;
-/** @var yii\web\View $this */
-/** @var common\modules\artist\models\search\ArtistSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Художники';
+/**
+ * @var View $this
+ * @var ArtistSearch $searchModel
+ * @var ActiveDataProvider $dataProvider
+ */
+
+$this->title = Yii::t('app', 'Художники');
 $this->params['breadcrumbs'][] = $this->title;
-
-$layout = <<< HTML
-
-HTML;
 
 ?>
 <div class="artist-index">
@@ -25,7 +24,7 @@ HTML;
     <div class="d-flex justify-content-between align-items-center py-4 px-5">
         <h1><?= Html::encode($this->title) ?></h1>
         <p>
-            <?= Html::a('Create Artist', ['create'], ['class' => 'btn btn-orange']) ?>
+            <?= Html::a(Yii::t('app', 'Добавить художника'), ['create'], ['class' => 'btn btn-orange']) ?>
         </p>
     </div>
 
@@ -39,6 +38,7 @@ HTML;
             'name',
             [
                 'attribute' => 'born',
+                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'born',
                     'layout' => '{picker}{input}{remove}',
@@ -47,6 +47,7 @@ HTML;
                         'autoclose' => true,
                         'minViewMode'=>'years',
                         'format' => 'yyyy',
+                        'orientation' => 'bottom',
                     ],
                     'options' => [
                         'placeholder' => 'Дата рождения',
@@ -55,24 +56,23 @@ HTML;
             ],
             [
                 'attribute' => 'died',
-
+                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'died',
-
                     'layout' => '{picker}{input}{remove}',
                     'model' => $searchModel,
                     'pluginOptions' => [
                         'autoclose' => true,
                         'minViewMode'=>'years',
                         'format' => 'yyyy',
+                        'orientation' => 'bottom',
                     ],
                     'options' => [
                         'placeholder' => 'Дата смерти',
                     ]
                 ]),
             ],
-            //'updated_at',
-            //'is_deleted',
+            'is_deleted:boolean',
             [
                 'class' => ActionColumn::class,
             ],

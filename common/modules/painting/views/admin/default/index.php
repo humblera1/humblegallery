@@ -2,14 +2,20 @@
 
 use backend\components\widgets\HumbleGridView;
 use common\modules\painting\models\data\Painting;
+use common\modules\painting\models\search\PaintingSearch;
+use kartik\date\DatePicker;
+use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
+use yii\web\View;
 use yii\widgets\Pjax;
 
-/** @var yii\web\View $this */
-/** @var common\modules\painting\models\search\PaintingSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+/**
+ * @var View $this
+ * @var PaintingSearch $searchModel
+ * @var ActiveDataProvider $dataProvider
+ */
 
 $this->title = 'Картины';
 $this->params['breadcrumbs'][] = $this->title;
@@ -30,18 +36,52 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
-            'id',
             'title',
-            'start_date',
-            'end_date',
+            [
+                'attribute' => 'artist_id',
+            ],
+            [
+                'attribute' => 'start_date',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => DatePicker::widget([
+                    'attribute' => 'start_date',
+                    'layout' => '{picker}{input}{remove}',
+                    'model' => $searchModel,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'orientation' => 'bottom',
+                    ],
+                    'options' => [
+                        'placeholder' => 'Дата начала',
+                        'value' => $searchModel->created_at ?
+                            Yii::$app->formatter->asDate($searchModel->created_at)
+                            : '',
+                    ]
+                ]),
+            ],
+            [
+                'attribute' => 'end_date',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => DatePicker::widget([
+                    'attribute' => 'end_date',
+                    'layout' => '{picker}{input}{remove}',
+                    'model' => $searchModel,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'orientation' => 'bottom',
+                    ],
+                    'options' => [
+                        'placeholder' => 'Дата завершения',
+                        'value' => $searchModel->created_at ?
+                            Yii::$app->formatter->asDate($searchModel->created_at)
+                            : '',
+                    ]
+                ]),
+            ],
             'rating',
-            //'artist_id',
-            //'created_at',
-            //'updated_at',
             //'is_deleted',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'urlCreator' => function ($action, Painting $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

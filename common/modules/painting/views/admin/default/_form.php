@@ -1,37 +1,64 @@
 <?php
 
+use common\modules\artist\models\data\Artist;
+use common\modules\painting\models\data\Painting;
+use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
-/** @var yii\web\View $this */
-/** @var common\modules\painting\models\data\Painting $model */
-/** @var yii\widgets\ActiveForm $form */
+/**
+ * @var View $this
+ * @var Painting $model
+ * @var ActiveForm $form
+ */
 ?>
 
 <div class="painting-form">
+    <div class="col-md-6 mt-5">
+        <?php $form = ActiveForm::begin(); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        <div class="datepicker-container">
+            <?= $form->field($model, 'start_date')->widget(DatePicker::class, [
+                'options' => [
+                    'value' => $model->start_date ? Yii::$app->formatter->asDate($model->start_date, 'php:d.m.Y') : null,
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd.mm.yyyy',
+                    'orientation' => 'bottom',
+                ],
+            ]) ?>
 
-    <?= $form->field($model, 'start_date')->textInput() ?>
+            <?= $form->field($model, 'end_date')->widget(DatePicker::class, [
+                'options' => [
+                    'value' => $model->end_date ? Yii::$app->formatter->asDate($model->end_date, 'php:d.m.Y') : null,
+                ],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd.mm.yyyy',
+                    'orientation' => 'bottom',
+                ],
+            ]) ?>
+        </div>
 
-    <?= $form->field($model, 'end_date')->textInput() ?>
+        <div class="kartik-select2-container">
+            <?= $form->field($model, 'artist_id')->widget(Select2::class, [
+                'data' => ArrayHelper::map(Artist::find()->all(), 'id', 'name'),
+                'pluginOptions' => [
+                    'positionDropdown' => true,
+                ],
+            ]) ?>
+        </div>
 
-    <?= $form->field($model, 'rating')->textInput() ?>
+        <div class="form-group">
+            <?= Html::submitButton(Yii::t('app','Сохранить'), ['class' => 'btn btn-orange']) ?>
+        </div>
 
-    <?= $form->field($model, 'artist_id')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'is_deleted')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?php ActiveForm::end(); ?>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

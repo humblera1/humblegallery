@@ -2,10 +2,12 @@
 
 use yii\helpers\Html;
 
-/** @var yii\web\View $this */
-/** @var common\modules\painting\models\data\Painting $model */
+/**
+ * @var yii\web\View $this
+ * @var common\modules\painting\models\data\Painting $model
+ */
 
-$this->title = 'Create Painting';
+$this->title = Yii::t('app', 'Добавить картину');
 $this->params['breadcrumbs'][] = ['label' => 'Paintings', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

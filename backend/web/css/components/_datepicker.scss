@@ -1,16 +1,22 @@
 @import '../colors';
 
-.datepicker{
+.datepicker, .datetimepicker{
 
   padding: 1.5rem;
   border-radius: 2.5rem;
   background-color: $additional-color;
 
-
   & table {
     & tr {
       & td {
         padding: .8rem !important;
+        &:hover {
+          background-color: lighten($orange, 25%) !important;
+
+        }
+        &.active {
+          background-color: $orange !important;
+        }
 
         & span {
           border-radius: .75rem;
@@ -23,6 +29,9 @@
           &.active {
             background-color: $orange !important;
           }
+          &.hour {;
+            padding: .5rem;
+          }
         }
       }
       & th {
@@ -30,4 +39,8 @@
       }
     }
   }
+}
+
+.datetimepicker-hours td{
+  width: 25rem !important;
 }

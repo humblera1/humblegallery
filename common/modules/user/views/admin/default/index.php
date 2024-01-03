@@ -3,16 +3,21 @@
 use backend\components\widgets\HumbleGridView;
 use common\modules\user\models\data\User;
 use common\modules\user\models\search\UserSearch;
+use kartik\date\DatePicker;
+use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\View;
 use yii\widgets\Pjax;
 
-/** @var yii\web\View $this */
-/** @var UserSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+/**
+ * @var View $this
+ * @var UserSearch $searchModel
+ * @var ActiveDataProvider $dataProvider
+ */
 
-$this->title = 'Users';
+$this->title = Yii::t('app', 'Пользователи');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -33,8 +38,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'name',
             'surname',
-            //'created_at',
-            //'updated_at',
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => DatePicker::widget([
+                    'attribute' => 'created_at',
+                    'layout' => '{picker}{input}{remove}',
+                    'model' => $searchModel,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'orientation' => 'bottom',
+                    ],
+                    'options' => [
+                        'placeholder' => 'Дата регистрации',
+                        'value' => $searchModel->created_at ?
+                            Yii::$app->formatter->asDate($searchModel->created_at)
+                            : '',
+                    ]
+                ]),
+            ],
             [
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {

@@ -220,8 +220,7 @@ tfoot,
 tr,
 td,
 th {
-  border-color: inherit;
-  border-width: 0; }
+  border: none; }
 
 label {
   display: inline-block; }

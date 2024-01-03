@@ -1,9 +1,92 @@
+@import '../colors';
+
 .control-label {
   padding-left: 1.25rem;
   padding-bottom: .25rem;
 }
 
+.humble-control-label {
+  position: relative;
+  color: #a2a2a2;
+  top: 10px;
+  left: 25px;
+  background-color: #FEF1DF;
+  padding: 0 3px;
+  font-size: 14px;
+}
+
+.datepicker-container .humble-control-label {
+  left: 75px;
+  z-index: 10;
+}
+
+.form-group {
+  padding-bottom: 1.25rem;
+}
+
 .form-group.required label:after  {
   content:" *";
   color: darkred;
+}
+
+.select2-dropdown {
+  background-color: $additional-color;
+}
+
+.select2-container--krajee-bs5 .select2-selection--single{
+  background-color: inherit;
+  border-color: #a2a2a2;
+  border-radius: 15px;
+  padding: 1rem;
+  height: auto;
+}
+
+.select2-container--krajee-bs5 .select2-search--dropdown .select2-search__field {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  background-color: $additional-color;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  color: #212529;
+}
+
+.select2-container--krajee-bs5 .select2-selection--single .select2-selection__clear,
+.select2-container--krajee-bs5 .select2-selection--multiple .select2-selection__clear {
+  float: right;
+  font-size: 1.2rem;
+  margin-right: 3rem;
+}
+
+.select2-container--krajee-bs5 .select2-results__option[aria-selected] {
+  background-color: $primary-color;
+  color: #333;
+  border-radius: 0;
+}
+
+.select2-container--krajee-bs5 .select2-results__option.select2-results__option--selected,
+.select2-container--krajee-bs5 .select2-results__option[aria-selected=true] {
+  color: #262626;
+  background-color: lighten($orange, 20);
+}
+
+.select2-container--krajee-bs5:not(.select2-container--disabled) .select2-dropdown {
+  border-color: inherit;
+  box-shadow: none;
+  overflow-x: hidden;
+  margin-top: -1px;
+}
+
+.select2-container--krajee-bs5.select2-container--open:not(.select2-container--disabled) .select2-selection,
+.select2-container--krajee-bs5:not(.select2-container--disabled) .select2-selection:focus {
+  border-color: #a2a2a2;
+  box-shadow: none;
+}
+
+.kartik-select2-container .humble-control-label {
+  z-index: 10;
+}
+
+select.is-valid + .select2-container--krajee-bs5 .select2-selection--single,
+.has-success.select2-container--krajee-bs5 .select2-dropdown,
+.has-success .select2-container--krajee-bs5 .select2-selection {
+  border-color: #a2a2a2;
 }

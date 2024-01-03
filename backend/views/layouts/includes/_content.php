@@ -1,7 +1,7 @@
 <?php
 
 use common\widgets\Alert;
-use yii\bootstrap4\Breadcrumbs;
+use yii\bootstrap5\Breadcrumbs;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 
@@ -14,6 +14,9 @@ use yii\helpers\Inflector;
 
     <!-- Main content -->
     <div class="content">
+        <?= Breadcrumbs::widget([
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]); ?>
         <?= $content ?><!-- /.container-fluid -->
     </div>
     <!-- /.content -->

@@ -1,11 +1,16 @@
 <?php
 
+use common\modules\user\models\data\User;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
-/** @var yii\web\View $this */
-/** @var \common\modules\painting\data\User $model */
-/** @var yii\widgets\ActiveForm $form */
+/**
+ * @var View $this
+ * @var User $model
+ * @var ActiveForm $form
+ */
+
 ?>
 
 <div class="user-form">
@@ -15,8 +20,6 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-<!--        --><?php //= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

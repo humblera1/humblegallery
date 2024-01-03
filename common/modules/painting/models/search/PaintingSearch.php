@@ -2,6 +2,7 @@
 
 namespace common\modules\painting\models\search;
 
+use common\modules\artist\models\data\Artist;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\modules\painting\models\data\Painting;
@@ -14,12 +15,12 @@ class PaintingSearch extends Painting
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            [['id', 'start_date', 'end_date', 'artist_id', 'created_at', 'updated_at', 'is_deleted'], 'integer'],
-            [['title'], 'safe'],
-            [['rating'], 'number'],
+            [['title'], 'string'],
+            [['artist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Artist::class, 'targetAttribute' => ['artist_id' => 'id']],
+            [[ 'start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
         ];
     }
 
@@ -57,17 +58,13 @@ class PaintingSearch extends Painting
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'rating' => $this->rating,
-            'artist_id' => $this->artist_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'is_deleted' => $this->is_deleted,
-        ]);
+        if ($this->start_date) {
+            $query->andFilterWhere(['start_date' => $this->start_date]);
+        }
+
+        if ($this->end_date) {
+            $query->andFilterWhere(['end_date' => $this->end_date]);
+        }
 
         $query->andFilterWhere(['like', 'title', $this->title]);
 

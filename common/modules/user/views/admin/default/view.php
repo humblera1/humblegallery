@@ -1,15 +1,20 @@
 <?php
 
+use common\modules\user\models\data\User;
 use yii\helpers\Html;
+use yii\web\View;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
-/** @var yii\web\View $this */
-/** @var \common\modules\painting\data\User $model */
+/**
+ * @var View $this
+ * @var User $model
+ */
 
-$this->title = $model->name;
+$this->title = $model->service->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="user-view">
     <div class="d-flex justify-content-between align-items-center py-4 px-5">
@@ -32,16 +37,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table table-bordered table-hover detail-view'],
             'template' => '<tr><td><strong>{captionOptions}{label}:</strong></td><td>{contentOptions}{value}</td></tr>',
             'attributes' => [
-                'id',
                 'username',
                 'email:email',
-                'password_hash',
                 'name',
                 'surname',
-                'is_verified',
+                'is_verified:boolean',
                 'is_blocked',
-                'created_at',
-                'updated_at',
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d.m.Y'],
+                ],
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d.m.Y'],
+                ],
             ],
         ]) ?>
     </div>

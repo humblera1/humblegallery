@@ -1,8 +1,12 @@
 <?php
 
+use backend\components\widgets\HumbleActiveField;
 use common\modules\artist\ArtistModule;
+use common\modules\movement\MovementModule;
 use common\modules\painting\PaintingModule;
 use common\modules\user\UserModule;
+use kartik\date\DatePicker;
+use yii\widgets\ActiveForm;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -16,6 +20,18 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'container' => [
+        'definitions' => [
+            ActiveForm::class => [
+                'fieldClass' => HumbleActiveField::class
+            ],
+            DatePicker::class => [
+                'options' => [
+                    'class' => ['form-group'],
+                ],
+            ],
+        ],
+    ],
     'modules' => [
         'user' => [
             'class' => UserModule::class,
@@ -32,8 +48,16 @@ return [
             'controllerNamespace' => 'common\modules\artist\controllers\admin',
             'viewPath' => '@common/modules/artist/views/admin',
         ],
+        'movement' => [
+            'class' => MovementModule::class,
+            'controllerNamespace' => 'common\modules\movement\controllers\admin',
+            'viewPath' => '@common/modules/movement/views/admin',
+        ],
     ],
     'components' => [
+        'formatter' => [
+            'dateFormat' => 'dd.MM.yyyy',
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],

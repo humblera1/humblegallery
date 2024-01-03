@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="painting-form">
-    <div class="col-md-6 mt-5">
-        <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'col-md-12 row']]); ?>
 
+    <div class="col-md-6 mt-5">
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
         <div class="datepicker-container">
@@ -58,7 +58,11 @@ use yii\widgets\ActiveForm;
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app','Сохранить'), ['class' => 'btn btn-orange']) ?>
         </div>
-
-        <?php ActiveForm::end(); ?>
     </div>
+
+    <div class="col-md-4 mt-5">
+        <?= $form->field($model, 'image')->fileInput() ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 </div>

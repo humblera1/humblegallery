@@ -40,18 +40,30 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'id',
                 'title',
-                'start_date',
-                'end_date',
+                [
+                    'attribute' => 'start_date',
+                    'value' => Yii::$app->formatter->asDate($model->start_date),
+                ],
+                [
+                    'attribute' => 'end_date',
+                    'value' => Yii::$app->formatter->asDate($model->end_date),
+                ],
                 'rating',
-                'artist_id',
+                [
+                    'attribute' => 'end_date',
+                    'value' => $model->artist->name,
+                ],
                 [
                     'attribute' => 'created_at',
-                    'value' => Yii::$app->formatter->asDate($model->created_at),
+                    'value' => Yii::$app->formatter->asDatetime($model->created_at),
                 ],
-                'created_at',
-                'updated_at',
-                'is_deleted',
+                [
+                    'attribute' => 'updated_at',
+                    'value' => Yii::$app->formatter->asDatetime($model->updated_at),
+                ],
+                'is_deleted:boolean',
             ],
         ]) ?>
     </div>
+    <?= Html::img($model->service->getImagePath());?>
 </div>

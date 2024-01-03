@@ -57,6 +57,7 @@ return [
     'components' => [
         'formatter' => [
             'dateFormat' => 'dd.MM.yyyy',
+            'datetimeFormat' => 'php:Y-m-d H:i:s',
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',

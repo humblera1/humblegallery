@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -25,12 +25,7 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * Lists all User models.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);

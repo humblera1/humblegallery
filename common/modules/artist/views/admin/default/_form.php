@@ -60,7 +60,7 @@ CSS
             <?= $form->field($model, 'description')->textarea(['rows' => '6']) ?>
 
             <div class="form-group">
-                <?= Html::submitButton('Save', ['class' => 'btn btn-orange']) ?>
+                <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-orange']) ?>
             </div>
         </div>
         <div class="col-md-6 px-5">

@@ -10,7 +10,7 @@ use yii\web\View;
  */
 
 $this->title = Yii::t('app', 'Добавить художника');
-$this->params['breadcrumbs'][] = ['label' => 'Artists', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Художники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="artist-create">

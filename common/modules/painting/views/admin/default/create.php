@@ -1,14 +1,16 @@
 <?php
 
+use common\modules\painting\models\data\Painting;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var yii\web\View $this
- * @var common\modules\painting\models\data\Painting $model
+ * @var View $this
+ * @var Painting $model
  */
 
 $this->title = Yii::t('app', 'Добавить картину');
-$this->params['breadcrumbs'][] = ['label' => 'Paintings', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Картины'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="painting-create">

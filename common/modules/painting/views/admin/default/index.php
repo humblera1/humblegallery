@@ -53,8 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'options' => [
                         'placeholder' => 'Дата начала',
-                        'value' => $searchModel->created_at ?
-                            Yii::$app->formatter->asDate($searchModel->created_at)
+                        'value' => $searchModel->start_date ?
+                            Yii::$app->formatter->asDate($searchModel->start_date)
                             : '',
                     ]
                 ]),
@@ -72,8 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'options' => [
                         'placeholder' => 'Дата завершения',
-                        'value' => $searchModel->created_at ?
-                            Yii::$app->formatter->asDate($searchModel->created_at)
+                        'value' => $searchModel->end_date ?
+                            Yii::$app->formatter->asDate($searchModel->end_date)
                             : '',
                     ]
                 ]),

@@ -1,9 +1,12 @@
 <?php
 
 use backend\components\widgets\HumbleActiveField;
+use common\modules\admin\AdminModule;
 use common\modules\artist\ArtistModule;
 use common\modules\movement\MovementModule;
 use common\modules\painting\PaintingModule;
+use common\modules\subject\SubjectModule;
+use common\modules\technique\TechniqueModule;
 use common\modules\user\UserModule;
 use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
@@ -33,6 +36,11 @@ return [
         ],
     ],
     'modules' => [
+        'admin' => [
+            'class' => AdminModule::class,
+            'controllerNamespace' => 'common\modules\admin\controllers',
+            'viewPath' => '@common/modules/admin/views',
+        ],
         'user' => [
             'class' => UserModule::class,
             'controllerNamespace' => 'common\modules\user\controllers\admin',
@@ -52,6 +60,16 @@ return [
             'class' => MovementModule::class,
             'controllerNamespace' => 'common\modules\movement\controllers\admin',
             'viewPath' => '@common/modules/movement/views/admin',
+        ],
+        'technique' => [
+            'class' => TechniqueModule::class,
+            'controllerNamespace' => 'common\modules\technique\controllers\admin',
+            'viewPath' => '@common/modules/technique/views/admin',
+        ],
+        'subject' => [
+            'class' => SubjectModule::class,
+            'controllerNamespace' => 'common\modules\subject\controllers\admin',
+            'viewPath' => '@common/modules/subject/views/admin',
         ],
     ],
     'components' => [

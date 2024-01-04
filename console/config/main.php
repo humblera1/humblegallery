@@ -27,6 +27,8 @@ return [
                 '@common/modules/artist/migrations',
                 '@common/modules/painting/migrations',
                 '@common/modules/movement/migrations',
+                '@common/modules/subject/migrations',
+                '@common/modules/technique/migrations',
             ]
         ],
         'fixture' => [

@@ -9,10 +9,10 @@ use yii\web\View;
  * @var Artist $model
  */
 
-$this->title = 'Редактирование: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Artists', 'url' => ['index']];
+$this->title =  $model->name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Художники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Редактирование');
 ?>
 <div class="artist-update">
 

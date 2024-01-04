@@ -11,7 +11,7 @@ use yii\widgets\DetailView;
  */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Artists', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Художники'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

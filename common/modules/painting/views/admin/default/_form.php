@@ -3,6 +3,8 @@
 use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\data\Painting;
+use common\modules\subject\models\data\Subject;
+use common\modules\technique\models\data\Technique;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
@@ -48,6 +50,10 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="kartik-select2-container">
+            <?= $form->field($model, 'technique_id')->widget(Select2::class, [
+                'data' => ArrayHelper::map(Technique::find()->all(), 'id', 'name'),
+            ]) ?>
+
             <?= $form->field($model, 'artist_id')->widget(Select2::class, [
                 'data' => ArrayHelper::map(Artist::find()->all(), 'id', 'name'),
             ]) ?>
@@ -55,7 +61,16 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'movementIds')->widget(Select2::class, [
                 'data' => ArrayHelper::map(Movement::find()->all(), 'id', 'name'),
                 'pluginOptions' => [
-                    'multiple' => true
+                    'multiple' => true,
+                    'tags' => true,
+                ],
+            ]) ?>
+
+            <?= $form->field($model, 'subjectIds')->widget(Select2::class, [
+                'data' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                'pluginOptions' => [
+                    'multiple' => true,
+                    'tags' => true,
                 ],
             ]) ?>
         </div>

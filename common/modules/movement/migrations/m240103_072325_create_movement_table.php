@@ -11,7 +11,7 @@ class m240103_072325_create_movement_table extends Migration
     {
         $this->createTable('{{%movement}}', [
             'id' => $this->primaryKey()->comment('ID'),
-            'name' => $this->string(255)->unique()->comment('Направление'),
+            'name' => $this->string(255)->unique()->notNull()->comment('Направление'),
         ]);
     }
 

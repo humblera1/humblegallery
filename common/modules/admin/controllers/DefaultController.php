@@ -1,13 +1,19 @@
 <?php
 
-namespace common\modules\user\controllers\admin;
+namespace common\modules\admin\controllers;
 
-use common\modules\user\models\data\User;
-use common\modules\user\models\search\UserSearch;
-use yii\filters\VerbFilter;
+use common\models\Admin;
+use common\modules\admin\models\form\AdminForm;
+use common\modules\admin\models\search\AdminSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\web\Response;
 
+/**
+ * DefaultController implements the CRUD actions for Admin model.
+ */
 class DefaultController extends Controller
 {
     public function behaviors(): array
@@ -15,6 +21,17 @@ class DefaultController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['create', 'update', 'delete'],
+                            'roles' => ['superadmin'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::class,
                     'actions' => [
@@ -27,7 +44,7 @@ class DefaultController extends Controller
 
     public function actionIndex(): string
     {
-        $searchModel = new UserSearch();
+        $searchModel = new AdminSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -37,8 +54,8 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays a single User model.
-     * @param int $id ID
+     * Displays a single Admin model.
+     * @param int $id
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -49,18 +66,15 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
+    public function actionCreate(): string|Response
     {
-        $model = new User();
+        $model = new AdminForm();
+        $model->scenario = AdminForm::SCENARIO_CREATE;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()) && $model->register()) {
+                    $id = $model->id;
+                    return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -71,18 +85,11 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing User model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionUpdate($id): string|Response
     {
-        $model = $this->findModel($id);
+        $model = AdminForm::findOne($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->edit()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -92,9 +99,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Admin model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
+     * @param int $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -106,18 +113,18 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Admin model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return User the loaded model
+     * @param int $id
+     * @return Admin the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne(['id' => $id])) !== null) {
+        if (($model = Admin::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }

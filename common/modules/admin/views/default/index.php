@@ -1,50 +1,52 @@
 <?php
 
 use backend\components\widgets\HumbleGridView;
-use common\modules\painting\models\data\Painting;
-use common\modules\painting\models\search\PaintingSearch;
+use common\models\Admin;
+use common\modules\admin\models\search\AdminSearch;
 use kartik\date\DatePicker;
 use yii\data\ActiveDataProvider;
+use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\web\View;
 use yii\widgets\Pjax;
 
 /**
  * @var View $this
- * @var PaintingSearch $searchModel
+ * @var AdminSearch $searchModel
  * @var ActiveDataProvider $dataProvider
  */
 
-$this->title = 'Картины';
+$this->title = Yii::t('app', 'Администраторы');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="painting-index">
+<div class="admin-index">
 
     <div class="d-flex justify-content-between align-items-center py-4 px-5">
         <h1><?= Html::encode($this->title) ?></h1>
+
+        <?php if (Yii::$app->user->identity->isSuperadmin()): ?>
         <p>
-            <?= Html::a(Yii::t('app','Добавить картину'), ['create'], ['class' => 'btn btn-orange']) ?>
+            <?= Html::a(Yii::t('app', 'Добавить администратора'), ['create'], ['class' => 'btn btn-orange']) ?>
         </p>
+        <?php endif; ?>
     </div>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?php $template = Yii::$app->user->identity->isSuperadmin() ? '{view} {update} {delete}' : '{view}'; ?>
 
     <?= HumbleGridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'title',
+            'username',
+            'email:email',
             [
-                'attribute' => 'artist_id',
-            ],
-            [
-                'attribute' => 'start_date',
-                'format' => ['date', 'php:d.m.Y'],
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d.m.Y h:i:s'],
                 'filter' => DatePicker::widget([
-                    'attribute' => 'start_date',
+                    'attribute' => 'created_at',
                     'layout' => '{picker}{input}{remove}',
                     'model' => $searchModel,
                     'pluginOptions' => [
@@ -52,18 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         'orientation' => 'bottom',
                     ],
                     'options' => [
-                        'placeholder' => 'Дата начала',
-                        'value' => $searchModel->start_date ?
-                            Yii::$app->formatter->asDate($searchModel->start_date)
+                        'placeholder' => 'Дата создания',
+                        'value' => $searchModel->created_at ?
+                            Yii::$app->formatter->asDate($searchModel->created_at)
                             : '',
                     ]
                 ]),
             ],
             [
-                'attribute' => 'end_date',
-                'format' => ['date', 'php:d.m.Y'],
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d.m.Y h:i:s'],
                 'filter' => DatePicker::widget([
-                    'attribute' => 'end_date',
+                    'attribute' => 'updated_at',
                     'layout' => '{picker}{input}{remove}',
                     'model' => $searchModel,
                     'pluginOptions' => [
@@ -71,20 +73,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         'orientation' => 'bottom',
                     ],
                     'options' => [
-                        'placeholder' => 'Дата завершения',
-                        'value' => $searchModel->end_date ?
-                            Yii::$app->formatter->asDate($searchModel->end_date)
+                        'placeholder' => 'Последнее обновление',
+                        'value' => $searchModel->updated_at ?
+                            Yii::$app->formatter->asDate($searchModel->updated_at)
                             : '',
                     ]
                 ]),
             ],
-            'rating',
-            //'is_deleted',
             [
                 'class' => ActionColumn::class,
-                'urlCreator' => function ($action, Painting $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'template' => $template,
             ],
         ],
     ]); ?>

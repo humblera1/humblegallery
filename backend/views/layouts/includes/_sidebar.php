@@ -1,7 +1,6 @@
 <?php
 
 use common\models\Admin;
-use hail812\adminlte\widgets\Menu as NotMyMenu;
 use yii\web\View;
 use yii\widgets\Menu;
 use backend\components\widgets\Menu as MyMenu;
@@ -23,10 +22,9 @@ $admin = Yii::$app->user->identity;
             <?= MyMenu::widget([
                 'items' => [
                     [
-                        'label' => 'Назначение ролей',
-                        'icon' => 'gear',
-                        'url' => ['/roles'],
-                        'visible' => Yii::$app->user->identity->isSuperadmin(),
+                        'label' => 'Администраторы',
+                        'icon' => 'user-gear',
+                        'url' => ['/admin'],
                     ],
                     [
                         'label' => 'Пользователи',

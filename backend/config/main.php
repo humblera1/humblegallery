@@ -1,6 +1,7 @@
 <?php
 
 use backend\components\widgets\HumbleActiveField;
+use common\modules\admin\AdminModule;
 use common\modules\artist\ArtistModule;
 use common\modules\movement\MovementModule;
 use common\modules\painting\PaintingModule;
@@ -33,6 +34,11 @@ return [
         ],
     ],
     'modules' => [
+        'admin' => [
+            'class' => AdminModule::class,
+            'controllerNamespace' => 'common\modules\admin\controllers',
+            'viewPath' => '@common/modules/admin/views',
+        ],
         'user' => [
             'class' => UserModule::class,
             'controllerNamespace' => 'common\modules\user\controllers\admin',

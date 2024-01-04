@@ -2,7 +2,7 @@
 // General form controls (plus a few specific high-level interventions)
 //
 
-.form-control {
+%basic-form-control {
   display: block;
   width: 100%;
   padding: $input-padding-y $input-padding-x;
@@ -21,6 +21,10 @@
 
   @include box-shadow($input-box-shadow);
   @include transition($input-transition);
+}
+
+.form-control {
+  @extend %basic-form-control;
 
   &[type="file"] {
     overflow: hidden; // prevent pseudo element button overlap
@@ -216,4 +220,31 @@ textarea {
     height: if(unit($input-line-height) == "", $input-line-height * 1em, $input-line-height);
     @include border-radius($input-border-radius);
   }
+}
+
+.humble-form-control {
+  @extend %basic-form-control;
+  padding: 1rem;
+  border-color: #a2a2a2;
+  border-radius: 15px;
+
+  &[type="file"] {
+    overflow: hidden; // prevent pseudo element button overlap
+
+    &:not(:disabled):not([readonly]) {
+      cursor: pointer;
+    }
+  }
+
+  &::file-selector-button {
+    //display: none
+  }
+
+  &::-webkit-file-upload-button {
+    //visibility: hidden;
+    display: none;
+  }
+
+
+
 }

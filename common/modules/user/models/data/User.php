@@ -3,6 +3,7 @@
 namespace common\modules\user\models\data;
 
 use common\modules\user\models\query\UserQuery;
+use common\modules\user\models\service\UserService;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,6 +22,14 @@ use yii\db\ActiveRecord;
  */
 class User extends ActiveRecord
 {
+    public ?UserService $service = null;
+
+    public function init(): void
+    {
+        $this->service = new UserService($this);
+
+        parent::init();
+    }
     public static function tableName(): string
     {
         return 'user';

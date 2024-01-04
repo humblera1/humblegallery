@@ -786,7 +786,7 @@ $input-group-addon-padding-y:           $input-padding-y !default;
 $input-group-addon-padding-x:           $input-padding-x !default;
 $input-group-addon-font-weight:         $input-font-weight !default;
 $input-group-addon-color:               $input-color !default;
-$input-group-addon-bg:                  $gray-200 !default;
+$input-group-addon-bg:                  tint-color($component-active-bg, 25%)  !default;
 $input-group-addon-border-color:        $input-border-color !default;
 // scss-docs-end input-group-variables
 
@@ -1122,7 +1122,7 @@ $accordion-button-color:                  $accordion-color !default;
 $accordion-button-bg:                     $accordion-bg !default;
 $accordion-transition:                    $btn-transition, border-radius .15s ease !default;
 $accordion-button-active-bg:              tint-color($component-active-bg, 90%) !default;
-$accordion-button-active-color:           shade-color($primary, 10%) !default;
+$accordion-button-active-color:           shade-color($component-active-bg, 10%) !default;
 
 $accordion-button-focus-border-color:     $input-focus-border-color !default;
 $accordion-button-focus-box-shadow:       $btn-focus-box-shadow !default;

@@ -41,6 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id',
                 'title',
                 [
+                    'attribute' => 'artist_id',
+                    'value' => $model->artist->name,
+                ],
+                [
                     'attribute' => 'start_date',
                     'value' => Yii::$app->formatter->asDate($model->start_date),
                 ],
@@ -48,11 +52,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'end_date',
                     'value' => Yii::$app->formatter->asDate($model->end_date),
                 ],
-                'rating',
                 [
-                    'attribute' => 'end_date',
-                    'value' => $model->artist->name,
+                    'attribute' => 'movements',
+                    'label' => Yii::t('app', 'Направления'),
+                    'format' => 'raw',
+                    'value' => $model->service->getMovementsList(),
                 ],
+                [
+                    'attribute' => 'subjects',
+                    'label' => Yii::t('app', 'Жанры'),
+                    'format' => 'raw',
+                    'value' => $model->service->getSubjectsList(),
+                ],
+                [
+                    'attribute' => 'technique_id',
+                    'value' => $model->technique->name,
+                ],
+                'rating',
                 [
                     'attribute' => 'created_at',
                     'value' => Yii::$app->formatter->asDatetime($model->created_at),
@@ -65,5 +81,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
-    <?= Html::img($model->service->getImagePath());?>
+    <?= Html::img($model->service->getImagePath()); ?>
 </div>

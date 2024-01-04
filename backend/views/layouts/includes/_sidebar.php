@@ -46,6 +46,16 @@ $admin = Yii::$app->user->identity;
                         'icon' => 'monument',
                         'url' => ['/movement']
                     ],
+                    [
+                        'label' => 'Жанры',
+                        'icon' => 'mountain-sun',
+                        'url' => ['/subject']
+                    ],
+                    [
+                        'label' => 'Техники',
+                        'icon' => 'palette',
+                        'url' => ['/technique']
+                    ],
                 ]
             ]); ?>
         </nav>

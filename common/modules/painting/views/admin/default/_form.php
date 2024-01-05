@@ -17,6 +17,23 @@ use yii\widgets\ActiveForm;
  * @var Painting $model
  * @var ActiveForm $form
  */
+
+$this->registerCss(<<<CSS
+    .image-container--form {
+        width: 30vw;
+        height: 50rem;
+        margin-top: 2.5rem;
+        
+    }
+    
+    .image--form {
+        object-fit: cover;
+        border-radius: 30px;
+        width: 100%;
+        height: 100%;
+    }
+CSS);
+
 ?>
 
 <div class="painting-form">
@@ -80,7 +97,12 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <div class="col-md-4 mt-5">
+    <div class="col-md-6 mt-5 d-flex align-items-center flex-column">
+        <?php if (!$model->isNewRecord): ?>
+        <div class="image-container--form">
+            <?= Html::img($model->service->getImagePath(), ['class' => 'image--form']); ?>
+        </div>
+        <?php endif; ?>
         <?= $form->field($model, 'image')->fileInput() ?>
     </div>
 

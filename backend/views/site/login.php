@@ -1,29 +1,32 @@
 <?php
 
-use common\models\LoginForm;
-use yii\helpers\Html;
+/** @var yii\web\View $this */
+/** @var yii\bootstrap5\ActiveForm $form */
+/** @var \common\models\LoginForm $model */
+
 use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\Html;
 
-/**
- * @var LoginForm $model
- */
-
-$this->title = 'Вход';
+$this->title = 'Login';
 ?>
+<div class="site-login">
+    <div class="mt-5 offset-lg-3 col-lg-6">
+        <h1><?= Html::encode($this->title) ?></h1>
 
+        <p>Please fill out the following fields to login:</p>
 
-<div class="login-box-body">
-    <?php $form = ActiveForm::begin(['id' => 'login-form']) ?>
+        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-    <?= $form->field($model, 'username')->textInput([
-        'placeholder' => $model->getAttributeLabel('username'),
-    ])->label(false) ?>
+            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
-    <?= $form->field($model, 'password')->passwordInput([
-        'placeholder' => $model->getAttributeLabel('password'),
-    ])->label(false) ?>
+            <?= $form->field($model, 'password')->passwordInput() ?>
 
-    <?= Html::submitButton('Войти', ['class' => 'btn btn-orange']) ?>
+            <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-    <?php ActiveForm::end() ?>
+            <div class="form-group">
+                <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+            </div>
+
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>

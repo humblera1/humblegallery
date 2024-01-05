@@ -63,6 +63,7 @@ class DefaultController extends Controller
     public function actionCreate()
     {
         $model = new Painting();
+        $model->scenario = Painting::SCENARIO_CREATE;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

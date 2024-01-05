@@ -4,6 +4,9 @@ namespace common\modules\painting\models\data;
 
 use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
+use common\modules\painting\components\behaviors\ImageBehavior;
+use common\modules\painting\components\behaviors\MovementBehavior;
+use common\modules\painting\components\behaviors\SubjectBehavior;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
@@ -13,10 +16,8 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii2tech\ar\linkmany\LinkManyBehavior;
-use function PHPUnit\Framework\throwException;
 
 /**
  * This is the model class for table "painting".
@@ -34,8 +35,6 @@ use function PHPUnit\Framework\throwException;
  * @property int $updated_at Дата обновления
  * @property int|null $is_deleted В архиве
  *
- * @property array $movementsToSave
- *
  * @property Artist $artist
  * @property Technique $technique
  * @property Movement[] $movements
@@ -43,13 +42,11 @@ use function PHPUnit\Framework\throwException;
  */
 class Painting extends ActiveRecord
 {
-    /**
-     * @var UploadedFile
-     */
-    public $image = null;
+    const SCENARIO_CREATE = 'create';
+
+    public UploadedFile|string|null $image = null;
 
     public ?PaintingService $service = null;
-    public $movementsToSave;
 
     public function init(): void
     {
@@ -79,13 +76,16 @@ class Painting extends ActiveRecord
                 'relation' => 'subjects',
                 'relationReferenceAttribute' => 'subjectIds',
             ],
+            ImageBehavior::class,
+            MovementBehavior::class,
+            SubjectBehavior::class,
         ];
     }
 
     public function rules(): array
     {
         return [
-            [['title', 'end_date', 'artist_id', 'technique_id'], 'required'],
+            [['title', 'end_date', 'artist_id', 'technique_id', 'movementIds', 'subjectIds'], 'required'],
             [['title'], 'string', 'max' => 255],
             [['start_date', 'end_date'], 'date', 'format' => 'php:d.m.Y'],
             [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
@@ -93,9 +93,10 @@ class Painting extends ActiveRecord
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
             [['technique_id'], 'exist', 'targetRelation' => 'technique'],
+            [['image'], 'required', 'on' => self::SCENARIO_CREATE],
             [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
 
-            [['movementIds', 'subjectIds', 'movementsToSave'], 'safe'],
+            [['movementIds', 'subjectIds'], 'safe'],
         ];
     }
 
@@ -147,114 +148,42 @@ class Painting extends ActiveRecord
 
     public function beforeSave($insert): bool
     {
-        if ($imageName = $this->saveImage()) {
-            $this->image_name = $imageName;
+        $transaction = Yii::$app->db->beginTransaction();
 
+        try {
+            /** @see ImageBehavior::saveImage()  */
+            if (!$this->saveImage()) {
+                $this->addError('image', Yii::t('app', 'Не удалось сохранить изображение'));
+
+                throw new Exception();
+            }
+
+            /** @see MovementBehavior::saveMovements()  */
             if (!$this->saveMovements()) {
                 $this->addError('movementIds', Yii::t('app', 'Не удалось сохранить новые направления'));
 
-                return false;
+                throw new Exception();
             }
 
+            /** @see SubjectBehavior::saveSubjects()  */
             if (!$this->saveSubjects()) {
                 $this->addError('subjectIds', Yii::t('app', 'Не удалось сохранить новые жанры'));
 
-                return false;
+                throw new Exception();
             }
 
-            return parent::beforeSave($insert);
-        }
-
-        return false;
-    }
-
-    public function saveMovements(): bool
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        $newIds = [];
-
-        try {
-            foreach ($this->movementIds as $movementToSave) {
-                if (!Movement::findOne($movementToSave)) {
-                    $movement = new Movement();
-                    $movement->name = $movementToSave;
-
-                    if ($movement->save()) {
-                        $newIds[] = $movement->id;
-
-                        continue;
-                    }
-
-                    throw new Exception();
-                }
-
-                $newIds[] = $movementToSave;
+            if (!parent::beforeSave($insert)) {
+                throw new Exception();
             }
+
         } catch (Exception) {
             $transaction->rollBack();
 
             return false;
         }
 
-        $this->movementIds = $newIds;
-
         $transaction->commit();
 
         return true;
-    }
-
-    public function saveSubjects(): bool
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        $newIds = [];
-
-        try {
-            foreach ($this->subjectIds as $subjectToSave) {
-                if (!Subject::findOne($subjectToSave)) {
-                    $subject = new Subject();
-                    $subject->name = $subjectToSave;
-
-                    if ($subject->save()) {
-                        $newIds[] = $subject->id;
-
-                        continue;
-                    }
-
-                    throw new Exception();
-                }
-
-                $newIds[] = $subjectToSave;
-            }
-        } catch (Exception) {
-            $transaction->rollBack();
-
-            return false;
-        }
-
-        $this->subjectIds = $newIds;
-
-        $transaction->commit();
-
-        return true;
-    }
-
-    public function saveImage()
-    {
-        $this->image = UploadedFile::getInstance($this, 'image');
-        $uploadPath = $this->getUploadPath();
-
-        $imageName = $this->title . '.' . $this->image->extension;
-        $imagePath = $uploadPath . '/' . $imageName;
-
-        if ($this->image->saveAs($imagePath)) {
-            return $imageName;
-        }
-
-        return false;
-    }
-
-    public function getUploadPath(): string
-    {
-        return Url::to('@common/uploads/paintings');
     }
 }

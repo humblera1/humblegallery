@@ -32,4 +32,5 @@ return [
 
     'Не удалось сохранить новые направления' => 'Failed to save new movements',
     'Не удалось сохранить новые жанры' => 'Failed to save new artists subjects',
+    'Не удалось сохранить изображение' => 'Failed to save image',
 ];

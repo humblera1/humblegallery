@@ -5,9 +5,9 @@ use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
 use kartik\date\DatePicker;
 use yii\data\ActiveDataProvider;
+use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\web\View;
 use yii\widgets\Pjax;
 
@@ -36,9 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'title',
+            [
+                'attribute' => 'title',
+                'format' => 'raw',
+                'value' => function(Painting $model) {
+                    return Html::a($model->title, ['view', 'id' => $model->id]);
+                }
+            ],
             [
                 'attribute' => 'artist_id',
+                'format' => 'raw',
+                'value' => function(Painting $model) {
+                    return Html::a($model->artist->name, ['/artist/default/view', 'id' => $model->artist->id]);
+                }
             ],
             [
                 'attribute' => 'start_date',

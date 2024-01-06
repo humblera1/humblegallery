@@ -42,7 +42,7 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  */
 class Painting extends ActiveRecord
 {
-    const SCENARIO_CREATE = 'create';
+//    const SCENARIO_CREATE = 'create';
 
     public UploadedFile|string|null $image = null;
 
@@ -85,7 +85,17 @@ class Painting extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['title', 'end_date', 'artist_id', 'technique_id', 'movementIds', 'subjectIds'], 'required'],
+            [
+                [
+                    'title',
+                    'end_date',
+                    'artist_id',
+                    'technique_id',
+                    'movementIds',
+                    'subjectIds'
+                ],
+                'required'
+            ],
             [['title'], 'string', 'max' => 255],
             [['start_date', 'end_date'], 'date', 'format' => 'php:d.m.Y'],
             [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
@@ -93,8 +103,14 @@ class Painting extends ActiveRecord
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
             [['technique_id'], 'exist', 'targetRelation' => 'technique'],
-            [['image'], 'required', 'on' => self::SCENARIO_CREATE],
-            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
+            [
+                ['image'],
+                'image',
+                'skipOnEmpty' => true,
+                'extensions' => 'jpg, webp, png',
+                'maxFiles' => 1,
+                'maxSize' => 1024 * 1024 * 2,
+            ],
 
             [['movementIds', 'subjectIds'], 'safe'],
         ];

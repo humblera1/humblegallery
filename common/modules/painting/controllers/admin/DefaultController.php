@@ -7,16 +7,14 @@ use common\modules\painting\models\search\PaintingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * DefaultController implements the CRUD actions for Painting model.
  */
 class DefaultController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(
             parent::behaviors(),
@@ -31,12 +29,7 @@ class DefaultController extends Controller
         );
     }
 
-    /**
-     * Lists all Painting models.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new PaintingSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -47,23 +40,16 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Painting model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate(): string|Response
     {
         $model = new Painting();
-        $model->scenario = Painting::SCENARIO_CREATE;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -78,7 +64,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionUpdate($id)
+    public function actionUpdate(int $id): string|Response
     {
         $model = $this->findModel($id);
 
@@ -93,21 +79,14 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Painting model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Painting the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
+    protected function findModel(int $id): Painting
     {
         if (($model = Painting::findOne(['id' => $id])) !== null) {
             return $model;

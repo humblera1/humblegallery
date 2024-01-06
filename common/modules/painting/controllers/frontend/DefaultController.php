@@ -22,4 +22,9 @@ class DefaultController extends Controller
             'pages' => $pages,
         ]);
     }
+
+    public function createPagination()
+    {
+        
+    }
 }

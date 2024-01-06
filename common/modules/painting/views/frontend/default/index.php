@@ -4,6 +4,7 @@ use common\modules\painting\models\data\Painting;
 use yii\data\Pagination;
 use yii\web\View;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
 
 /**
  * @var $this View
@@ -26,6 +27,7 @@ use yii\widgets\LinkPager;
                 <!-- Sidebar content goes here -->
             </aside>
 
+            <?php Pjax::begin() ?>
             <main class="content">
                 <?php foreach($models as $model): ?>
                     <div class="paint">
@@ -39,11 +41,11 @@ use yii\widgets\LinkPager;
                     </div>
                 <?php endforeach; ?>
 
+                <?= LinkPager::widget([
+                    'pagination' => $pages,
+                ]); ?>
             </main>
-
-            <?= LinkPager::widget([
-                'pagination' => $pages,
-            ]); ?>
+            <?php Pjax::end() ?>
         </div>
 
 

@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'start_date',
-                    'value' => Yii::$app->formatter->asDate($model->start_date),
+                    'value' => $model->start_date ? Yii::$app->formatter->asDate($model->start_date) : null,
                 ],
                 [
                     'attribute' => 'end_date',
@@ -81,5 +81,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
-    <?= Html::img($model->service->getImagePath()); ?>
+    <?= Html::img($model->service->getImage()); ?>
 </div>

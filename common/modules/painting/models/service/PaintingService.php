@@ -7,9 +7,14 @@ use yii\helpers\Url;
 
 class PaintingService extends Service
 {
-    public function getImagePath(): string
+    public function getImage(): string
     {
-        return '/uploads/paintings/' . $this->model->image_name;
+        return '/uploads/images/paintings/' . $this->model->image_name;
+    }
+
+    public function getThumbnail(): string
+    {
+        return '/uploads/thumbnails/paintings/' . $this->model->image_name;
     }
 
     public function getMovementsList(): string

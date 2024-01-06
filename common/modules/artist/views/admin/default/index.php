@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ]),
             ],
-            'is_deleted:boolean',
+//            'is_deleted:boolean',
             [
                 'class' => ActionColumn::class,
             ],

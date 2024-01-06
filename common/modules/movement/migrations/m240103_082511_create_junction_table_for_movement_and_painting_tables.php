@@ -36,7 +36,7 @@ class m240103_082511_create_junction_table_for_movement_and_painting_tables exte
             'movement_id',
             '{{%movement}}',
             'id',
-            'NO ACTION'
+            'CASCADE'
         );
 
         // creates index for column `painting_id`
@@ -53,7 +53,7 @@ class m240103_082511_create_junction_table_for_movement_and_painting_tables exte
             'painting_id',
             '{{%painting}}',
             'id',
-            'NO ACTION'
+            'CASCADE'
         );
     }
 

@@ -22,7 +22,8 @@
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
         "yii2tech/ar-linkmany": "^1.0",
-        "yii2tech/ar-softdelete": "^1.0"
+        "yii2tech/ar-softdelete": "^1.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

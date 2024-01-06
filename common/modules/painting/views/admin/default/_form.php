@@ -49,7 +49,9 @@ CSS);
                 ],
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'dd.mm.yyyy',
+                    'minViewMode'=>'years',
+                    'format' => 'yyyy',
+                    'startView' => 3,
                     'orientation' => 'bottom',
                 ],
             ]) ?>
@@ -60,7 +62,9 @@ CSS);
                 ],
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'dd.mm.yyyy',
+                    'minViewMode'=>'years',
+                    'format' => 'yyyy',
+                    'startView' => 3,
                     'orientation' => 'bottom',
                 ],
             ]) ?>
@@ -90,6 +94,8 @@ CSS);
                     'tags' => true,
                 ],
             ]) ?>
+
+            <?= $form->field($model, 'description')->textarea() ?>
         </div>
 
         <div class="form-group">
@@ -100,7 +106,7 @@ CSS);
     <div class="col-md-6 mt-5 d-flex align-items-center flex-column">
         <?php if (!$model->isNewRecord): ?>
         <div class="image-container--form">
-            <?= Html::img($model->service->getImagePath(), ['class' => 'image--form']); ?>
+            <?= Html::img($model->service->getImage(), ['class' => 'image--form']); ?>
         </div>
         <?php endif; ?>
         <?= $form->field($model, 'image')->fileInput() ?>

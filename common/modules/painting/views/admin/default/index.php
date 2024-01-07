@@ -19,6 +19,9 @@ use yii\widgets\Pjax;
 
 $this->title = 'Картины';
 $this->params['breadcrumbs'][] = $this->title;
+
+Yii::$app->session->getFlash('error');
+
 ?>
 <div class="painting-index">
 

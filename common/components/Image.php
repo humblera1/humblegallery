@@ -51,7 +51,7 @@ class Image
             ob_start();
             imagewebp($this->img, null, $initialQuality);
 
-            if ($targetFileSize <= strlen(ob_get_clean())) {
+            if ($targetFileSize >= strlen(ob_get_clean())) {
                 break;
             }
 

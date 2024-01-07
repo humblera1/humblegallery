@@ -7,6 +7,7 @@ use common\modules\painting\models\data\Painting;
 use Exception;
 use yii\base\Behavior;
 use yii\base\Model;
+use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 
@@ -15,6 +16,19 @@ class ImageBehavior extends Behavior
     const TARGET_THUMBNAIL_FILESIZE = 50 * 1024; // 50 KB
 
     private ?string $folderName = null;
+
+//    public function events()
+//    {
+//        return [
+//            ActiveRecord::EVENT_AFTER_FIND => 'initiateFolderName',
+//            ActiveRecord::EVENT_AFTER_VALIDATE => 'initiateFolderName',
+//        ];
+//    }
+//
+//    public function initiateFolderName()
+//    {
+//        $this->folderName = $this->owner->artist->name;
+//    }
 
     public function saveImage()
     {
@@ -29,8 +43,7 @@ class ImageBehavior extends Behavior
             $this->removeImage();
         }
 
-        $this->folderName = $model->artist->name;
-
+        $this->folderName = $this->owner->artist->name;
         $mainFolder = $this->getMainPath();
 
         $imageName = $model->title . '.' . $model->image->extension;
@@ -47,7 +60,7 @@ class ImageBehavior extends Behavior
         throw new Exception('Ошибка при сохранении изображения');
     }
 
-    public function getImagePath(): string
+    public function getMainPath(): string
     {
         return Url::to('@common/uploads/images/paintings/' . $this->folderName);
     }
@@ -59,12 +72,12 @@ class ImageBehavior extends Behavior
 
     public function saveThumbnailImage(string $mainImagePath): bool
     {
-        $thumbnailFolder = $this->getMainPath();
+        $thumbnailFolder = $this->getThumbnailPath();
 
         $thumbnailName = $this->owner->title . '.webp';
         $thumbnailPath = $thumbnailFolder . '/' . $thumbnailName;
 
-        FileHelper::createDirectory($thumbnailPath);
+        FileHelper::createDirectory($thumbnailFolder);
 
         $image = new Image($mainImagePath);
         return $image->saveWebp($thumbnailPath, self::TARGET_THUMBNAIL_FILESIZE);
@@ -72,6 +85,9 @@ class ImageBehavior extends Behavior
 
     public function removeImage($deleteParentFolder = false): void
     {
+        $this->folderName = $this->owner->artist->name;
+
+        $isSuccess = true;
         $mainFolder = $this->getMainPath();
         $thumbnailFolder = $this->getThumbnailPath();
 

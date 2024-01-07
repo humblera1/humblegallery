@@ -60,7 +60,7 @@ Yii::$app->session->getFlash('error');
 
             <?= $form->field($model, 'end_date')->widget(DatePicker::class, [
                 'options' => [
-                    'value' => $model->end_date ? Yii::$app->formatter->asDate($model->end_date, 'php:d.m.Y') : null,
+                    'value' => $model->end_date ? Yii::$app->formatter->asDate($model->end_date, 'php:Y') : null,
                 ],
                 'pluginOptions' => [
                     'autoclose' => true,

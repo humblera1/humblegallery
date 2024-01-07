@@ -97,7 +97,7 @@ class Painting extends ActiveRecord
                 'required'
             ],
             [['title'], 'string', 'max' => 255],
-            [['start_date', 'end_date'], 'date', 'format' => 'php:d.m.Y'],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
             [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
             [['artist_id'], 'integer'],
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],

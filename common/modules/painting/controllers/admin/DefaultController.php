@@ -55,9 +55,10 @@ class DefaultController extends Controller
         if ($this->request->isPost) {
             $model->setScenario(Painting::SCENARIO_CREATE);
 
+            $model->load($this->request->post());
             $model->image = UploadedFile::getInstance($model, 'image');
 
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -74,9 +75,11 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost) {
+
+            $model->load($this->request->post());
             $model->image = UploadedFile::getInstance($model, 'image');
 
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

@@ -194,4 +194,29 @@ class Painting extends ActiveRecord
 
         return true;
     }
+
+    public function beforeDelete(): bool
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            /** @see ImageBehavior::removeImage()  */
+            $this->removeImage(true);
+
+            if (!parent::beforeDelete()) {
+                throw new Exception('Ошибка при удалении модели');
+            }
+        } catch(Exception $e) {
+            Yii::warning($e->getMessage(), 'painting');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удалении картины'));
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $transaction->commit();
+
+        return true;
+    }
 }

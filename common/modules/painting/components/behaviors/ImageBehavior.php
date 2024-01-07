@@ -26,7 +26,7 @@ class ImageBehavior extends Behavior
         }
 
         if ($model->getScenario() === Model::SCENARIO_DEFAULT) {
-            unlink($this->getMainPath() . '/' . $model->image_name);
+            $this->removeImage();
         }
 
         $this->folderName = $model->artist->name;
@@ -68,5 +68,29 @@ class ImageBehavior extends Behavior
 
         $image = new Image($mainImagePath);
         return $image->saveWebp($thumbnailPath, self::TARGET_THUMBNAIL_FILESIZE);
+    }
+
+    public function removeImage($deleteParentFolder = false): void
+    {
+        $mainFolder = $this->getMainPath();
+        $thumbnailFolder = $this->getThumbnailPath();
+
+        $imageToDelete = $mainFolder . '/' . $this->owner->image_name;
+        $thumbnailToDelete = $thumbnailFolder . '/' . $this->owner->title . '.webp';
+
+        if (file_exists($imageToDelete) && $isSuccess = FileHelper::unlink($imageToDelete)) {
+            if ($deleteParentFolder && empty(FileHelper::findFiles($mainFolder))) {
+                FileHelper::removeDirectory($mainFolder);
+                FileHelper::removeDirectory($thumbnailFolder);
+            }
+        }
+
+        if (file_exists($thumbnailToDelete) && $isSuccess) {
+            $isSuccess = FileHelper::unlink($thumbnailToDelete);
+        }
+
+        if (!$isSuccess) {
+            throw new Exception('Ошибка при удалении старого изображения');
+        }
     }
 }

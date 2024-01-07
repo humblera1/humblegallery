@@ -4,15 +4,11 @@ namespace common\modules\painting\models\data;
 
 use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
-use common\modules\painting\components\behaviors\ImageBehavior;
-use common\modules\painting\components\behaviors\MovementBehavior;
-use common\modules\painting\components\behaviors\SubjectBehavior;
+use common\modules\painting\components\behaviors\PaintingBehavior;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
-use Exception;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -60,7 +56,7 @@ class Painting extends ActiveRecord
         return 'painting';
     }
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'timestamp' => [
@@ -76,9 +72,7 @@ class Painting extends ActiveRecord
                 'relation' => 'subjects',
                 'relationReferenceAttribute' => 'subjectIds',
             ],
-            ImageBehavior::class,
-            MovementBehavior::class,
-            SubjectBehavior::class,
+            PaintingBehavior::class,
         ];
     }
 
@@ -161,62 +155,5 @@ class Painting extends ActiveRecord
     public static function find(): PaintingQuery
     {
         return new PaintingQuery(get_called_class());
-    }
-
-    public function beforeSave($insert): bool
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-
-        try {
-            /** @see ImageBehavior::saveImage()  */
-            $this->saveImage();
-
-            /** @see MovementBehavior::saveMovements()  */
-            $this->saveMovements();
-
-            /** @see SubjectBehavior::saveSubjects()  */
-            $this->saveSubjects();
-
-            if (!parent::beforeSave($insert)) {
-                throw new Exception('Ошибка при сохранении модели');
-            }
-
-        } catch (Exception $e) {
-            Yii::warning($e->getMessage(), 'painting');
-            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении картины'));
-
-            $transaction->rollBack();
-
-            return false;
-        }
-
-        $transaction->commit();
-
-        return true;
-    }
-
-    public function beforeDelete(): bool
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-
-        try {
-            /** @see ImageBehavior::removeImage()  */
-            $this->removeImage(true);
-
-            if (!parent::beforeDelete()) {
-                throw new Exception('Ошибка при удалении модели');
-            }
-        } catch(Exception $e) {
-            Yii::warning($e->getMessage(), 'painting');
-            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при удалении картины'));
-
-            $transaction->rollBack();
-
-            return false;
-        }
-
-        $transaction->commit();
-
-        return true;
     }
 }

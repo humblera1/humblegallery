@@ -16,6 +16,7 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'language' => 'ru-RU',
+    'sourceLanguage' => 'ru-RU',
     'components' => [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

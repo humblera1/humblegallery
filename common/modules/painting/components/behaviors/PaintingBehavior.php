@@ -96,7 +96,6 @@ class PaintingBehavior extends Behavior
      */
     public function saveMovements(): void
     {
-        /** @var Painting $model */
         $model = $this->owner;
         $newIds = [];
 
@@ -127,7 +126,6 @@ class PaintingBehavior extends Behavior
      */
     public function saveSubjects(): void
     {
-        /** @var Painting $model */
         $model = $this->owner;
         $newIds = [];
 
@@ -158,7 +156,6 @@ class PaintingBehavior extends Behavior
      */
     public function saveImage(): void
     {
-        /** @var Painting $model */
         $model = $this->owner;
 
         if (!$model->image) {
@@ -209,7 +206,7 @@ class PaintingBehavior extends Behavior
      * Remove an image and its associated thumbnail
      *
      * @param bool $deleteParentFolder Whether to delete the parent folder if it's empty
-     * @throws Exception If there is an error deleting the image or thumbnail
+     * @throws Exception If there is an error deleting folder, image or thumbnail
      */
     public function removeImage(bool $deleteParentFolder = false): void
     {

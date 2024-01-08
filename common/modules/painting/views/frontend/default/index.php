@@ -1,7 +1,9 @@
 <?php
 
 use common\modules\painting\models\data\Painting;
+use frontend\assets\MasonryAsset;
 use yii\data\Pagination;
+use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
@@ -12,8 +14,20 @@ use yii\widgets\Pjax;
  * @var Pagination $pages
  */
 
-?>
+//MasonryAsset::register($this);
 
+$js = <<<JS
+    var content = document.querySelector('.content');
+    var msnry = new Masonry(content, {
+      columnWidth: '.paint-container',
+      itemSelector: '.paint-container',
+      percentPosition: true
+    });
+JS;
+
+
+?>
+<script src="/js/masonry.js"></script>
 <div class="page">
     <div class="page__content">
         <header class="header">
@@ -30,29 +44,31 @@ use yii\widgets\Pjax;
             <?php Pjax::begin() ?>
             <main class="content">
                 <?php foreach($models as $model): ?>
-                    <div class="paint">
-                        <div class="paint__paint">
-                            <?= $model->title ?>
-                            <!-- picture goes here -->
-                        </div>
-                        <div class="paint__description">
-                            <!-- description goes here -->
+                    <div class="paint-container">
+                        <div class="paint-content">
+
+                            <div class="paint-content__image-wrapper">
+                                <?= Html::img($model->service->getThumbnail(), ['class' => 'paint-content__image']); ?>
+                            </div>
+
+                            <div class="paint-content__title">
+                                <?= $model->title ?>
+                            </div>
+
                         </div>
                     </div>
                 <?php endforeach; ?>
-
-                <?= LinkPager::widget([
-                    'pagination' => $pages,
-                ]); ?>
             </main>
+            <?= LinkPager::widget([
+                'pagination' => $pages,
+            ]); ?>
             <?php Pjax::end() ?>
         </div>
-
-
-
-        <!--    <footer class="footer">-->
-        <!--        Footer content goes here -->
-        <!--    </footer>-->
     </div>
 </div>
+
+<?php
+//Закинуть в Pjax
+$this->registerJs($js);
+?>
 

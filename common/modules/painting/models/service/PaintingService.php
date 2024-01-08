@@ -9,12 +9,16 @@ class PaintingService extends Service
 {
     public function getImage(): string
     {
-        return '/uploads/images/paintings/' . $this->model->image_name;
+        $model = $this->model;
+
+        return '/uploads/images/paintings/' . $model->artist->name . '/' . $model->image_name;
     }
 
     public function getThumbnail(): string
     {
-        return '/uploads/thumbnails/paintings/' . $this->model->image_name;
+        $model = $this->model;
+
+        return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->image_name;
     }
 
     public function getMovementsList(): string

@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for Painting model.
@@ -52,7 +53,12 @@ class DefaultController extends Controller
         $model = new Painting();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->setScenario(Painting::SCENARIO_CREATE);
+
+            $model->load($this->request->post());
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -69,7 +75,11 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+
+            $model->load($this->request->post());
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

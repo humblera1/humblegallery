@@ -4,15 +4,11 @@ namespace common\modules\painting\models\data;
 
 use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
-use common\modules\painting\components\behaviors\ImageBehavior;
-use common\modules\painting\components\behaviors\MovementBehavior;
-use common\modules\painting\components\behaviors\SubjectBehavior;
+use common\modules\painting\components\behaviors\PaintingBehavior;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
-use Exception;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -42,7 +38,7 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  */
 class Painting extends ActiveRecord
 {
-//    const SCENARIO_CREATE = 'create';
+    const SCENARIO_CREATE = 'create';
 
     public UploadedFile|string|null $image = null;
 
@@ -60,7 +56,7 @@ class Painting extends ActiveRecord
         return 'painting';
     }
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'timestamp' => [
@@ -76,9 +72,7 @@ class Painting extends ActiveRecord
                 'relation' => 'subjects',
                 'relationReferenceAttribute' => 'subjectIds',
             ],
-            ImageBehavior::class,
-            MovementBehavior::class,
-            SubjectBehavior::class,
+            PaintingBehavior::class,
         ];
     }
 
@@ -97,12 +91,13 @@ class Painting extends ActiveRecord
                 'required'
             ],
             [['title'], 'string', 'max' => 255],
-            [['start_date', 'end_date'], 'date', 'format' => 'php:d.m.Y'],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
             [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
             [['artist_id'], 'integer'],
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
             [['technique_id'], 'exist', 'targetRelation' => 'technique'],
+            [['image'], 'required', 'on' => self::SCENARIO_CREATE],
             [
                 ['image'],
                 'image',
@@ -160,46 +155,5 @@ class Painting extends ActiveRecord
     public static function find(): PaintingQuery
     {
         return new PaintingQuery(get_called_class());
-    }
-
-    public function beforeSave($insert): bool
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-
-        try {
-            /** @see ImageBehavior::saveImage()  */
-            if (!$this->saveImage()) {
-                $this->addError('image', Yii::t('app', 'Не удалось сохранить изображение'));
-
-                throw new Exception();
-            }
-
-            /** @see MovementBehavior::saveMovements()  */
-            if (!$this->saveMovements()) {
-                $this->addError('movementIds', Yii::t('app', 'Не удалось сохранить новые направления'));
-
-                throw new Exception();
-            }
-
-            /** @see SubjectBehavior::saveSubjects()  */
-            if (!$this->saveSubjects()) {
-                $this->addError('subjectIds', Yii::t('app', 'Не удалось сохранить новые жанры'));
-
-                throw new Exception();
-            }
-
-            if (!parent::beforeSave($insert)) {
-                throw new Exception();
-            }
-
-        } catch (Exception) {
-            $transaction->rollBack();
-
-            return false;
-        }
-
-        $transaction->commit();
-
-        return true;
     }
 }

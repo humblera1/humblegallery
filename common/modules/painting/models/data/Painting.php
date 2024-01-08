@@ -42,7 +42,7 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  */
 class Painting extends ActiveRecord
 {
-//    const SCENARIO_CREATE = 'create';
+    const SCENARIO_CREATE = 'create';
 
     public UploadedFile|string|null $image = null;
 
@@ -103,6 +103,7 @@ class Painting extends ActiveRecord
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
             [['technique_id'], 'exist', 'targetRelation' => 'technique'],
+            [['image'], 'required', 'on' => self::SCENARIO_CREATE],
             [
                 ['image'],
                 'image',
@@ -168,31 +169,22 @@ class Painting extends ActiveRecord
 
         try {
             /** @see ImageBehavior::saveImage()  */
-            if (!$this->saveImage()) {
-                $this->addError('image', Yii::t('app', 'Не удалось сохранить изображение'));
-
-                throw new Exception();
-            }
+            $this->saveImage();
 
             /** @see MovementBehavior::saveMovements()  */
-            if (!$this->saveMovements()) {
-                $this->addError('movementIds', Yii::t('app', 'Не удалось сохранить новые направления'));
-
-                throw new Exception();
-            }
+            $this->saveMovements();
 
             /** @see SubjectBehavior::saveSubjects()  */
-            if (!$this->saveSubjects()) {
-                $this->addError('subjectIds', Yii::t('app', 'Не удалось сохранить новые жанры'));
-
-                throw new Exception();
-            }
+            $this->saveSubjects();
 
             if (!parent::beforeSave($insert)) {
-                throw new Exception();
+                throw new Exception('Ошибка при сохранении модели');
             }
 
-        } catch (Exception) {
+        } catch (Exception $e) {
+            Yii::warning($e->getMessage(), 'painting');
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Произошла ошибка при сохранении картины'));
+
             $transaction->rollBack();
 
             return false;

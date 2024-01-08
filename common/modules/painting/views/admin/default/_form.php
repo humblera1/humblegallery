@@ -34,6 +34,8 @@ $this->registerCss(<<<CSS
     }
 CSS);
 
+Yii::$app->session->getFlash('error');
+
 ?>
 
 <div class="painting-form">

@@ -2,75 +2,71 @@
 
 namespace common\modules\painting\components\behaviors;
 
-use common\components\Thumb;
+use common\components\Image;
 use common\modules\painting\models\data\Painting;
 use Exception;
 use yii\base\Behavior;
+use yii\base\Model;
+use yii\helpers\FileHelper;
 use yii\helpers\Url;
-use yii\web\UploadedFile;
 
 class ImageBehavior extends Behavior
 {
-    const THUMBNAIL_IMAGE_QUALITY = 90;
-    const THUMBNAIL_MAX_WIDTH = 500;
-    const THUMBNAIL_MAX_HEIGHT = 500;
+    const TARGET_THUMBNAIL_FILESIZE = 50 * 1024; // 50 KB
 
-    public function saveImage(): bool
+    private ?string $folderName = null;
+
+    public function saveImage()
     {
         /** @var Painting $model */
         $model = $this->owner;
 
-        $model->image = UploadedFile::getInstance($model, 'image');
-
-        switch (true) {
-            case ($model->isNewRecord && !$model->image):
-                return false;
-            case (!$model->isNewRecord && !$model->image):
-                return true;
-            case (!$model->isNewRecord && $model->image):
-                unlink($this->getMainPath() . '/' . $model->image_name);
+        if (!$model->image) {
+            return;
         }
 
-        $uploadPath = $this->getMainPath();
-        $imageExtension = $model->image->extension;
-        $imageName = $model->title . '.' . $imageExtension;
+        if ($model->getScenario() === Model::SCENARIO_DEFAULT) {
+            unlink($this->getMainPath() . '/' . $model->image_name);
+        }
 
-        $imagePath = $uploadPath . '/' . $imageName;
+        $this->folderName = $model->artist->name;
 
-        if ($model->image->saveAs($imagePath) && $this->saveThumbnailImage($imageName)) {
+        $mainFolder = $this->getMainPath();
+
+        $imageName = $model->title . '.' . $model->image->extension;
+        $imagePath = $mainFolder . '/' . $imageName;
+
+        FileHelper::createDirectory($mainFolder);
+
+        if ($model->image->saveAs($imagePath) && $this->saveThumbnailImage($imagePath)) {
             $model->image_name = $imageName;
 
-            return true;
+            return;
         }
 
-        return false;
+        throw new Exception('Ошибка при сохранении изображения');
     }
 
-    public function getMainPath(): string
+    public function getImagePath(): string
     {
-        return Url::to('@common/uploads/images/paintings');
+        return Url::to('@common/uploads/images/paintings/' . $this->folderName);
     }
 
     public function getThumbnailPath(): string
     {
-        return Url::to('@common/uploads/thumbnails/paintings');
+        return Url::to('@common/uploads/thumbnails/paintings/' . $this->folderName);
     }
 
-    public function saveThumbnailImage(string $imageName): bool
+    public function saveThumbnailImage(string $mainImagePath): bool
     {
-        $imagePath = $this->getMainPath() . '/' . $imageName;
-        $thumbnailPath = $this->getThumbnailPath() . '/' . $this->owner->title . '.webp';
+        $thumbnailFolder = $this->getMainPath();
 
-        try {
-            $image = new Thumb($imagePath);
-            $image->reduce(self::THUMBNAIL_MAX_WIDTH, self::THUMBNAIL_MAX_HEIGHT);
+        $thumbnailName = $this->owner->title . '.webp';
+        $thumbnailPath = $thumbnailFolder . '/' . $thumbnailName;
 
-            return $image->saveWebp($thumbnailPath, self::THUMBNAIL_IMAGE_QUALITY);
-        } catch (Exception) {
+        FileHelper::createDirectory($thumbnailPath);
 
-            //TODO: залогировать в sentry
-
-            return false;
-        }
+        $image = new Image($mainImagePath);
+        return $image->saveWebp($thumbnailPath, self::TARGET_THUMBNAIL_FILESIZE);
     }
 }

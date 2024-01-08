@@ -4,14 +4,17 @@ namespace common\modules\painting\components\behaviors;
 
 use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\data\Painting;
+use Exception;
 use yii\base\Behavior;
 
 class MovementBehavior extends Behavior
 {
     /**
      * Saves new Movement model if it doesn't exist
+     *
+     * @throws Exception if one of new movement can't be saved
      */
-    public function saveMovements(): bool
+    public function saveMovements(): void
     {
         /** @var Painting $model */
         $model = $this->owner;
@@ -28,14 +31,12 @@ class MovementBehavior extends Behavior
                     continue;
                 }
 
-                return false;
+                throw new Exception('Ошибка при сохранении направления');
             }
 
             $newIds[] = $movementToSave;
         }
 
         $model->movementIds = $newIds;
-
-        return true;
     }
 }

@@ -21,6 +21,12 @@ class PaintingService extends Service
         return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->image_name;
     }
 
+    public function getThumbnail(): string
+    {
+        $model = $this->model;
+        return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->title . '.webp';
+    }
+
     public function getMovementsList(): string
     {
         $list = '';

@@ -12,7 +12,7 @@ class DefaultController extends Controller
     {
         $query = Painting::find();
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 1]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
         $models = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();

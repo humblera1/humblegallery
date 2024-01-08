@@ -61,7 +61,6 @@ fieldset {
   display: flex;
   justify-content: center; }
   .page__content {
-    border: #0a53be 1px solid;
     height: 100vh;
     width: 100%;
     max-width: 2048px; }
@@ -78,10 +77,11 @@ fieldset {
   width: 100%;
   height: 100%;
   margin-top: 25rem;
-  border: #0a53be 1px solid;
-  display: flex; }
+  display: grid;
+  grid-template-columns: 1fr 3fr; }
 
 .sidebar {
+  grid-column: 1 / 2;
   width: 18vw;
   max-width: 40rem;
   height: 100%;
@@ -93,20 +93,39 @@ fieldset {
   border: #0a53be 1px solid; }
 
 .content {
-  width: auto;
-  height: 100%;
-  margin: 30px;
-  border: #0a53be 1px solid;
-  display: flex;
-  justify-content: center;
-  align-content: flex-start;
-  flex-flow: row wrap; }
+  width: 100%;
+  margin-top: 3rem; }
 
-.paint {
-  width: 33%;
-  min-width: 150px;
-  max-width: 300px;
-  height: 400px;
-  border: #0a53be 1px solid; }
+.paint-container {
+  width: 100%;
+  min-width: 20rem; }
+  @media (min-width: 720px) {
+    .paint-container {
+      width: 50%; } }
+  @media (min-width: 1055px) {
+    .paint-container {
+      width: 33.333%; } }
+  @media (min-width: 1400px) {
+    .paint-container {
+      width: 25%; } }
+
+.paint-content {
+  padding: 0 3% 5% 3%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column; }
+  .paint-content__image {
+    object-fit: cover;
+    border-radius: 3rem;
+    width: 100%;
+    height: 100%; }
+  .paint-content__title {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: .5rem;
+    padding-left: .75rem;
+    font-size: 1.8rem; }
 
 /*# sourceMappingURL=frontend.css.map */

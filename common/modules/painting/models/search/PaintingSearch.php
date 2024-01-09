@@ -12,21 +12,15 @@ use common\modules\painting\models\data\Painting;
  */
 class PaintingSearch extends Painting
 {
-    /**
-     * {@inheritdoc}
-     */
     public function rules(): array
     {
         return [
-            [['title'], 'string'],
+            [['title', 'start_date', 'end_date'], 'string'],
             [['artist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Artist::class, 'targetAttribute' => ['artist_id' => 'id']],
-            [[ 'start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -58,15 +52,9 @@ class PaintingSearch extends Painting
             return $dataProvider;
         }
 
-        if ($this->start_date) {
-            $query->andFilterWhere(['start_date' => $this->start_date]);
-        }
-
-        if ($this->end_date) {
-            $query->andFilterWhere(['end_date' => $this->end_date]);
-        }
-
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['start_date' => $this->start_date])
+            ->andFilterWhere(['end_date' => $this->end_date])
+            ->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }

@@ -55,39 +55,37 @@ Yii::$app->session->getFlash('error');
             ],
             [
                 'attribute' => 'start_date',
-                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'start_date',
                     'layout' => '{picker}{input}{remove}',
                     'model' => $searchModel,
                     'pluginOptions' => [
                         'autoclose' => true,
+                        'minViewMode'=>'years',
+                        'format' => 'yyyy',
+                        'startView' => 3,
                         'orientation' => 'bottom',
                     ],
                     'options' => [
                         'placeholder' => 'Дата начала',
-                        'value' => $searchModel->start_date ?
-                            Yii::$app->formatter->asDate($searchModel->start_date)
-                            : '',
                     ]
                 ]),
             ],
             [
                 'attribute' => 'end_date',
-                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'end_date',
                     'layout' => '{picker}{input}{remove}',
                     'model' => $searchModel,
                     'pluginOptions' => [
                         'autoclose' => true,
+                        'minViewMode'=>'years',
+                        'format' => 'yyyy',
+                        'startView' => 3,
                         'orientation' => 'bottom',
                     ],
                     'options' => [
                         'placeholder' => 'Дата завершения',
-                        'value' => $searchModel->end_date ?
-                            Yii::$app->formatter->asDate($searchModel->end_date)
-                            : '',
                     ]
                 ]),
             ],

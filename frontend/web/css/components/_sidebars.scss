@@ -1,0 +1,14 @@
+.sidebar {
+  grid-column: 1 / 2;
+  width: 18vw;
+  max-width: 40rem;
+  min-width: 25rem;
+  height: 100%;
+  background-color: $additional-color;
+  border-radius: 3rem;
+  margin: 30px;
+
+  -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+  -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+  box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+}

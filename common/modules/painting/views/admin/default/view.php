@@ -44,14 +44,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'artist_id',
                     'value' => $model->artist->name,
                 ],
-                [
-                    'attribute' => 'start_date',
-                    'value' => $model->start_date ? Yii::$app->formatter->asDate($model->start_date) : null,
-                ],
-                [
-                    'attribute' => 'end_date',
-                    'value' => Yii::$app->formatter->asDate($model->end_date),
-                ],
+                'start_date',
+                'end_date',
                 [
                     'attribute' => 'movements',
                     'label' => Yii::t('app', 'Направления'),

@@ -21,8 +21,8 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  * @property int $id ID
  * @property string $title Название
  * @property string $description Описание
- * @property int|null $start_date Дата начала
- * @property int|null $end_date Дата завершения
+ * @property string|null $start_date Дата начала
+ * @property string $end_date Дата завершения
  * @property float|null $rating Рейтинг
  * @property string $image_name Путь к изображению
  * @property int $technique_id Техника
@@ -92,7 +92,6 @@ class Painting extends ActiveRecord
             ],
             [['title'], 'string', 'max' => 255],
             [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
-            [['start_date', 'end_date'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
             [['artist_id'], 'integer'],
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
@@ -116,8 +115,8 @@ class Painting extends ActiveRecord
         return [
             'id' => 'ID',
             'title' => 'Название',
-            'start_date' => 'Дата начала',
-            'end_date' => 'Дата завершения',
+            'start_date' => 'Год начала',
+            'end_date' => 'Год завершения',
             'rating' => 'Рейтинг',
             'technique_id' => 'Техника',
             'artist_id' => 'Художник',

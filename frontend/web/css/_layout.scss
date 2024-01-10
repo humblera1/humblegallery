@@ -35,23 +35,6 @@
   grid-template-columns: 1fr 3fr;
 }
 
-.sidebar {
-  grid-column: 1 / 2;
-  width: 18vw;
-  max-width: 40rem;
-  height: 100%;
-  background-color: $additional-color;
-  margin: 30px;
-
-  -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
-  -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
-  box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
-
-  border: #0a53be 1px solid;
-}
-
-
-
 .content {
   width: 100%;
   margin-top: 3rem;

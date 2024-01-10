@@ -52,7 +52,7 @@ JS;
                             </div>
 
                             <div class="paint-content__title">
-                                <?= $model->title ?>
+                                <?= $model->service->getNameToDisplay() ?>
                             </div>
 
                         </div>

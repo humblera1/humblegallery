@@ -46,9 +46,6 @@ Yii::$app->session->getFlash('error');
 
         <div class="datepicker-container">
             <?= $form->field($model, 'start_date')->widget(DatePicker::class, [
-                'options' => [
-                    'value' => $model->start_date ? Yii::$app->formatter->asDate($model->start_date, 'php:d.m.Y') : null,
-                ],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'minViewMode'=>'years',
@@ -59,9 +56,6 @@ Yii::$app->session->getFlash('error');
             ]) ?>
 
             <?= $form->field($model, 'end_date')->widget(DatePicker::class, [
-                'options' => [
-                    'value' => $model->end_date ? Yii::$app->formatter->asDate($model->end_date, 'php:Y') : null,
-                ],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'minViewMode'=>'years',

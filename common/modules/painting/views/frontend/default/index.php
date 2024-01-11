@@ -1,9 +1,11 @@
 <?php
 
 use common\modules\painting\models\data\Painting;
+use common\modules\subject\models\data\Subject;
 use frontend\assets\MasonryAsset;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\ActiveForm;
@@ -44,12 +46,19 @@ $this->registerJs($js);
                 <?php $form = ActiveForm::begin([
                     'id' => 'filters',
                     'action' => "filtering",
-                ]); ?>
+                ]);
 
-                <label for="test">Пейзаж</label>
-                <input id='test' type="checkbox" name="PaintingSearch[subject]" value="Пейзаж">
+                echo Html::checkboxList(
+                    'PaintingSearch[subject][]',
+                    null,
+                    ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                    [
+                        'class' => 'filter',
+                        'separator' => '<br>',
+                    ]
+                );
 
-                <?php ActiveForm::end(); ?>
+                ActiveForm::end(); ?>
                 <!-- Sidebar content goes here -->
             </aside>
             <?php
@@ -75,22 +84,22 @@ $this->registerJs(<<<JS
 
     let form = $('#filters');
 
-    $('#test').on('change', function () {
-        makeRequest();
+    $('.filter').each((index, filter) => {
+        filter.addEventListener('change', reloadContent);
     })
 
     // let paintingCatalog = $('.painting-catalog');
     //
     const makeRequest = () => $.post('apply-filters', $(form).serializeArray());
     
-    //
-    // function applyFilter() {
-    //     makeRequest()
-    //         .done(function (data) {
-    //             paintingCatalog.innerHTML = data;
-    //         })
-    // }
-
+    function reloadContent () {
+        console.log('hi');
+        makeRequest()
+            .done(function (data) {
+                // paintingCatalog.innerHTML = data;
+                console.log(data);
+            })
+    }
 JS);
 
 

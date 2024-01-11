@@ -1,11 +1,16 @@
 <?php
 
 use common\modules\painting\models\data\Painting;
+use common\modules\subject\models\data\Subject;
 use frontend\assets\MasonryAsset;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
+use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 /**
@@ -13,8 +18,6 @@ use yii\widgets\Pjax;
  * @var Painting[] $models
  * @var Pagination $pages
  */
-
-//MasonryAsset::register($this);
 
 $js = <<<JS
     var content = document.querySelector('.content');
@@ -25,7 +28,9 @@ $js = <<<JS
     });
 JS;
 
+$this->registerJs($js);
 
+//MasonryAsset::register($this);
 ?>
 <script src="/js/masonry.js"></script>
 <div class="page">
@@ -38,37 +43,65 @@ JS;
 
         <div class="page-container">
             <aside class="sidebar">
+                <?php $form = ActiveForm::begin([
+                    'id' => 'filters',
+                    'action' => "filtering",
+                ]);
+
+                echo Html::checkboxList(
+                    'PaintingSearch[subject][]',
+                    null,
+                    ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
+                    [
+                        'class' => 'filter',
+                        'separator' => '<br>',
+                    ]
+                );
+
+                ActiveForm::end(); ?>
                 <!-- Sidebar content goes here -->
             </aside>
+            <?php
+            $dataProvider = new ActiveDataProvider([
+                'query' => Painting::find(),
+                'pagination' => [
+                    'pageSize' => 5,
+                ],
+            ]);            ?>
 
             <?php Pjax::begin() ?>
-            <main class="content">
-                <?php foreach($models as $model): ?>
-                    <div class="paint-container">
-                        <div class="paint-content">
-
-                            <div class="paint-content__image-wrapper">
-                                <?= Html::img($model->service->getThumbnail(), ['class' => 'paint-content__image']); ?>
-                            </div>
-
-                            <div class="paint-content__title">
-                                <?= $model->service->getNameToDisplay() ?>
-                            </div>
-
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </main>
-            <?= LinkPager::widget([
-                'pagination' => $pages,
-            ]); ?>
+                <div class="painting-catalog">
+                    <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
+                </div>
             <?php Pjax::end() ?>
         </div>
     </div>
 </div>
 
 <?php
-//Закинуть в Pjax
-$this->registerJs($js);
+
+$this->registerJs(<<<JS
+
+    let form = $('#filters');
+
+    $('.filter').each((index, filter) => {
+        filter.addEventListener('change', reloadContent);
+    })
+
+    // let paintingCatalog = $('.painting-catalog');
+    //
+    const makeRequest = () => $.post('apply-filters', $(form).serializeArray());
+    
+    function reloadContent () {
+        console.log('hi');
+        makeRequest()
+            .done(function (data) {
+                // paintingCatalog.innerHTML = data;
+                console.log(data);
+            })
+    }
+JS);
+
+
 ?>
 

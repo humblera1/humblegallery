@@ -8,6 +8,7 @@ class MasonryAsset extends AssetBundle
 {
     public $js = [
         'js/masonry.js',
+        'js/painting/painting.js',
     ];
 
     public $depends = [

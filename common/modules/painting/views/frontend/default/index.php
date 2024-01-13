@@ -19,20 +19,11 @@ use yii\widgets\Pjax;
  * @var Pagination $pages
  */
 
-$js = <<<JS
-    var content = document.querySelector('.content');
-    var msnry = new Masonry(content, {
-      columnWidth: '.paint-container',
-      itemSelector: '.paint-container',
-      percentPosition: true
-    });
-JS;
 
-$this->registerJs($js);
 
-//MasonryAsset::register($this);
+MasonryAsset::register($this);
 ?>
-<script src="/js/masonry.js"></script>
+<!--<script src="/js/masonry.js"></script>-->
 <div class="page">
     <div class="page__content">
         <header class="header">
@@ -44,12 +35,12 @@ $this->registerJs($js);
         <div class="page-container">
             <aside class="sidebar">
                 <?php $form = ActiveForm::begin([
-                    'id' => 'filters',
+                    'id' => 'painting-form',
                     'action' => "filtering",
                 ]);
 
                 echo Html::checkboxList(
-                    'PaintingSearch[subject][]',
+                    'PaintingSearch[subjects][]',
                     null,
                     ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
                     [
@@ -71,7 +62,9 @@ $this->registerJs($js);
 
             <?php Pjax::begin() ?>
                 <div class="painting-catalog">
+                    <main class="content">
                     <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
+                    </main>
                 </div>
             <?php Pjax::end() ?>
         </div>
@@ -79,29 +72,6 @@ $this->registerJs($js);
 </div>
 
 <?php
-
-$this->registerJs(<<<JS
-
-    let form = $('#filters');
-
-    $('.filter').each((index, filter) => {
-        filter.addEventListener('change', reloadContent);
-    })
-
-    // let paintingCatalog = $('.painting-catalog');
-    //
-    const makeRequest = () => $.post('apply-filters', $(form).serializeArray());
-    
-    function reloadContent () {
-        console.log('hi');
-        makeRequest()
-            .done(function (data) {
-                // paintingCatalog.innerHTML = data;
-                console.log(data);
-            })
-    }
-JS);
-
 
 ?>
 

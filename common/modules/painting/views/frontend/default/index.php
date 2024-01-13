@@ -35,7 +35,7 @@ MasonryAsset::register($this);
         <div class="page-container">
             <aside class="sidebar">
                 <?php $form = ActiveForm::begin([
-                    'id' => 'filters',
+                    'id' => 'painting-form',
                     'action' => "filtering",
                 ]);
 
@@ -62,9 +62,9 @@ MasonryAsset::register($this);
 
             <?php Pjax::begin() ?>
                 <div class="painting-catalog">
-<!--                    <main class="content">-->
+                    <main class="content">
                     <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
-<!--                    </main>-->
+                    </main>
                 </div>
             <?php Pjax::end() ?>
         </div>
@@ -72,53 +72,6 @@ MasonryAsset::register($this);
 </div>
 
 <?php
-
-$this->registerJs(<<<JS
-
-    const content = document.querySelector('.content');
-
-    let form = $('#filters');
-    let paintingCatalog = document.querySelector('.painting-catalog');
-    // console.log(content);
-    
-    $('.filter').each((index, filter) => {
-        filter.addEventListener('change', applyFilters);
-    })
-    
-    $(document).ready(function() {
-        initMasonry();
-    })
-    
-    initMasonry();
-    const makeRequest = () => $.post('apply-filters', $(form).serializeArray());
-    
-    function applyFilters () {
-        makeRequest()
-        .done(function (data) {
-            reloadContent(data);
-            reloadMasonry();
-        });
-    }
-    
-    function reloadContent (data) {
-        $('.content').html(data);
-        // paintingCatalog.innerHTML = data;
-    }
-    
-    function reloadMasonry () {
-        initMasonry();
-        $('.content').masonry();
-        // $('.content').masonry('reloadItems');
-    }
-    
-    function initMasonry () {
-        $('.content').masonry({
-            columnWidth: '.paint-container',
-            itemSelector: '.paint-container',
-            percentPosition: true
-        })
-    }
-JS);
 
 ?>
 

@@ -2,7 +2,9 @@
 
 namespace common\components;
 
+use Throwable;
 use yii\db\ActiveRecord;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller as BaseWebController;
@@ -51,6 +53,9 @@ abstract class CrudController extends BaseWebController
         );
     }
 
+    /**
+     * Lists all models
+     */
     public function actionIndex(): string
     {
         $searchModel = new $this->searchModel();
@@ -62,6 +67,9 @@ abstract class CrudController extends BaseWebController
         ]);
     }
 
+    /**
+     * Displays a single model
+     */
     public function actionView($id): string
     {
         return $this->render('view', [
@@ -69,6 +77,10 @@ abstract class CrudController extends BaseWebController
         ]);
     }
 
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page
+     */
     public function actionCreate(): string|Response
     {
         $model = new $this->model();
@@ -86,6 +98,12 @@ abstract class CrudController extends BaseWebController
         ]);
     }
 
+    /**
+     * Updates an existing model.
+     * If update is successful, the browser will be redirected to the 'view' page
+     *
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionUpdate($id): string|Response
     {
         $model = $this->findModel($id);
@@ -99,6 +117,14 @@ abstract class CrudController extends BaseWebController
         ]);
     }
 
+    /**
+     * Deletes an existing model.
+     * If deletion is successful, the browser will be redirected to the 'index' page
+     *
+     * @throws NotFoundHttpException if the model cannot be found
+     * @throws StaleObjectException if [[optimisticLock|optimistic locking]] is enabled and the data being deleted is outdated
+     * @throws Throwable in case delete failed
+     */
     public function actionDelete($id): Response
     {
         $this->findModel($id)->delete();
@@ -106,6 +132,12 @@ abstract class CrudController extends BaseWebController
         return $this->redirect(['index']);
     }
 
+    /**
+     * Finds the model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown
+     *
+     * @throws NotFoundHttpException
+     */
     public function findModel($value, $field = 'id'): ?ActiveRecord
     {
         if (($model = $this->model::findOne([$field => $value])) !== null) {
@@ -119,7 +151,7 @@ abstract class CrudController extends BaseWebController
      * This method will be called by init() to initialize the controller properties, such as
      * `model`, `searchModel` and `form`.
      *
-     * For example:
+     * See usage example below:
      *  ```php
      *  $this->model = ExampleModel::class,
      *  $this->searchModel = ExampleSearchModel::class,

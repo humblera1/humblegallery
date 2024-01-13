@@ -26,6 +26,7 @@ class PaintingBehavior extends Behavior
 {
     const TARGET_THUMBNAIL_FILESIZE = 50 * 1024; // 50 KB
 
+    /** {@inheritDoc} */
     public function events(): array
     {
         return [
@@ -162,6 +163,7 @@ class PaintingBehavior extends Behavior
             return;
         }
 
+        //Если сценарий - не создание, необходимо удалить прежнее изображение, основываясь на инвормации из changedAttributes
         if ($model->getScenario() === Model::SCENARIO_DEFAULT) {
             $this->removeImage();
         }

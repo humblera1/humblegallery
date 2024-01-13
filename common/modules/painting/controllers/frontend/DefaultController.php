@@ -2,10 +2,9 @@
 
 namespace common\modules\painting\controllers\frontend;
 
-use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
+use Exception;
 use yii\data\ActiveDataProvider;
-use yii\data\Pagination;
 use yii\web\Controller;
 
 class DefaultController extends Controller
@@ -25,7 +24,7 @@ class DefaultController extends Controller
             ]);
         }
 
-        throw new \Exception();
+        throw new Exception();
     }
 
     public function getProvider(): ActiveDataProvider

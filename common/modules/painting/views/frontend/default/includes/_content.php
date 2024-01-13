@@ -14,3 +14,4 @@ use yii\widgets\ListView;
         'itemView' => '_painting',
     ]); ?>
 </main>
+

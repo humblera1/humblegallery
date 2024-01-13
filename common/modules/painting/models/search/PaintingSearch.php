@@ -24,13 +24,13 @@ class PaintingSearch extends ActiveSearchModel
     public function buildQuery(): ActiveQuery
     {
         $query = Painting::find()->alias('p')
-        ->with(['subjects']);
+        ->joinWith(['subjects']);
 
         return $query;
     }
 
     public function applyFilter(ActiveQuery $query)
     {
-        $query->andFilterWhere([Subject::tableName() . '.subject_id' => $this->subjects]);
+        $query->andFilterWhere([Subject::tableName() . '.id' => $this->subjects]);
     }
 }

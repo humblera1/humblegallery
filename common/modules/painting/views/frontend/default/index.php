@@ -19,20 +19,11 @@ use yii\widgets\Pjax;
  * @var Pagination $pages
  */
 
-$js = <<<JS
-    var content = document.querySelector('.content');
-    var msnry = new Masonry(content, {
-      columnWidth: '.paint-container',
-      itemSelector: '.paint-container',
-      percentPosition: true
-    });
-JS;
 
-$this->registerJs($js);
 
-//MasonryAsset::register($this);
+MasonryAsset::register($this);
 ?>
-<script src="/js/masonry.js"></script>
+<!--<script src="/js/masonry.js"></script>-->
 <div class="page">
     <div class="page__content">
         <header class="header">
@@ -49,7 +40,7 @@ $this->registerJs($js);
                 ]);
 
                 echo Html::checkboxList(
-                    'PaintingSearch[subject][]',
+                    'PaintingSearch[subjects][]',
                     null,
                     ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
                     [
@@ -71,7 +62,9 @@ $this->registerJs($js);
 
             <?php Pjax::begin() ?>
                 <div class="painting-catalog">
+<!--                    <main class="content">-->
                     <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
+<!--                    </main>-->
                 </div>
             <?php Pjax::end() ?>
         </div>
@@ -82,26 +75,50 @@ $this->registerJs($js);
 
 $this->registerJs(<<<JS
 
+    const content = document.querySelector('.content');
+
     let form = $('#filters');
-
+    let paintingCatalog = document.querySelector('.painting-catalog');
+    // console.log(content);
+    
     $('.filter').each((index, filter) => {
-        filter.addEventListener('change', reloadContent);
+        filter.addEventListener('change', applyFilters);
     })
-
-    // let paintingCatalog = $('.painting-catalog');
-    //
+    
+    $(document).ready(function() {
+        initMasonry();
+    })
+    
+    initMasonry();
     const makeRequest = () => $.post('apply-filters', $(form).serializeArray());
     
-    function reloadContent () {
-        console.log('hi');
+    function applyFilters () {
         makeRequest()
-            .done(function (data) {
-                // paintingCatalog.innerHTML = data;
-                console.log(data);
-            })
+        .done(function (data) {
+            reloadContent(data);
+            reloadMasonry();
+        });
+    }
+    
+    function reloadContent (data) {
+        $('.content').html(data);
+        // paintingCatalog.innerHTML = data;
+    }
+    
+    function reloadMasonry () {
+        initMasonry();
+        $('.content').masonry();
+        // $('.content').masonry('reloadItems');
+    }
+    
+    function initMasonry () {
+        $('.content').masonry({
+            columnWidth: '.paint-container',
+            itemSelector: '.paint-container',
+            percentPosition: true
+        })
     }
 JS);
-
 
 ?>
 

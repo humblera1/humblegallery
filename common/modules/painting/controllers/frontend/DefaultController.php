@@ -12,40 +12,26 @@ class DefaultController extends Controller
 {
     public function actionIndex(): string
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Painting::find(),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
-
-        $query = Painting::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
-        $models = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
         return $this->render('index', [
-            'models' => $models,
-            'pages' => $pages,
+            'dataProvider' => $this->getProvider(),
         ]);
     }
 
-    public function createPagination()
-    {
-        
-    }
-
-    public function actionApplyFilters()
+    public function actionApplyFilters(): string
     {
         if ($this->request->isAjax) {
-            $searchModel = new PaintingSearch();
-            $dataProvider = $searchModel->search($this->request->post());
-
-            return $this->renderPartial('includes/_content', ['provider' => $dataProvider]);
+            return $this->renderPartial('includes/_content', [
+                'provider' => $this->getProvider()
+            ]);
         }
 
         throw new \Exception();
+    }
+
+    public function getProvider(): ActiveDataProvider
+    {
+        $searchModel = new PaintingSearch();
+
+        return $searchModel->search($this->request->post());
     }
 }

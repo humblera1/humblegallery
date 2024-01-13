@@ -8,10 +8,8 @@ use yii\widgets\ListView;
  */
 ?>
 
-<!--<main class="content">-->
 <?= ListView::widget([
     'dataProvider' => $provider,
     'itemView' => '_painting',
 ]); ?>
-<!--</main>-->
 

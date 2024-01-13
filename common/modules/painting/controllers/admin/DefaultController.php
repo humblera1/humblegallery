@@ -2,52 +2,25 @@
 
 namespace common\modules\painting\controllers\admin;
 
+use common\components\CrudController;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for Painting model.
  */
-class DefaultController extends Controller
+class DefaultController extends CRUDController
 {
-    public function behaviors(): array
+    /** {@inheritDoc} */
+    public function initController(): void
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
+        $this->model = Painting::class;
+        $this->searchModel = PaintingSearch::class;
     }
 
-    public function actionIndex(): string
-    {
-        $searchModel = new PaintingSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionView(int $id): string
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
+    /** {@inheritDoc} */
     public function actionCreate(): string|Response
     {
         $model = new Painting();
@@ -70,7 +43,8 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionUpdate(int $id): string|Response
+    /** {@inheritDoc} */
+    public function actionUpdate($id): string|Response
     {
         $model = $this->findModel($id);
 
@@ -87,21 +61,5 @@ class DefaultController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
-    }
-
-    public function actionDelete(int $id): Response
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    protected function findModel(int $id): Painting
-    {
-        if (($model = Painting::findOne(['id' => $id])) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

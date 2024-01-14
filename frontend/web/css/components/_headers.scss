@@ -1,0 +1,33 @@
+@import '../colors';
+
+.header {
+  width: 100%;
+  height: 10rem;
+  background-color: $additional-color;
+  border-radius: 3rem;
+  font-size: 2rem;
+
+  -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+  -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+  box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+
+  //border: #0a53be 1px solid;
+
+  &__navigation {
+    padding: 0 2.5rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.nav-block {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  padding: 0 1rem;
+}
+

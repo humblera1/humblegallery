@@ -21,7 +21,15 @@ MasonryAsset::register($this);
     <div class="page__content">
         <header class="header">
             <nav class="header__navigation">
-                <!-- Header navigation content goes here -->
+                <div class="nav-block">
+                    <div class="nav-item--logo"></div>
+                    <div class="nav-item">Художники</div>
+                    <div class="nav-item">Картины</div>
+                    <div class="nav-item">Статьи</div>
+                </div>
+                <div class="nav-block">
+                    <div class="nav-item">Профиль</div>
+                </div>
             </nav>
         </header>
 

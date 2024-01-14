@@ -49,6 +49,9 @@ class PaintingBehavior extends Behavior
     {
         $transaction = Yii::$app->db->beginTransaction();
 
+        $changedAttributes = array_diff($this->owner->getAttributes(), $this->owner->getOldAttributes());
+        $dirtyAttributes = $this->owner->getDirtyAttributes();
+
         try {
             $this->saveMovements();
             $this->saveSubjects();
@@ -60,6 +63,8 @@ class PaintingBehavior extends Behavior
             $transaction->rollBack();
 
             $event->isValid = false;
+
+            return;
         }
 
         $transaction->commit();

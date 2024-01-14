@@ -12,10 +12,10 @@ class m231217_122018_create_artist_table extends Migration
         $this->createTable('{{%artist}}', [
             'id' => $this->primaryKey()->comment('ID'),
             'name' => $this->string()->notNull()->comment('Имя'),
-            'born' => $this->integer()->comment('Дата рождения'),
-            'died' => $this->integer()->comment('Дата смерти'),
+            'born' => $this->string(10)->comment('Дата рождения'),
+            'died' => $this->string(10)->comment('Дата смерти'),
             'description' => $this->string()->comment('Описание'),
-            'image_path' => $this->string()->comment('Изображение'),
+            'image_name' => $this->string()->comment('Изображение'),
             'rating' => $this->float()->comment('Рейтинг'),
             'created_at' => $this->integer()->notNull()->comment('Дата создания'),
             'updated_at' => $this->integer()->notNull()->comment('Дата обновления'),

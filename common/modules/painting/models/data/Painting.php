@@ -105,7 +105,7 @@ class Painting extends ActiveRecord
                 'maxFiles' => 1,
                 'maxSize' => 1024 * 1024 * 2,
             ],
-
+            [['artist_id'], 'filter', 'filter' => 'intval'],
             [['movementIds', 'subjectIds'], 'safe'],
         ];
     }

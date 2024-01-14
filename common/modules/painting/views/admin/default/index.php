@@ -47,7 +47,7 @@ Yii::$app->session->getFlash('error');
                 }
             ],
             [
-                'attribute' => 'artist_id',
+                'attribute' => 'artist',
                 'format' => 'raw',
                 'value' => function(Painting $model) {
                     return Html::a($model->artist->name, ['/artist/default/view', 'id' => $model->artist->id]);
@@ -88,6 +88,10 @@ Yii::$app->session->getFlash('error');
                         'placeholder' => 'Дата завершения',
                     ]
                 ]),
+            ],
+            [
+                'attribute' => 'rating',
+                'label' => 'Рейтинг',
             ],
             'rating',
             //'is_deleted',

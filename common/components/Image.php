@@ -60,4 +60,34 @@ class Image
 
         return imageWebp($this->img, $filename, $initialQuality);
     }
+
+    public function savePng(string $fileName): bool
+    {
+        return imagepng($this->img, $fileName);
+    }
+
+    public function saveJpeg(string $fileName): bool
+    {
+        return imagejpeg($this->img, $fileName);
+    }
+
+    public function saveGif(string $filename): bool
+    {
+        return imagegif($this->img, $filename);
+    }
+
+    public function saveImage(string $fileName): bool
+    {
+        return match ($this->type) {
+            self::IMAGE_GIF => $this->saveGif($fileName),
+            self::IMAGE_JPEG => $this->saveJpeg($fileName),
+            self::IMAGE_PNG => $this->savePng($fileName),
+            self::IMAGE_WEBP => $this->saveWebp($fileName),
+        };
+    }
+
+    public function getExtensionAsString(): string
+    {
+        return image_type_to_extension($this->type);
+    }
 }

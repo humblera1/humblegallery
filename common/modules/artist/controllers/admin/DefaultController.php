@@ -2,75 +2,36 @@
 
 namespace common\modules\artist\controllers\admin;
 
+use common\components\CrudController;
 use common\modules\artist\models\data\Artist;
 use common\modules\artist\models\search\ArtistSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for Artist model.
  */
-class DefaultController extends Controller
+class DefaultController extends CRUDController
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
+    /** {@inheritDoc} */
+    public function initController(): void
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
+        $this->model = Artist::class;
+        $this->searchModel = ArtistSearch::class;
     }
 
-    /**
-     * Lists all Artist models.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    /** {@inheritDoc} */
+    public function actionCreate(): string|Response
     {
-        $searchModel = new ArtistSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Artist model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Artist model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Artist();
+        $model = new $this->model();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $model->setScenario(Artist::SCENARIO_CREATE);
+
+            $model->load($this->request->post());
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -82,53 +43,23 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Artist model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    /** {@inheritDoc} */
+    public function actionUpdate($id): string|Response
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+
+            $model->load($this->request->post());
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Deletes an existing Artist model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Artist model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Artist the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Artist::findOne(['id' => $id])) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

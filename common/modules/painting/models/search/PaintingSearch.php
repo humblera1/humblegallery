@@ -2,35 +2,103 @@
 
 namespace common\modules\painting\models\search;
 
-use common\components\ActiveSearchModel;
-use common\modules\painting\models\data\Painting;
+use common\modules\artist\models\data\Artist;
+use common\modules\movement\models\data\Movement;
+use common\modules\painting\models\query\PaintingQuery;
 use common\modules\subject\models\data\Subject;
-use yii\db\ActiveQuery;
+use common\modules\technique\models\data\Technique;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use common\modules\painting\models\data\Painting;
 
-class PaintingSearch extends ActiveSearchModel
+/**
+ * PaintingSearch represents the model behind the search form of `common\modules\painting\models\data\Painting`.
+ */
+class PaintingSearch extends Painting
 {
     public array $subjects = [];
+    public array $movements = [];
+    public array $techniques = [];
+    public array $artists = [];
+
 
     public function rules(): array
     {
-        return array_merge(
-            parent::rules(),
-            [
-                [['subjects'], 'safe'],
-            ],
-        );
+        return [
+            [['title', 'start_date', 'end_date'], 'string'],
+            [['artist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Artist::class, 'targetAttribute' => ['artist_id' => 'id']],
+            [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
+            [['subjects', 'movements', 'techniques', 'artists'], 'each', 'rule' => ['integer']],
+        ];
     }
 
-    public function buildQuery(): ActiveQuery
+    public function scenarios(): array
     {
-        $query = Painting::find()->alias('p')
-        ->joinWith(['subjects']);
-
-        return $query;
+        return Model::scenarios();
     }
 
-    public function applyFilter(ActiveQuery $query)
+    /**
+     * Creates data provider instance with search query applied
+     */
+    public function search(array $params): ActiveDataProvider
     {
-        $query->andFilterWhere([Subject::tableName() . '.id' => $this->subjects]);
+        $query = Painting::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $this->applySubjectFilter($query);
+        $this->applyMovementFilter($query);
+        $this->applyTechniqueFilter($query);
+        $this->applyArtistFilter($query);
+
+        $query->andFilterWhere(['start_date' => $this->start_date])
+            ->andFilterWhere(['end_date' => $this->end_date])
+            ->andFilterWhere(['like', 'title', $this->title]);
+
+        return $dataProvider;
+    }
+
+    public function applySubjectFilter(PaintingQuery $query): void
+    {
+        if ($this->subjects) {
+            $query->joinWith('subjects');
+
+            $query->andFilterWhere([Subject::tableName() . '.id' => $this->subjects]);
+        }
+    }
+
+    public function applyMovementFilter(PaintingQuery $query): void
+    {
+        if ($this->subjects) {
+            $query->joinWith('movements');
+
+            $query->andFilterWhere([Movement::tableName() . '.id' => $this->movements]);
+        }
+    }
+
+    public function applyTechniqueFilter(PaintingQuery $query): void
+    {
+        if ($this->techniques) {
+            $query->joinWith('technique');
+
+            $query->andFilterWhere([Technique::tableName() . '.id' => $this->techniques]);
+        }
+    }
+
+    public function applyArtistFilter(PaintingQuery $query): void
+    {
+        if ($this->artists) {
+            $query->joinWith('artist');
+
+            $query->andFilterWhere([Artist::tableName() . '.id' => $this->artists]);
+        }
     }
 }

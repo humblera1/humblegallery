@@ -17,33 +17,24 @@ class ArtistSearch extends Artist
     public function rules(): array
     {
         return [
-            [['id', 'born', 'died', 'created_at', 'updated_at', 'is_deleted'], 'integer'],
-            [['name', 'description', 'image_path'], 'safe'],
-            [['rating'], 'number'],
+            [['name', 'born', 'died'], 'string'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
     /**
      * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Artist::find();
-
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,25 +43,19 @@ class ArtistSearch extends Artist
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'born' => $this->born,
             'died' => $this->died,
             'rating' => $this->rating,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'is_deleted' => $this->is_deleted,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'image_path', $this->image_path]);
+            ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

@@ -2,50 +2,74 @@
 
 namespace common\modules\painting\controllers\frontend;
 
-use common\modules\painting\models\data\Painting;
+use common\modules\painting\models\data\PaintingLike;
 use common\modules\painting\models\search\PaintingSearch;
+use Exception;
+use Throwable;
+use Yii;
 use yii\data\ActiveDataProvider;
-use yii\data\Pagination;
+use yii\db\Query;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 
 class DefaultController extends Controller
 {
     public function actionIndex(): string
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Painting::find(),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
-
-        $query = Painting::find();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 9]);
-        $models = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
         return $this->render('index', [
-            'models' => $models,
-            'pages' => $pages,
+            'dataProvider' => $this->getProvider(),
         ]);
     }
 
-    public function createPagination()
-    {
-        
-    }
-
-    public function actionApplyFilters()
+    public function actionApplyFilters(): string
     {
         if ($this->request->isAjax) {
-            $searchModel = new PaintingSearch();
-            $dataProvider = $searchModel->search($this->request->post());
-
-            return $this->renderPartial('includes/_content', ['provider' => $dataProvider]);
+            return $this->renderPartial('includes/_content', [
+                'provider' => $this->getProvider()
+            ]);
         }
 
-        throw new \Exception();
+        throw new Exception();
+    }
+
+    /**
+     * This function handles the action of liking a painting.
+     *
+     * @throws Exception if the request is not an AJAX request.
+     * @throws StaleObjectException|Throwable if deleting fails
+     */
+    public function actionLike(): bool
+    {
+        if ($this->request->isAjax) {
+            $tableName = PaintingLike::tableName();
+
+            $userId = Yii::$app->user->getId();
+            $paintingId = Yii::$app->request->post('paintingId');
+
+            $isLike = Yii::$app->request->post('isLike');
+
+            if ($isLike) {
+                return Yii::$app->db->createCommand()
+                    ->insert($tableName, [
+                        'user_id' => $userId,
+                        'painting_id' => $paintingId,
+                    ])->execute();
+            }
+
+            return Yii::$app->db->createCommand()
+                ->delete($tableName, [
+                    'user_id' => $userId,
+                    'painting_id' => $paintingId
+                ])->execute();
+        }
+
+        throw new Exception();
+    }
+
+    protected function getProvider(): ActiveDataProvider
+    {
+        $searchModel = new PaintingSearch();
+
+        return $searchModel->search($this->request->post());
     }
 }

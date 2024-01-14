@@ -35,6 +35,7 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  * @property Technique $technique
  * @property Movement[] $movements
  * @property Subject[] $subjects
+ * @property PaintingLike[] $likes
  */
 class Painting extends ActiveRecord
 {
@@ -105,7 +106,7 @@ class Painting extends ActiveRecord
                 'maxFiles' => 1,
                 'maxSize' => 1024 * 1024 * 2,
             ],
-
+            [['artist_id'], 'filter', 'filter' => 'intval'],
             [['movementIds', 'subjectIds'], 'safe'],
         ];
     }
@@ -149,6 +150,11 @@ class Painting extends ActiveRecord
     {
         return $this->hasMany(Movement::class, ['id' => 'movement_id'])
             ->viaTable('movement_painting', ['painting_id' => 'id']);
+    }
+
+    public function getLikes(): ActiveQuery
+    {
+        return $this->hasMany(PaintingLike::class, ['painting_id' => 'id']);
     }
 
     public static function find(): PaintingQuery

@@ -3,6 +3,7 @@
 namespace common\modules\painting\components\behaviors;
 
 use common\components\Image;
+use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\data\Painting;
 use common\modules\subject\models\data\Subject;
@@ -26,6 +27,7 @@ class PaintingBehavior extends Behavior
 {
     const TARGET_THUMBNAIL_FILESIZE = 50 * 1024; // 50 KB
 
+    /** {@inheritDoc} */
     public function events(): array
     {
         return [
@@ -59,6 +61,8 @@ class PaintingBehavior extends Behavior
             $transaction->rollBack();
 
             $event->isValid = false;
+
+            return;
         }
 
         $transaction->commit();
@@ -157,15 +161,123 @@ class PaintingBehavior extends Behavior
     public function saveImage(): void
     {
         $model = $this->owner;
+        $dirtyAttributes = $model->getDirtyAttributes(['artist_id', 'title']);
 
-        if (!$model->image) {
+        if (!$model->image && !$dirtyAttributes) {
             return;
         }
 
-        if ($model->getScenario() === Model::SCENARIO_DEFAULT) {
-            $this->removeImage();
+        switch (true) {
+            case (isset($dirtyAttributes['artist_id'])):
+                $this->onArtistUpdate();
+                break;
+            case (isset($dirtyAttributes['title'])):
+                $this->onTitleUpdate();
+                break;
+            default:
+                $this->removeImage();
+                $this->saveUploadedFile();
+        }
+    }
+
+    /**
+     * Called if the artist of this painting (or both the artist and the title) has been changed.
+     *
+     * If a new image has not been uploaded, this method will determine the previous location of the main
+     * image and thumbnail, based on the model's _oldAttributes values, will save them to new directories and delete them
+     * from the old ones.
+     *
+     * If a new image has been uploaded, the function will simply remove main image and thumbnail from the irrelevant directory,
+     * and call the saveUploadedFile() method to save the new image
+     *
+     * @throws Exception if there is an error while moving/saving images
+     */
+    public function onArtistUpdate(): void
+    {
+        $model = $this->owner;
+
+        if (!$model->image) {
+            $previousTitle = $model->getOldAttribute('title');
+            $previousArtistName = $this->getPreviousArtistName();
+
+            $previousMainImagePath = $this->getMainPath($previousArtistName) . '/' . $model->image_name;
+            $previousThumbnailPath = $this->getThumbnailPath($previousArtistName) . '/' . $previousTitle . '.webp';
+
+            $image = new Image($previousMainImagePath);
+            $thumbnail = new Image($previousThumbnailPath);
+
+            $mainFolder = $this->getMainPath();
+            $thumbnailFolder = $this->getThumbnailPath();
+
+            FileHelper::createDirectory($mainFolder);
+            FileHelper::createDirectory($thumbnailFolder);
+
+            $newImageName = $model->title . $image->getExtensionAsString();
+            $newMainImagePath = $mainFolder . '/' . $newImageName;
+            $newThumbnailPath = $thumbnailFolder . '/' . $model->title . '.webp';
+
+            if ($image->saveImage($newMainImagePath) && $thumbnail->saveWebp($newThumbnailPath, self::TARGET_THUMBNAIL_FILESIZE)) {
+                $this->removeImage(true);
+
+                $model->image_name = $newImageName;
+
+                return;
+            }
+
+            throw new Exception('Ошибка при перемещении изображения');
         }
 
+        $this->removeImage(true);
+        $this->saveUploadedFile();
+    }
+
+    /**
+     * Called if the title of this painting has been updated.
+     *
+     * If a new image has not been uploaded, this method will rename the existing image and thumbnail.
+     *
+     * Otherwise, method remove main image and thumbnail, and call the saveUploadedFile() method to save the new image
+     *
+     * @throws Exception if there is an error while renaming/saving images
+     */
+    public function onTitleUpdate(): void
+    {
+        $model = $this->owner;
+        $previousTitle = $model->getOldAttribute('title');
+
+        if (!$model->image) {
+            $previousMainImagePath = $this->getMainPath() . '/' . $model->image_name;
+            $previousThumbnailPath = $this->getThumbnailPath() . '/' . $previousTitle . '.webp';
+
+            $image = new Image($previousMainImagePath);
+
+            $newImageName = $model->title . '.' . $image->getExtensionAsString();
+
+            $newMainImagePath = $this->getMainPath() . '/' . $newImageName;
+            $newThumbnailPath = $this->getThumbnailPath() . '/' . $model->title .'.webp';
+
+            if (rename($previousMainImagePath, $newMainImagePath) && rename($previousThumbnailPath, $newThumbnailPath)) {
+
+                $model->image_name = $newImageName;
+
+                return;
+            }
+
+            throw new Exception('Ошибка при переименовании изображения');
+        }
+
+        $this->removeImage();
+        $this->saveUploadedFile();
+    }
+
+    /**
+     * Saves the uploaded file.
+     *
+     * @throws Exception if there is an error while saving the uploaded image
+     */
+    public function saveUploadedFile(): void
+    {
+        $model = $this->owner;
         $mainFolder = $this->getMainPath();
 
         $imageName = $model->title . '.' . $model->image->extension;
@@ -179,7 +291,7 @@ class PaintingBehavior extends Behavior
             return;
         }
 
-        throw new Exception('Ошибка при сохранении изображения');
+        throw new Exception('Ошибка при сохранении загруженного изображения');
     }
 
     /**
@@ -211,11 +323,15 @@ class PaintingBehavior extends Behavior
     public function removeImage(bool $deleteParentFolder = false): void
     {
         $isSuccess = true;
-        $mainFolder = $this->getMainPath();
-        $thumbnailFolder = $this->getThumbnailPath();
+        $owner = $this->owner;
 
-        $imageToDelete = $mainFolder . '/' . $this->owner->image_name;
-        $thumbnailToDelete = $thumbnailFolder . '/' . $this->owner->title . '.webp';
+        $artistName = $this->getPreviousArtistName();
+
+        $mainFolder = $this->getMainPath($artistName);
+        $thumbnailFolder = $this->getThumbnailPath($artistName);
+
+        $imageToDelete = $mainFolder . '/' . $owner->image_name;
+        $thumbnailToDelete = $thumbnailFolder . '/' . $owner->getOldAttribute('title') . '.webp';
 
         if (file_exists($imageToDelete) && $isSuccess = FileHelper::unlink($imageToDelete)) {
             if ($deleteParentFolder && empty(FileHelper::findFiles($mainFolder))) {
@@ -238,16 +354,31 @@ class PaintingBehavior extends Behavior
      *
      * For each author, a directory of the same name is created to contain all his works
      */
-    public function getMainPath(): string
+    public function getMainPath(string $artistName = null): string
     {
-        return Url::to('@common/uploads/images/paintings/' . $this->owner->artist->name);
+        $folderName = $artistName ?? $this->owner->artist->name;
+
+        return Url::to('@common/uploads/images/paintings/' . $folderName);
     }
 
     /**
      * Constructs the path to directory where thumbnail image will be saved
      */
-    public function getThumbnailPath(): string
+    public function getThumbnailPath(string $artistName = null): string
     {
-        return Url::to('@common/uploads/thumbnails/paintings/' . $this->owner->artist->name);
+        $folderName = $artistName ?? $this->owner->artist->name;
+
+        return Url::to('@common/uploads/thumbnails/paintings/' . $folderName);
+    }
+
+    /**
+     * Returns the name of the previous artist
+     */
+    public function getPreviousArtistName(): string
+    {
+        return Artist::find()
+            ->select('name')
+            ->where(['id' => $this->owner->getOldAttribute('artist_id')])
+            ->scalar();
     }
 }

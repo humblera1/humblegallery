@@ -3,6 +3,8 @@
 namespace common\modules\painting\models\service;
 
 use common\components\Service;
+use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\Url;
 
 class PaintingService extends Service
@@ -74,5 +76,13 @@ class PaintingService extends Service
     public function getNameToDisplay(): string
     {
         return $this->model->title . ' ' . $this->getDateToDisplay();
+    }
+
+    /**
+     * Check if the painting is liked by the current user
+     */
+    public function isLikedByCurrentUser(): bool
+    {
+        return $this->model->getLikes()->byCurrentUser()->exists();
     }
 }

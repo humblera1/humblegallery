@@ -10,14 +10,16 @@ $(document).ready(function() {
 
 filters.each((index, filter) => {
     filter.addEventListener('change', applyFilters);
+    filter.addEventListener('change', markLabel);
 })
 
 function applyFilters () {
     makeRequest()
         .done(data => {
             reloadContent(data);
-            reloadMasonry();
-        });
+        })
+        .done(() => reloadMasonry())
+        .fail(error => console.log(error));
 }
 
 function reloadContent (data) {
@@ -36,4 +38,10 @@ function initMasonry () {
         transitionDuration: '1s',
         percentPosition: true
     })
+}
+
+
+//Работа со стилизацией фильтров
+function markLabel () {
+    $(this).parent().toggleClass('filter--active');
 }

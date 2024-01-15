@@ -16,8 +16,11 @@ class DefaultController extends Controller
 {
     public function actionIndex(): string
     {
+        $model = new PaintingSearch();
+
         return $this->render('index', [
             'dataProvider' => $this->getProvider(),
+            'model' => $model,
         ]);
     }
 
@@ -70,6 +73,10 @@ class DefaultController extends Controller
     {
         $searchModel = new PaintingSearch();
 
-        return $searchModel->search($this->request->post());
+        $d = $searchModel->search($this->request->post());
+
+        $om = 'om';
+
+        return $d;
     }
 }

@@ -16,10 +16,10 @@ use common\modules\painting\models\data\Painting;
  */
 class PaintingSearch extends Painting
 {
-    public array $subjects = [];
-    public array $movements = [];
-    public array $techniques = [];
-    public array $artists = [];
+    public string|array $subjects = '';
+    public string|array $movements = '';
+    public string|array $techniques = '';
+    public string|array $artists = '';
 
 
     public function rules(): array
@@ -77,7 +77,7 @@ class PaintingSearch extends Painting
 
     public function applyMovementFilter(PaintingQuery $query): void
     {
-        if ($this->subjects) {
+        if ($this->movements) {
             $query->joinWith('movements');
 
             $query->andFilterWhere([Movement::tableName() . '.id' => $this->movements]);

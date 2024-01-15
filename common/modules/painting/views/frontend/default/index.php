@@ -1,5 +1,6 @@
 <?php
 
+use common\modules\painting\models\search\PaintingSearch;
 use common\modules\subject\models\data\Subject;
 use frontend\assets\MasonryAsset;
 use yii\data\ActiveDataProvider;
@@ -11,6 +12,7 @@ use yii\widgets\Pjax;
 
 /**
  * @var $this View
+ * @var $model PaintingSearch
  * @var ActiveDataProvider $dataProvider
  */
 
@@ -34,24 +36,7 @@ MasonryAsset::register($this);
         </header>
 
         <div class="page-container">
-            <aside class="sidebar">
-                <?php $form = ActiveForm::begin([
-                    'id' => 'painting-form',
-                    'action' => "filtering",
-                ]);
-
-                echo Html::checkboxList(
-                    'PaintingSearch[subjects][]',
-                    null,
-                    ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
-                    [
-                        'class' => 'filter',
-                        'separator' => '<br>',
-                    ]
-                );
-
-                ActiveForm::end(); ?>
-            </aside>
+            <?= $this->render('includes/_sidebar', ['model' => $model]) ?>
 
             <?php Pjax::begin() ?>
                 <div class="painting-catalog">

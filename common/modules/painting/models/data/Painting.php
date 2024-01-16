@@ -73,7 +73,9 @@ class Painting extends ActiveRecord
                 'relation' => 'subjects',
                 'relationReferenceAttribute' => 'subjectIds',
             ],
-            PaintingBehavior::class,
+            'mainBehavior' => [
+                'class' => PaintingBehavior::class,
+            ],
         ];
     }
 

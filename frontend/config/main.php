@@ -1,6 +1,7 @@
 <?php
 
 use common\modules\painting\PaintingModule;
+use common\modules\user\UserModule;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -20,6 +21,11 @@ return [
             'class' => PaintingModule::class,
             'controllerNamespace' => 'common\modules\painting\controllers\frontend',
             'viewPath' => '@common/modules/painting/views/frontend',
+        ],
+        'user' => [
+            'class' => UserModule::class,
+            'controllerNamespace' => 'common\modules\user\controllers\frontend',
+            'viewPath' => '@common/modules/user/views/frontend',
         ],
     ],
     'components' => [

@@ -1,0 +1,29 @@
+@import '../../colors';
+
+.control-label {
+  padding-left: 1.25rem;
+  padding-bottom: .25rem;
+}
+
+.humble-control-label {
+  position: relative;
+  color: #a2a2a2;
+  top: 10px;
+  left: 25px;
+  background-color: $additional-color;
+  padding: 0 3px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.form-group {
+  padding-bottom: 1.25rem;
+}
+
+.help-block {
+  color: $orange;
+}
+
+input[aria-invalid="true"] {
+  border-color: $orange;
+}

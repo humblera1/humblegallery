@@ -1,5 +1,6 @@
 <?php
 
+use yii\console\controllers\FixtureController;
 use yii\console\controllers\MigrateController;
 
 $params = array_merge(
@@ -24,6 +25,7 @@ return [
             'db' => 'db',
             'migrationPath' => [
                 '@app/migrations',
+                '@common/modules/user/migrations',
                 '@common/modules/artist/migrations',
                 '@common/modules/painting/migrations',
                 '@common/modules/movement/migrations',
@@ -32,7 +34,7 @@ return [
             ]
         ],
         'fixture' => [
-            'class' => \yii\console\controllers\FixtureController::class,
+            'class' => FixtureController::class,
             'namespace' => 'common\fixtures',
           ],
     ],

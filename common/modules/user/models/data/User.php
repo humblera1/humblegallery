@@ -4,7 +4,9 @@ namespace common\modules\user\models\data;
 
 use common\modules\user\models\query\UserQuery;
 use common\modules\user\models\service\UserService;
+use traits\IdentityTrait;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -20,8 +22,10 @@ use yii\db\ActiveRecord;
  * @property int $created_at Создан
  * @property int $updated_at Обновлён
  */
-class User extends ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
+    use IdentityTrait;
+
     public ?UserService $service = null;
 
     public function init(): void

@@ -20,4 +20,14 @@ class UserService extends Service
     {
         $this->model->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
+
+    /**
+     * Generates 'remember me' authentication key
+     *
+     * @throws Exception if string can't be generated
+     */
+    public function generateAuthKey(): void
+    {
+        $this->model->auth_key = Yii::$app->security->generateRandomString();
+    }
 }

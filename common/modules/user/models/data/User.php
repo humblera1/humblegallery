@@ -2,9 +2,10 @@
 
 namespace common\modules\user\models\data;
 
+use common\modules\user\components\traits\IdentityTrait;
 use common\modules\user\models\query\UserQuery;
 use common\modules\user\models\service\UserService;
-use traits\IdentityTrait;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -17,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string|null $name Имя
  * @property string|null $surname Фамилия
+ * @property string $auth_key
  * @property int|null $is_verified Подтверждён
  * @property int|null $is_blocked Заблокирован
  * @property int $created_at Создан
@@ -37,6 +39,16 @@ class User extends ActiveRecord implements IdentityInterface
     public static function tableName(): string
     {
         return 'user';
+    }
+
+    /** {@inheritdoc} */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+            ]
+        ];
     }
 
     public function rules(): array

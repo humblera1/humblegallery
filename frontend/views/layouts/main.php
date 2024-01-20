@@ -35,16 +35,16 @@ AppAsset::register($this);
                     <div class="nav-item">Статьи</div>
                 </div>
                 <div class="nav-block">
-                    <?php if (Yii::$app->user->isGuest): ?>
-                    <?php $text = "<i class='fa-solid fa-right-to-bracket'></i>    Вход"; ?>
-                    <div class='' id='login-button'>
-                        <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
+                    <div class="nav-item">
+                        <?php if (Yii::$app->user->isGuest): ?>
+                            <?php $text = "<i class='fa-solid fa-right-to-bracket'></i>    Вход"; ?>
+                            <div class='' id='login-button'>
+                                <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
+                            </div>
+                        <?php else: ?>
+                            <?= Html::a('Профиль', [''], ['class' => 'nav-item']); ?>
+                        <?php endif; ?>
                     </div>
-
-<!--                        --><?php //= Html::a($text, [''], ['class' => 'nav-item', 'id' => 'login-button']); ?>
-                    <?php else: ?>
-                        <?= Html::a('Профиль', [''], ['class' => 'nav-item']); ?>
-                    <?php endif; ?>
                 </div>
             </nav>
         </header>
@@ -71,7 +71,11 @@ AppAsset::register($this);
                             <div class="close-button">×</div>
                         </div>
                         <div class="modal-head--title">
-                            <span>Вход/Регистрация</span>
+                            <span>
+                                <span id="action-login" class="action-login action-active" data-action="login">Вход</span>
+                                /
+                                <span id="action-signup" class="action-signup" data-action="signup">Регистрация</span>
+                            </span>
                         </div>
                     </div>
                 </div>

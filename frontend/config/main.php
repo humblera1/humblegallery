@@ -1,7 +1,9 @@
 <?php
 
+use backend\components\widgets\HumbleActiveField;
 use common\modules\painting\PaintingModule;
 use common\modules\user\UserModule;
+use yii\widgets\ActiveForm;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -16,6 +18,13 @@ return [
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
     'controllerNamespace' => 'frontend\controllers',
+    'container' => [
+        'definitions' => [
+            ActiveForm::class => [
+                'fieldClass' => HumbleActiveField::class
+            ],
+        ],
+    ],
     'modules' => [
         'painting' => [
             'class' => PaintingModule::class,
@@ -56,7 +65,9 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => true,
             'rules' => [
+                'user/<action>' => 'user/default/<action>',
             ],
         ],
     ],

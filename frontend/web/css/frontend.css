@@ -166,7 +166,8 @@ fieldset {
   align-items: center; }
 
 .nav-item {
-  padding: 0 1rem; }
+  padding: 0 1rem;
+  cursor: pointer; }
 
 .modal {
   z-index: 1000;
@@ -190,7 +191,8 @@ fieldset {
     height: 90vh;
     overflow-y: scroll;
     background-color: #FFF4E5;
-    border-radius: 15px; }
+    border-radius: 15px;
+    max-width: 76.8rem; }
   .modal__action {
     width: 70px;
     height: 90vh;
@@ -214,6 +216,14 @@ fieldset {
     justify-content: center;
     padding: .5rem 3rem; }
 
+.action-login, .action-signup {
+  cursor: pointer; }
+  .action-login:hover, .action-signup:hover {
+    color: #ECBC5E; }
+
+.action-active {
+  font-weight: bold; }
+
 .close-button {
   font-size: 25px;
   cursor: pointer; }
@@ -233,5 +243,28 @@ fieldset {
   bottom: 0;
   background: #000;
   opacity: 0.5; }
+
+.control-label {
+  padding-left: 1.25rem;
+  padding-bottom: .25rem; }
+
+.humble-control-label {
+  position: relative;
+  color: #a2a2a2;
+  top: 10px;
+  left: 25px;
+  background-color: #FFF4E5;
+  padding: 0 3px;
+  font-size: 14px;
+  font-weight: bold; }
+
+.form-group {
+  padding-bottom: 1.25rem; }
+
+.help-block {
+  color: #ECBC5E; }
+
+input[aria-invalid="true"] {
+  border-color: #ECBC5E; }
 
 /*# sourceMappingURL=frontend.css.map */

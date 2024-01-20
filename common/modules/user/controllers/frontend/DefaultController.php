@@ -2,8 +2,8 @@
 
 namespace common\modules\user\controllers\frontend;
 
-use common\models\LoginForm;
-use common\modules\user\models\forms\RegisterForm;
+use common\modules\user\models\forms\LoginForm;
+use common\modules\user\models\forms\SignupForm;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -13,15 +13,15 @@ class DefaultController extends Controller
     /**
      * New user registration action
      */
-    public function actionRegister(): string|Response
+    public function actionSignup(): string|Response
     {
-        $model = new RegisterForm();
+        $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
             return $this->goHome();
         }
 
-        return $this->render('includes/_signup', [
+        return $this->renderAjax('includes/_signup', [
             'model' => $model,
         ]);
     }
@@ -31,11 +31,6 @@ class DefaultController extends Controller
      */
     public function actionLogin(): string|Response
     {
-        return 'hello there';
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -43,7 +38,7 @@ class DefaultController extends Controller
 
         $model->password = '';
 
-        return $this->render('includes/_login', [
+        return $this->renderAjax('includes/_login', [
             'model' => $model,
         ]);
     }

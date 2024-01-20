@@ -1,6 +1,17 @@
 const loginButton = $('#login-button');
 const overlay = $('#overlay');
 const loginModal = $('#login-modal');
+const loginContent = $('#login-content');
+
+const actionLogin = $('#action-login');
+const actionSignup = $('#action-signup');
+
+
+([actionLogin, actionSignup]).forEach(function (action) {
+    action.on('click', function () {
+        action.data('action') === 'signup' ? showSignupForm() : showLoginForm();
+    })
+});
 
 loginButton.on('click', () => {
     showLoginModal();
@@ -8,8 +19,8 @@ loginButton.on('click', () => {
 })
 
 function showLoginModal() {
-    $(overlay).addClass('overlay--active');
-    $(loginModal).addClass('modal--active');
+    overlay.addClass('overlay--active');
+    loginModal.addClass('modal--active');
 
     $('body').css('overflow', 'hidden');
 
@@ -26,7 +37,15 @@ function showLoginModal() {
 }
 
 function showLoginForm() {
-    $('#login-content').load('/user/default/login');
+    actionLogin.addClass('action-active');
+    actionSignup.removeClass('action-active');
+    loginContent.load('/user/login');
+}
+
+function showSignupForm() {
+    actionSignup.addClass('action-active');
+    actionLogin.removeClass('action-active');
+    loginContent.load('/user/signup');
 }
 
 function hideModal() {

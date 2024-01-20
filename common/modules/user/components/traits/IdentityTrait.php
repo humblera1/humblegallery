@@ -3,7 +3,6 @@
 namespace traits;
 
 use common\modules\user\models\data\User;
-use Yii;
 
 trait IdentityTrait
 {
@@ -35,5 +34,13 @@ trait IdentityTrait
     public function validateAuthKey($authKey): bool
     {
         return $this->authKey === $authKey;
+    }
+
+    /**
+     * Find User by provided username
+     */
+    public static function findByUsername(string $username): ?User
+    {
+        return parent::findOne(['username' => $username]);
     }
 }

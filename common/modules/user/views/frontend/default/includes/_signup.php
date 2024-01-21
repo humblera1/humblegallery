@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
                     'id' => 'signup-form',
                     'validationStateOn' => ActiveForm::VALIDATION_STATE_ON_INPUT,
                     'enableAjaxValidation' => true,
-                    'validationUrl' => "validate-signup",
+                    'validationUrl' => "/user/validate-signup",
                 ]
             ); ?>
 

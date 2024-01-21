@@ -1,6 +1,6 @@
 <?php
 
-namespace traits;
+namespace common\modules\user\components\traits;
 
 use common\modules\user\models\data\User;
 
@@ -13,10 +13,7 @@ trait IdentityTrait
     }
 
     /** {@inheritdoc} */
-    public static function findIdentityByAccessToken($token, $type = null): ?User
-    {
-        return parent::findOne(['access_token' => $token]);
-    }
+    public static function findIdentityByAccessToken($token, $type = null) {}
 
     /** {@inheritdoc} */
     public function getId(): int
@@ -27,13 +24,13 @@ trait IdentityTrait
     /** {@inheritdoc} */
     public function getAuthKey(): string
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /** {@inheritdoc} */
     public function validateAuthKey($authKey): bool
     {
-        return $this->authKey === $authKey;
+        return $this->auth_key === $authKey;
     }
 
     /**

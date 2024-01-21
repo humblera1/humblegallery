@@ -2,14 +2,50 @@
 
 namespace common\modules\user\controllers\frontend;
 
+use common\modules\user\models\data\User;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 class DefaultController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['personal-area'],
+                'rules' => [
+                    [
+                        'actions' => ['personal-area'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    $cache = Yii::$app->cache;
+                    $cache->set('needToShowLoginModal', true, 10);
+
+                    return $this->redirect('/');
+                },
+            ],
+        ];
+    }
+
+    public function actionProfile(int $id): string
+    {
+        $model = User::findOne($id);
+
+        return $this->render('profile', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * New user registration action
      */
@@ -17,8 +53,7 @@ class DefaultController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+            return $this->redirect(['personal-area', 'id' => Yii::$app->user->id]);
         }
 
         return $this->renderAjax('includes/_signup', [
@@ -32,8 +67,9 @@ class DefaultController extends Controller
     public function actionLogin(): string|Response
     {
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['personal-area', 'id' => Yii::$app->user->id]);
         }
 
         $model->password = '';
@@ -53,4 +89,25 @@ class DefaultController extends Controller
         return $this->goHome();
     }
 
+    public function actionValidateLogin(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = new LoginForm();
+
+        $model->load(Yii::$app->request->post());
+
+        return ActiveForm::validate($model);
+    }
+
+    public function actionValidateSignup(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = new SignupForm();
+
+        $model->load(Yii::$app->request->post());
+
+        return ActiveForm::validate($model);
+    }
 }

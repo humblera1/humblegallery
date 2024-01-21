@@ -42,7 +42,7 @@ AppAsset::register($this);
                                 <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
                             </div>
                         <?php else: ?>
-                            <?= Html::a('Профиль', [''], ['class' => 'nav-item']); ?>
+                            <?= Html::a('Профиль', ['/user/personal-area', 'id' => Yii::$app->user->id], ['class' => 'nav-item']); ?>
                         <?php endif; ?>
                     </div>
                 </div>

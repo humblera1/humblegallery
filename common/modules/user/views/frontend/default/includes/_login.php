@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
                     'id' => 'login-form',
                     'validationStateOn' => ActiveForm::VALIDATION_STATE_ON_INPUT,
                     'enableAjaxValidation' => true,
-                    'validationUrl' => "validate-login",
+                    'validationUrl' => "/user/validate-login",
                 ]
             ); ?>
 

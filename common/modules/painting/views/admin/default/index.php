@@ -32,7 +32,7 @@ Yii::$app->session->getFlash('error');
         </p>
     </div>
 
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin(['enablePushState' => false]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= HumbleGridView::widget([

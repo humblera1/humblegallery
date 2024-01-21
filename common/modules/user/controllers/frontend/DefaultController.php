@@ -37,11 +37,11 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionPersonalArea(int $id): string
+    public function actionProfile(int $id): string
     {
         $model = User::findOne($id);
 
-        return $this->render('personal-area', [
+        return $this->render('profile', [
             'model' => $model,
         ]);
     }

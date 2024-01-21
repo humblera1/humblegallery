@@ -4,6 +4,7 @@ use backend\components\widgets\HumbleActiveField;
 use common\modules\painting\PaintingModule;
 use common\modules\user\models\data\User;
 use common\modules\user\UserModule;
+use yii\caching\FileCache;
 use yii\widgets\ActiveForm;
 
 $params = array_merge(
@@ -51,6 +52,9 @@ return [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
+        'cache' => [
+            'class' => FileCache::class,
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -70,6 +74,7 @@ return [
             'rules' => [
                 'user/<action>' => 'user/default/<action>',
                 'user/personal-area/<id:\d+>' => 'user/default/personal-area',
+                '' => 'site/index', //TODO:поправить маршрут
             ],
         ],
     ],

@@ -63,6 +63,6 @@ class SignupForm extends Model
             return false;
         }
 
-        return Yii::$app->user->login($user, 30 * 24 & 60 * 60);
+        return Yii::$app->user->login($user, 30 * 24 * 60 * 60);
     }
 }

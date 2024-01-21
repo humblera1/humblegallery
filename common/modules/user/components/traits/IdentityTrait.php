@@ -24,13 +24,13 @@ trait IdentityTrait
     /** {@inheritdoc} */
     public function getAuthKey(): string
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /** {@inheritdoc} */
     public function validateAuthKey($authKey): bool
     {
-        return $this->authKey === $authKey;
+        return $this->auth_key === $authKey;
     }
 
     /**

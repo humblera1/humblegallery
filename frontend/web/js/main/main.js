@@ -6,7 +6,6 @@ const loginContent = $('#login-content');
 const actionLogin = $('#action-login');
 const actionSignup = $('#action-signup');
 
-
 ([actionLogin, actionSignup]).forEach(function (action) {
     action.on('click', function () {
         action.data('action') === 'signup' ? showSignupForm() : showLoginForm();

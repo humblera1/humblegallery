@@ -6,12 +6,37 @@ use common\modules\user\models\data\User;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 class DefaultController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['personal-area'],
+                'rules' => [
+                    [
+                        'actions' => ['personal-area'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    $cache = Yii::$app->cache;
+                    $cache->set('needToShowLoginModal', true, 10);
+
+                    return $this->redirect('/');
+                },
+            ],
+        ];
+    }
+
     public function actionPersonalArea(int $id): string
     {
         $model = User::findOne($id);

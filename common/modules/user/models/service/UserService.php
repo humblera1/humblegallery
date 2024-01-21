@@ -3,8 +3,13 @@
 namespace common\modules\user\models\service;
 
 use common\components\Service;
+use common\modules\user\models\data\User;
 use Yii;
 use yii\base\Exception;
+
+/**
+ * @property User $model
+ */
 
 class UserService extends Service
 {
@@ -29,5 +34,13 @@ class UserService extends Service
     public function generateAuthKey(): void
     {
         $this->model->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Validates password
+     */
+    public function validatePassword(string $password): bool
+    {
+        return Yii::$app->security->validatePassword($password, $this->model->password_hash);
     }
 }

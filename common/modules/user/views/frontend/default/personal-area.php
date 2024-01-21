@@ -1,5 +1,6 @@
 <?php
 
-?>
 
-heello!
+echo "Hello, " . Yii::$app->user->identity->username . "!";
+
+?>

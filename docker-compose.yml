@@ -2,37 +2,55 @@ version: '3.2'
 
 services:
 
-  frontend:
-    build: frontend
+  # NGINX
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}-nginx
+    image: nginx:alpine
+    restart: always
     ports:
-      - 20080:80
+      - "${NGINX_PORT}:80"
     volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-
-  backend:
-    build: backend
-    ports:
-      - 21080:80
-    volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-
-  mysql:
-    image: mysql:5.7
+      - .:/var/www/${COMPOSE_PROJECT_DIR}
+      - ./docker/nginx:/etc/nginx/conf.d/
+      # - ${APP_STORAGE_PATH}:/mnt/storage
     environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
-      - MYSQL_PASSWORD=secret
+      NGINX_PORT: 8080
+    networks:
+      - humblegallery-network
 
-  #pgsql:
-  #  image: postgres:9.5
-  #  environment:
-  #    - POSTGRES_DB=yii2advanced
-  #    - POSTGRES_USER=yii2advanced
-  #    - POSTGRES_PASSWORD=secret
+
+  #FPM
+  fpm:
+    container_name: ${COMPOSE_PROJECT_NAME}-fpm
+    build:
+      # Путь до директории с Dockerfile
+      context: ./docker/php
+      # Маппинг томов
+    volumes:
+      - .:/var/www/${COMPOSE_PROJECT_DIR}
+    networks:
+      - humblegallery-network
+
+
+  #MYSQL
+  mysql:
+    container_name: ${COMPOSE_PROJECT_NAME}-mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ${APP_STORAGE_PATH}:/var/lib/mysql
+    networks:
+      - humblegallery-network
+
+networks:
+  humblegallery-network:
+    driver: bridge

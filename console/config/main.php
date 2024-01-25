@@ -19,13 +19,19 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'modules' => [
+        'user' => [
+            'class' => \common\modules\user\UserModule::class,
+            'controllerNamespace' => 'common\modules\user\controllers',
+        ]
+    ],
     'controllerMap' => [
         'migrate' => [
             'class' => MigrateController::class,
             'db' => 'db',
             'migrationPath' => [
                 '@app/migrations',
-                '@common/modules/user/migrations',
+//                '@common/modules/user/migrations',
                 '@common/modules/artist/migrations',
                 '@common/modules/painting/migrations',
                 '@common/modules/movement/migrations',

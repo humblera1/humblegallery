@@ -24,7 +24,8 @@
         "yii2tech/ar-linkmany": "^1.0",
         "yii2tech/ar-softdelete": "^1.0",
         "ext-gd": "*",
-        "notamedia/yii2-sentry": "^1.7"
+        "notamedia/yii2-sentry": "^1.7",
+        "yiithings/yii2-dotenv": "^1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -24,7 +24,6 @@ class m231217_124505_create_painting_table extends Migration
             'rating' => $this->float()->defaultValue(0)->comment('Рейтинг'),
             'image_name' => $this->string(255)->comment('Изображение'),
             'artist_id' => $this->integer()->notNull()->comment('Художник'),
-            'technique_id' => $this->integer()->notNull()->comment('Техника'),
             'created_at' => $this->integer()->notNull()->comment('Дата добавления'),
             'updated_at' => $this->integer()->notNull()->comment('Дата обновления'),
             'is_deleted' => $this->boolean()->defaultValue(0)->comment('В архиве'),

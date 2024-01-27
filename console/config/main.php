@@ -31,7 +31,8 @@ return [
             'db' => 'db',
             'migrationPath' => [
                 '@app/migrations',
-//                '@common/modules/user/migrations',
+                '@yii/rbac/migrations',
+                '@common/modules/user/migrations',
                 '@common/modules/artist/migrations',
                 '@common/modules/painting/migrations',
                 '@common/modules/movement/migrations',

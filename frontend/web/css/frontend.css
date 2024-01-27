@@ -148,19 +148,33 @@ fieldset {
 .profile {
   display: grid;
   grid-template-columns: 1fr 4fr; }
-  .profile .__sidebar {
+  .profile__sidebar {
     display: flex;
-    min-width: 40rem; }
-    .profile .__sidebar-navigation {
+    min-width: 40rem;
+    height: auto; }
+    .profile__sidebar-navigation {
+      width: 100%;
       padding: 1rem; }
   .profile .navigation__li {
-    width: 100%;
-    border-radius: .5rem;
-    padding: .5rem;
-    background-color: #0a53be; }
-    .profile .navigation__li .navigation__link {
-      display: flex;
-      justify-content: center; }
+    background-color: #fae8d0;
+    border-radius: 1.75rem;
+    margin: 1rem 0; }
+    .profile .navigation__li_active {
+      -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+      -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+      box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+      background-color: #FFF4E5; }
+    .profile .navigation__li_exit {
+      margin-top: 20rem; }
+  .profile .navigation__link {
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    padding: 2rem; }
+  .profile .navigation__icon {
+    font-size: 2.5rem;
+    margin-left: 2.5rem;
+    margin-right: 4rem; }
 
 .header {
   width: 100%;

@@ -2,8 +2,8 @@
 
 namespace frontend\assets;
 
-use yii\bootstrap5\BootstrapAsset;
 use yii\web\AssetBundle;
+use yii\web\YiiAsset;
 
 /**
  * Main frontend application asset bundle.
@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle
         'js/main/main.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
+        YiiAsset::class,
+        FontAwesomeAsset::class
     ];
 }

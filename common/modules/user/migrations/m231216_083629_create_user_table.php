@@ -1,7 +1,5 @@
 <?php
 
-namespace common\modules\painting\migrations;
-
 use yii\db\Migration;
 
 /**

@@ -36,12 +36,13 @@ services:
     image: mysql:latest
 #    restart: always
     environment:
+      MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - 3336:3306
+      - 3306:3306
     volumes:
       - humblegallery-mysql-data:/var/lib/mysql
     networks:

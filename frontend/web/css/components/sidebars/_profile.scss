@@ -1,0 +1,33 @@
+.profile {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+  .__sidebar {
+    display: flex;
+    min-width: 40rem;
+
+    &-navigation {
+      padding: 1rem;
+    }
+  }
+
+  .navigation__li {
+    width: 100%;
+    border-radius: .5rem;
+    padding: .5rem;
+    background-color: #0a53be;
+
+
+
+    .navigation__link {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+
+
+  .profile__content {
+
+  }
+}

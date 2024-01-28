@@ -14,7 +14,6 @@ const actionSignup = $('#action-signup');
 
 loginButton.on('click', () => {
     showLoginModal();
-    showLoginForm();
 })
 
 function showLoginModal() {
@@ -33,6 +32,8 @@ function showLoginModal() {
             hideModal();
         }
     })
+
+    showLoginForm();
 }
 
 function showLoginForm() {

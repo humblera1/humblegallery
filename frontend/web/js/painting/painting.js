@@ -2,7 +2,10 @@ let content = $('.content');
 const form = $('#painting-form');
 const filters = $('.filter');
 
-const makeRequest = () => $.post('apply-filters', form.serializeArray());
+const heartWrappers = $('.action__wrapper_heart');
+
+const makeFilterRequest = () => $.post('/paintings/apply-filters', form.serializeArray());
+const makeLikeRequest = (paintingId) => $.post('/paintings/like', {paintingId: paintingId});
 
 $(document).ready(function() {
     initMasonry();
@@ -14,7 +17,7 @@ filters.each((index, filter) => {
 })
 
 function applyFilters () {
-    makeRequest()
+    makeFilterRequest()
         .done(data => {
             reloadContent(data);
         })
@@ -45,3 +48,18 @@ function initMasonry () {
 function markLabel () {
     $(this).parent().toggleClass('filter--active');
 }
+
+//Лайки на картины
+heartWrappers.on('click', function () {
+    if (isGuest) {
+        showLoginModal();
+        return;
+    }
+
+    const heart = $(this).find('.action__icon');
+    heart.toggleClass('action__icon_liked');
+
+    makeLikeRequest($(this).data('painting-id'))
+        .done(flag => console.log(flag))
+        .fail(error => console.log(error));
+})

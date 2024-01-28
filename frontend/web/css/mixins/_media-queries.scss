@@ -1,0 +1,38 @@
+//Breakpoints
+$mobile: 576px;
+$tablet-portrait: 768px;
+$tablet-landscape: 992px;
+$desktop: 1200px;
+$big-desktop: 1800px;
+
+//Media queries
+@mixin for-mobile {
+    @media (max-width: #{$mobile}) {
+        @content;
+    }
+}
+
+@mixin for-tablet-portrait {
+  @media (max-width: #{$tablet-portrait}) {
+    @content;
+  }
+}
+
+@mixin for-tablet-landscape {
+  @media (max-width: #{$tablet-landscape}) {
+    @content;
+  }
+}
+
+@mixin for-desktop {
+    @media (max-width: #{$desktop}) {
+        @content;
+    }
+}
+
+@mixin for-big-desktop {
+    @media (max-width: #{$big-desktop}) {
+        @content;
+    }
+}
+

@@ -72,9 +72,19 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => true,
             'rules' => [
-                'user/<action>' => 'user/default/<action>',
-                'user/personal-area/<id:\d+>' => 'user/default/personal-area',
+                'paintings' => 'painting/default/index',
+                'paintings/<action>' => 'painting/default/<action>',
+
                 '' => 'site/index', //TODO:поправить маршрут
+
+                'user/<action>' => 'user/default/<action>',
+                [
+                    'pattern' => 'profile/<section:\w+>',
+                    'route' => 'user/default/profile',
+                    'defaults' => [
+                        'section' => 'info',
+                    ]
+                ],
             ],
         ],
     ],

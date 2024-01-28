@@ -3,16 +3,20 @@
 namespace common\modules\user\controllers\frontend;
 
 use common\modules\user\models\data\User;
+use common\modules\user\models\enums\ProfileSectionsEnum;
+use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 class DefaultController extends Controller
 {
+    public $layout = 'profile';
 
     public function behaviors()
     {
@@ -37,13 +41,25 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionProfile(int $id): string
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionProfile($section): string
     {
-        $model = User::findOne($id);
+        if (!in_array($section, ProfileSectionsEnum::getLabels())) {
+            throw new NotFoundHttpException();
+        }
 
-        return $this->render('profile', [
-            'model' => $model,
-        ]);
+        if ($this->request->isAjax) {
+            return $this->renderPartial('sections/' . $section);
+        }
+
+        return $this->render('sections/' . $section);
+    }
+
+    public function actionInfo()
+    {
+
     }
 
     /**
@@ -94,7 +110,6 @@ class DefaultController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = new LoginForm();
-
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);
@@ -105,7 +120,6 @@ class DefaultController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = new SignupForm();
-
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);

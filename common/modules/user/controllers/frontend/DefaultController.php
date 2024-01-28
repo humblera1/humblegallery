@@ -3,11 +3,13 @@
 namespace common\modules\user\controllers\frontend;
 
 use common\modules\user\models\data\User;
+use common\modules\user\models\enums\ProfileSectionsEnum;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -38,16 +40,21 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionProfile(): string
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionProfile($section): string
     {
-        return $this->render('sections/info');
-    }
+        if (!in_array($section, ProfileSectionsEnum::getLabels())) {
+            throw new NotFoundHttpException();
+        }
 
-    public function actionSection($name): string
-    {
-        return 'hello from section ' . $name;
-    }
+        if ($this->request->isAjax) {
+            return $this->renderPartial('sections/' . $section);
+        }
 
+        return $this->render('sections/' . $section);
+    }
 
     /**
      * New user registration action

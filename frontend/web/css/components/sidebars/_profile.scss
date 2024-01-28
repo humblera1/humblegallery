@@ -18,6 +18,7 @@
 
   .navigation {
     &__li {
+      cursor: pointer;
       background-color: $primary-color-darken;
       border-radius: 1.75rem;
 
@@ -30,6 +31,10 @@
 
       &_exit {
           margin-top: 20rem;
+      }
+
+      &:hover {
+          color: #424141;
       }
     }
 

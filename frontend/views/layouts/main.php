@@ -45,7 +45,7 @@ AppAsset::register($this);
                                 <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
                             </div>
                         <?php else: ?>
-                            <?= Html::a('Профиль', ['/user/profile'], ['class' => 'nav-item']); ?>
+                            <?= Html::a('Профиль', ['/profile'], ['class' => 'nav-item']); ?>
                         <?php endif; ?>
                     </div>
                 </div>

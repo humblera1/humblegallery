@@ -156,6 +156,7 @@ fieldset {
       width: 100%;
       padding: 1rem; }
   .profile .navigation__li {
+    cursor: pointer;
     background-color: #fae8d0;
     border-radius: 1.75rem;
     margin: 1rem 0; }
@@ -166,6 +167,8 @@ fieldset {
       background-color: #FFF4E5; }
     .profile .navigation__li_exit {
       margin-top: 20rem; }
+    .profile .navigation__li:hover {
+      color: #424141; }
   .profile .navigation__link {
     display: flex;
     align-items: center;

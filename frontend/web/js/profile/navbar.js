@@ -34,7 +34,7 @@ navItems.each(function (index, item) {
 
 function loadSectionContent (sectionName) {
     const url = createSectionUrl(sectionName);
-    $('.profile__content').load(url);
+    $('.profile__section-content').load(url);
 }
 
 function createSectionUrl (sectionName) {

@@ -1,0 +1,37 @@
+
+@import '../mixins/media-queries';
+
+.profile {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+
+  &__section {
+
+    &-content {
+      padding: 1rem 8vw;
+    }
+
+  }
+
+  .info {
+    &-header {
+
+    }
+    &-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      @include for-desktop {
+        grid-template-columns: 1fr;
+      }
+
+      &__column {
+        padding: 2.5rem;
+      }
+    }
+  }
+}
+
+.form-group {
+  max-width: 50rem;
+}

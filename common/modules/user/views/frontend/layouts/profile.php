@@ -11,9 +11,13 @@ use yii\web\View;
 
 <?php $this->beginContent('@app/views/layouts/main.php'); ?>
     <div class="profile">
-        <?= $this->render('includes/_sidebar'); ?>
-        <div class="profile__content">
-            <?= $content ?>
+        <section class="profile__sidebar">
+            <?= $this->render('includes/_sidebar'); ?>
+        </section>
+        <div class="profile__section">
+            <div class="profile__section-content">
+                <?= $content ?>
+            </div>
         </div>
     </div>
 <?php $this->endContent(); ?>

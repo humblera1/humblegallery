@@ -2,12 +2,10 @@
 @import '../../colors';
 
 .profile {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-
   &__sidebar {
+    grid-column: 1/2;
     display: flex;
-    min-width: 40rem;
+    min-width: 30rem;
     height: auto;
 
     &-navigation {
@@ -22,7 +20,7 @@
       background-color: $primary-color-darken;
       border-radius: 1.75rem;
 
-      margin: 1rem 0;
+      margin-bottom: 1.25rem;
 
       &_active {
         @include basic-shadow();
@@ -52,10 +50,5 @@
       margin-right: 4rem;
 
     }
-  }
-
-
-  .profile__content {
-
   }
 }

@@ -10,7 +10,7 @@ use yii\widgets\Menu as BaseMenu;
 
 class Menu extends BaseMenu
 {
-    public $linkTemplate = '<a class="nav-link" href="#">{icon} {label}</a>';
+    public $linkTemplate = '<a class="nav-link" href="{url}">{icon} {label}</a>';
     public $itemOptions = ['class' => 'nav-item'];
 
     public ?string $iconDefault = 'circle';

@@ -4,6 +4,7 @@ namespace common\modules\user\controllers\frontend;
 
 use common\modules\user\models\data\User;
 use common\modules\user\models\enums\ProfileSectionsEnum;
+use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use Yii;
@@ -56,6 +57,11 @@ class DefaultController extends Controller
         return $this->render('sections/' . $section);
     }
 
+    public function actionInfo()
+    {
+
+    }
+
     /**
      * New user registration action
      */
@@ -104,7 +110,6 @@ class DefaultController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = new LoginForm();
-
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);
@@ -115,7 +120,6 @@ class DefaultController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = new SignupForm();
-
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);

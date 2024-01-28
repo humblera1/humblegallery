@@ -75,38 +75,6 @@ fieldset {
   width: 100%;
   margin-top: 3rem; }
 
-.paint-container {
-  width: 100%;
-  min-width: 20rem; }
-  @media (min-width: 720px) {
-    .paint-container {
-      width: 50%; } }
-  @media (min-width: 1055px) {
-    .paint-container {
-      width: 33.333%; } }
-  @media (min-width: 1400px) {
-    .paint-container {
-      width: 25%; } }
-
-.paint-content {
-  padding: 0 3% 5% 3%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column; }
-  .paint-content__image {
-    object-fit: cover;
-    border-radius: 3rem;
-    width: 100%;
-    height: 100%; }
-  .paint-content__title {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    padding-top: .5rem;
-    padding-left: .75rem;
-    font-size: 1.8rem; }
-
 .sidebar {
   grid-column: 1 / 2;
   width: 18vw;
@@ -314,5 +282,65 @@ input[aria-invalid="true"] {
 
 .form-group {
   max-width: 50rem; }
+
+.paint-container {
+  cursor: pointer;
+  width: 100%;
+  min-width: 20rem; }
+  .paint-container__actions {
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+    left: 85%;
+    padding-top: 1.5rem;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease; }
+  .paint-container:hover .paint-container__actions {
+    opacity: 0.8; }
+  @media (min-width: 720px) {
+    .paint-container {
+      width: 50%; } }
+  @media (min-width: 1055px) {
+    .paint-container {
+      width: 33.333%; } }
+  @media (min-width: 1400px) {
+    .paint-container {
+      width: 25%; } }
+
+.action__wrapper {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+.action__content {
+  font-size: 2.25rem; }
+.action__icon {
+  padding-right: .1rem; }
+  .action__icon_liked {
+    color: #c44848; }
+
+.paint-content {
+  padding: 0 3% 5% 3%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column; }
+  .paint-content__image {
+    object-fit: cover;
+    border-radius: 3rem;
+    width: 100%;
+    height: 100%; }
+  .paint-content__title {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: .5rem;
+    padding-left: .75rem;
+    font-size: 1.8rem; }
 
 /*# sourceMappingURL=frontend.css.map */

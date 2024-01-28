@@ -34,7 +34,7 @@ AppAsset::register($this);
                 <div class="nav-block">
                     <div class="nav-item--logo"></div>
                     <div class="nav-item">Художники</div>
-                    <div class="nav-item">Картины</div>
+                    <div class="nav-item"><a href="/paintings">Картины</a></div>
                     <div class="nav-item">Статьи</div>
                 </div>
                 <div class="nav-block">

@@ -44,26 +44,23 @@ class DefaultController extends Controller
     public function actionLike(): bool
     {
         if ($this->request->isAjax) {
-            $tableName = PaintingLike::tableName();
-
             $userId = Yii::$app->user->getId();
             $paintingId = Yii::$app->request->post('paintingId');
 
-            $isLike = Yii::$app->request->post('isLike');
-
-            if ($isLike) {
-                return Yii::$app->db->createCommand()
-                    ->insert($tableName, [
-                        'user_id' => $userId,
-                        'painting_id' => $paintingId,
-                    ])->execute();
+            if (Yii::$app->user->isGuest) {
+                //окно логина
             }
 
-            return Yii::$app->db->createCommand()
-                ->delete($tableName, [
-                    'user_id' => $userId,
-                    'painting_id' => $paintingId
-                ])->execute();
+            if ($like = PaintingLike::findOne(['user_id' => $userId, 'painting_id' => $paintingId])) {
+                return $like->delete();
+            }
+
+            $newLike = new PaintingLike();
+
+            $newLike->user_id = $userId;
+            $newLike->painting_id = $paintingId;
+
+            return $newLike->save();
         }
 
         throw new Exception();

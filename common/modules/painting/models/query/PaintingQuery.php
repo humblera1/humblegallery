@@ -2,7 +2,6 @@
 
 namespace common\modules\painting\models\query;
 
-use Yii;
 use yii\db\ActiveQuery;
 
 /**
@@ -29,13 +28,5 @@ class PaintingQuery extends ActiveQuery
     public function one($db = null)
     {
         return parent::one($db);
-    }
-
-    /**
-     * Checks the existence of a record in a related table with id of the current user
-     */
-    public function byCurrentUser(): PaintingQuery
-    {
-        return $this->andWhere(['user_id' => Yii::$app->user->getId()]);
     }
 }

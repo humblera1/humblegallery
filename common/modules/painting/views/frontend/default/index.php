@@ -14,15 +14,27 @@ use yii\widgets\Pjax;
 
 MasonryAsset::register($this);
 
+$this->registerCss(<<<CSS
+
+.painting-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+CSS);
+
 ?>
+<div class="painting-container">
+    <?= $this->render('includes/_sidebar', ['model' => $model]) ?>
 
-<?= $this->render('includes/_sidebar', ['model' => $model]) ?>
-
-<?php Pjax::begin() ?>
-<div class="painting-catalog">
-    <main class="content">
-        <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
-    </main>
+    <?php Pjax::begin() ?>
+    <div class="painting-catalog">
+        <main class="content">
+            <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
+        </main>
+    </div>
+    <?php Pjax::end() ?>
 </div>
-<?php Pjax::end() ?>
+
+
 

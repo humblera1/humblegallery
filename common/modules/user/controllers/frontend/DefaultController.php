@@ -13,6 +13,7 @@ use yii\widgets\ActiveForm;
 
 class DefaultController extends Controller
 {
+    public $layout = 'profile';
 
     public function behaviors()
     {
@@ -37,14 +38,16 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionProfile(int $id): string
+    public function actionProfile(): string
     {
-        $model = User::findOne($id);
-
-        return $this->render('profile', [
-            'model' => $model,
-        ]);
+        return $this->render('sections/info');
     }
+
+    public function actionSection($name): string
+    {
+        return 'hello from section ' . $name;
+    }
+
 
     /**
      * New user registration action

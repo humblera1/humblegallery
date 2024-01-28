@@ -75,6 +75,9 @@ return [
                 'user/<action>' => 'user/default/<action>',
                 'user/personal-area/<id:\d+>' => 'user/default/personal-area',
                 '' => 'site/index', //TODO:поправить маршрут
+
+                'user/profile' => 'user/default/profile',
+                'user/section/<name>' => 'user/default/section',
             ],
         ],
     ],

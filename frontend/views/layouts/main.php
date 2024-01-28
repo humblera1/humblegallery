@@ -1,7 +1,9 @@
 <?php
 
-/** @var \yii\web\View $this */
-/** @var string $content */
+/**
+ * @var View $this
+ * @var string $content
+ */
 
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
@@ -9,6 +11,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\web\View;
 
 AppAsset::register($this);
 ?>
@@ -42,7 +45,7 @@ AppAsset::register($this);
                                 <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
                             </div>
                         <?php else: ?>
-                            <?= Html::a('Профиль', ['/user/profile', 'id' => Yii::$app->user->id], ['class' => 'nav-item']); ?>
+                            <?= Html::a('Профиль', ['/user/profile'], ['class' => 'nav-item']); ?>
                         <?php endif; ?>
                     </div>
                 </div>

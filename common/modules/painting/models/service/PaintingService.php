@@ -85,4 +85,12 @@ class PaintingService extends Service
     {
         return $this->model->getLikes()->byCurrentUser()->exists();
     }
+
+    /**
+     * Check if the painting is collected by the current user
+     */
+    public function isCollectedByCurrentUser(): bool
+    {
+        return $this->model->getCollections()->byCurrentUser()->exists();
+    }
 }

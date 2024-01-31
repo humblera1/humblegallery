@@ -21,6 +21,7 @@ class m240130_153529_create_collection_table extends Migration
             'user_id' => $this->integer()->notNull()->comment('ID пользователя'),
             'is_private' => $this->boolean()->defaultValue(0)->comment('Закрыта'),
             'is_archived' => $this->boolean()->defaultValue(0)->comment('В архиве'),
+            'updated_at' => $this->integer()->notNull()->comment('Последнее обновление'),
         ]);
 
         // creates index for column `user_id`

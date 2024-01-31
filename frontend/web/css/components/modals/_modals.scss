@@ -107,3 +107,27 @@
     opacity:0.5;
   }
 }
+
+.collection-choice {
+  display: flex;
+  justify-content: center;
+
+  &__new {
+    cursor: pointer;
+    width: 25rem;
+    height: 25rem;
+    
+  }
+}
+
+.area{
+  height: 25rem;
+  width: 25rem;
+  border: grey 3px dashed;
+  border-radius: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 5rem;
+}

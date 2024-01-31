@@ -17,6 +17,12 @@ use yii\helpers\Html;
                 <i class="<?= $class ?> action__icon fa-solid fa-heart"></i>
             </div>
         </div>
+        <div class="action__wrapper action__wrapper_collect" data-painting-id="<?= $model->id ?>">
+            <div class="action__content">
+                <?php $icon = $model->service->isCollectedByCurrentUser() ? 'check' : 'plus'; ?>
+                <i class="action__icon fa-solid fa-<?= $icon ?>"></i>
+            </div>
+        </div>
     </div>
     <div class="paint-content">
 

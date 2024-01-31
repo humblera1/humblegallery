@@ -1,8 +1,10 @@
 let content = $('.content');
 const form = $('#painting-form');
 const filters = $('.filter');
+const collectionModal = $('#collection-modal');
 
 const heartWrappers = $('.action__wrapper_heart');
+const collectWrappers = $('.action__wrapper_collect');
 
 const makeFilterRequest = () => $.post('/paintings/apply-filters', form.serializeArray());
 const makeLikeRequest = (paintingId) => $.post('/paintings/like', {paintingId: paintingId});
@@ -49,7 +51,33 @@ function markLabel () {
     $(this).parent().toggleClass('filter--active');
 }
 
-//Лайки на картины
+//Взаимодействия с картинами
+
+function showCollectionModal() {
+    overlay.addClass('overlay--active');
+    collectionModal.addClass('modal--active');
+
+    $('body').css('overflow', 'hidden');
+
+    //Кнопка с закрытием окна
+    $('.close-button').on('click', function () {
+        hideModal();
+    })
+
+    $('.modal__wrapper').on('click', function (event) {
+        if (event.target === this) {
+            hideCollectionModal();
+        }
+    })
+}
+
+function hideCollectionModal() {
+    $(overlay).removeClass('overlay--active');
+    $(collectionModal).removeClass('modal--active');
+
+    $('body').css('overflow', 'auto');
+}
+
 heartWrappers.on('click', function () {
     if (isGuest) {
         showLoginModal();
@@ -60,6 +88,14 @@ heartWrappers.on('click', function () {
     heart.toggleClass('action__icon_liked');
 
     makeLikeRequest($(this).data('painting-id'))
-        .done(flag => console.log(flag))
-        .fail(error => console.log(error));
+        .fail(() => heart.toggleClass('action__icon_liked'));
 })
+
+collectWrappers.on('click', function () {
+    if (isGuest) {
+        showLoginModal();
+        return;
+    }
+
+    showCollectionModal();
+});

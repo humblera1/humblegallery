@@ -63,7 +63,6 @@ AppAsset::register($this);
 </div>
 
 <?php if (Yii::$app->user->isGuest): ?>
-
     <div id="overlay"> </div>
     <div id="login-modal" class="modal">
         <div class="modal__wrapper">

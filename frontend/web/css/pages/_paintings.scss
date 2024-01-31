@@ -13,8 +13,11 @@
     opacity: 0;
     z-index: 1;
     position: absolute;
-    left: 85%;
+    left: 83%;
     padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @include default-transition;
   }
@@ -22,9 +25,6 @@
   &:hover &__actions {
     opacity: 0.8;
   }
-
-
-  
 
   @media (min-width: 720px) {
     width: 50%;
@@ -41,14 +41,28 @@
 
 .action {
   &__wrapper {
-    width: 3.5rem;
-    height: 3.5rem;
-    background-color: white;
-    border-radius: 50%;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
+    border-radius: 50%;
+
+    @include default-transition;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &_heart {
+      width: 4rem;
+      height: 4rem;
+      margin-bottom: .5rem;
+    }
+
+    &_collect {
+      width: 3rem;
+      height: 3rem;
+    }
   }
 
   &__content {
@@ -56,7 +70,7 @@
   }
 
   &__icon {
-      padding-right: .1rem;
+
     &_liked {
         color: $burgundy;
     }

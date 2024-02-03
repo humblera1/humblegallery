@@ -187,11 +187,14 @@ fieldset {
     align-items: center; }
   .modal__content {
     width: 50vw;
-    height: 90vh;
     overflow-y: scroll;
     background-color: #FFF4E5;
     border-radius: 15px;
     max-width: 76.8rem; }
+    .modal__content_login {
+      height: 90vh; }
+    .modal__content_collections {
+      height: 70vh; }
   .modal__action {
     width: 70px;
     height: 90vh;
@@ -205,11 +208,11 @@ fieldset {
   .modal__body {
     width: 100%;
     padding: 1.5rem 3rem; }
-  .modal-head--close {
+  .modal-head__close {
     display: flex;
     justify-content: flex-end;
     padding: .5rem 1rem; }
-  .modal-head--title {
+  .modal-head__title {
     font-size: 1.8rem;
     display: flex;
     justify-content: center;

@@ -46,7 +46,7 @@ class UserService extends Service
     }
 
     /**
-     * Returns array of user's collections
+     * Returns array of user's collections or false if no collections are found
      *
      * @return bool|Collection[]
      */

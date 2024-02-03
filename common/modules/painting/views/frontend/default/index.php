@@ -36,44 +36,9 @@ CSS);
     <?php Pjax::end() ?>
 </div>
 
-<div id="overlay"> </div>
-<div id="collection-modal" class="modal">
-    <div class="modal__wrapper">
-        <div class="modal__content">
-            <div class="modal__header">
-                <div class="modal-head">
-                    <div class="modal-head--close">
-                        <div class="close-button">×</div>
-                    </div>
-                    <div class="modal-head--title">
-                        <h3>Выберите коллекцию</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="modal__body">
-                <div id="login-content" class="modal__body-content">
-
-                    <div class="collection-choice">
-                        <div class="collection-choice_new">
-                            <div class="area">
-                                <i class="fa-solid fa-plus"></i>
-                            </div>
-                        </div>
-                        <?php if ($collections = Yii::$app->user->identity->service->getCollections()): ?>
-                            <div class="collection-choice_existing">
-                                <div class="collection-box">
-                                    <?php foreach ($collections as $collection): ?>
-                                        <?php $this->render('includes/_collection', ['collection' => $collection]); ?>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php if (!Yii::$app->user->isGuest): ?>
+    <?= $this->render('includes/_modal') ?>
+<?php endif; ?>
 
 
 

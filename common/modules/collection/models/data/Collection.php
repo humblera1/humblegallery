@@ -5,6 +5,7 @@ namespace common\modules\collection\models\data;
 use common\modules\collection\models\query\CollectionQuery;
 use common\modules\painting\models\data\Painting;
 use common\modules\user\models\data\User;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -30,11 +31,26 @@ class Collection extends ActiveRecord
         return '{{%collection}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            'timestampBehavior' => [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => false,
+            ],
+        ];
+    }
+
     /** {@inheritdoc} */
     public function rules(): array
     {
         return [
-            [['title'], 'required'],
+            [['title', 'user_id'], 'required'],
+            [['title'], 'string', 'max' => 32],
+            [['is_private', 'is_archived'], 'boolean'],
+            [['user_id'], 'integer'],
+            [['user_id'], 'exist', 'targetRelation' => 'user'],
+
         ];
     }
 

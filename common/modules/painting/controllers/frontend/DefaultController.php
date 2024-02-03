@@ -2,6 +2,7 @@
 
 namespace common\modules\painting\controllers\frontend;
 
+use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\data\PaintingLike;
 use common\modules\painting\models\search\PaintingSearch;
 use Exception;
@@ -66,14 +67,22 @@ class DefaultController extends Controller
         throw new Exception();
     }
 
+    /**
+     * @throws Exception
+     */
+    public function actionNewCollection(): string
+    {
+        if ($this->request->isAjax) {
+            return $this->renderPartial('includes/_new');
+        }
+
+        throw new Exception();
+    }
+
     protected function getProvider(): ActiveDataProvider
     {
         $searchModel = new PaintingSearch();
 
-        $d = $searchModel->search($this->request->post());
-
-        $om = 'om';
-
-        return $d;
+        return $searchModel->search($this->request->post());
     }
 }

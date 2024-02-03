@@ -52,6 +52,20 @@ function markLabel () {
 }
 
 //Взаимодействия с картинами
+heartWrappers.on('click', function () {
+    if (isGuest) {
+        showLoginModal();
+        return;
+    }
+    const heart = $(this).find('.action__icon');
+    heart.toggleClass('action__icon_liked');
+
+    makeLikeRequest($(this).data('painting-id'))
+        .fail(() => heart.toggleClass('action__icon_liked'));
+})
+
+//Логика добавления в коллекцию
+
 
 function showCollectionModal() {
     overlay.addClass('overlay--active');
@@ -72,24 +86,13 @@ function showCollectionModal() {
 }
 
 function hideCollectionModal() {
+    $('#active-painting').removeAttr('id');
+
     $(overlay).removeClass('overlay--active');
     $(collectionModal).removeClass('modal--active');
 
     $('body').css('overflow', 'auto');
 }
-
-heartWrappers.on('click', function () {
-    if (isGuest) {
-        showLoginModal();
-        return;
-    }
-
-    const heart = $(this).find('.action__icon');
-    heart.toggleClass('action__icon_liked');
-
-    makeLikeRequest($(this).data('painting-id'))
-        .fail(() => heart.toggleClass('action__icon_liked'));
-})
 
 collectWrappers.on('click', function () {
     if (isGuest) {
@@ -97,5 +100,29 @@ collectWrappers.on('click', function () {
         return;
     }
 
+    $(this).attr('id', 'active-painting');
     showCollectionModal();
 });
+
+$('#collection-form').on('beforeSubmit', function (event) {
+    const activePaintingId = $('#active-painting').data('painting-id');
+    const url = $(this).attr('action') + '?paintingId=' + activePaintingId;
+
+    const sendForm = $.ajax(
+        {
+            type: $(this).attr('method'),
+            url: url,
+            data: $(this).serializeArray()
+        }
+    );
+
+    sendForm.done(function(data) {
+        console.log('yay!');
+    });
+
+    sendForm.fail(function () {
+        console.log('ошибка при создании коллекции');
+    });
+
+    return false;
+})

@@ -10,7 +10,6 @@ use yii\widgets\ActiveForm;
  */
 
 $model = new Collection();
-
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -30,10 +29,3 @@ $model = new Collection();
 
 <?php ActiveForm::end(); ?>
 
-
-
-<!--<div class="collection-choice_new">-->
-<!--    <div class="area">-->
-<!--        <i class="fa-solid fa-plus"></i>-->
-<!--    </div>-->
-<!--</div>-->

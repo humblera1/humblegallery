@@ -1,13 +1,17 @@
 <?php
 
 use common\modules\collection\models\data\Collection;
+use yii\helpers\Html;
 use yii\web\View;
+use yii\widgets\ActiveForm;
 
 /**
  * @var View $this
  */
 
-$collections = Yii::$app->user->identity->service->getCollections();
+$hasCollections = Yii::$app->user->identity->service->hasCollections();
+
+$this->registerJsVar('hasCollections', $hasCollections);
 
 ?>
 
@@ -21,15 +25,13 @@ $collections = Yii::$app->user->identity->service->getCollections();
                         <div class="close-button">×</div>
                     </div>
                     <div class="modal-head__title">
-                        <h3><?= $collections ? 'Выберите коллекцию' : 'Создайте свою первую коллекцию!' ?></h3>
+                        <h3><?= $hasCollections ? 'Выберите коллекцию' : 'Создайте свою первую коллекцию!' ?></h3>
                     </div>
                 </div>
             </div>
             <div class="modal__body">
-                <div id="login-content" class="modal__body-content">
-                    <div class="collection-choice">
-                        <?= $collections ? $this->render('_painting', ['collections' => $collections])
-                            : $this->render('_new') ?>
+                <div class="modal__body-content">
+                    <div id="collectionModalContent" class="collection-choice">
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ namespace common\modules\collection\controllers\frontend;
 use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\data\PaintingCollection;
 use Exception;
+use Throwable;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -17,32 +18,90 @@ class DefaultController extends Controller
 {
 
     /**
-     * Saves new PaintingCollection
+     * Return collection creation template to display it in modal window
+     *
      * @throws Exception
      */
-    public function actionAdd(int $collectionId, int $paintingId): void
+    public function actionGetNewCollection(): string
     {
-        if ($this->request->isAjax && $this->saveNewPaintingCollection($collectionId, $paintingId)) {
-            return;
+        if ($this->request->isAjax) {
+            return $this->renderAjax('includes/_new');
         }
 
         throw new Exception();
     }
 
-    public function actionCreateAndAdd(int $paintingId): void
+    /**
+     * Return list of user's collections to display it in modal window
+     *
+     * @throws Exception
+     */
+    public function actionGetUserCollections(): string
     {
-        if (
-            $this->request->isAjax
-            && ($collection = $this->saveNewCollection())
-            && $this->saveNewPaintingCollection($collection->id, $paintingId)
-        ) {
-            return;
+        if ($this->request->isAjax && $collections = Yii::$app->user->identity->service->getCollections()) {
+            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
         }
 
         throw new Exception();
     }
 
-    protected function saveNewCollection(): bool|Collection
+    /**
+     * @throws Throwable
+     */
+    public function actionAdd(int $collectionId, int $paintingId): string
+    {
+        if ($this->request->isAjax) {
+            if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
+                $paintingCollection->delete();
+
+                if ($collections = Yii::$app->user->identity->service->getCollections()) {
+                    return $this->renderPartial('includes/_collections', ['collections' => $collections]);
+                }
+
+                return $this->renderPartial('includes/_new');
+            }
+
+            $this->saveNewPaintingCollection($collectionId, $paintingId);
+
+            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
+        }
+
+        throw new Exception();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionCreateAndAdd(int $paintingId): string
+    {
+        if ($this->request->isAjax) {
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                $collection = $this->saveNewCollection();
+                $this->saveNewPaintingCollection($collection->id, $paintingId);
+            } catch (Exception $exception) {
+                $transaction->rollBack();
+
+                Yii::error($exception->getMessage(), 'collection');
+
+                throw $exception;
+            }
+
+            $transaction->commit();
+
+            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
+        }
+
+        throw new Exception();
+    }
+
+    /**
+     * Save new collection to database
+     *
+     * @throws Exception
+     */
+    protected function saveNewCollection(): Collection
     {
         $collection = new Collection();
 
@@ -53,21 +112,26 @@ class DefaultController extends Controller
             return $collection;
         }
 
-        return false;
+        throw new Exception();
     }
 
-    protected function saveNewPaintingCollection(int $collectionId, int $paintingId): bool
+    /**
+     * Save new painting to specific collection
+     *
+     * @throws Exception
+     */
+    protected function saveNewPaintingCollection(int $collectionId, int $paintingId): void
     {
         $paintingCollection = new PaintingCollection();
 
-        $paintingCollection->painting_id = $collectionId;
-        $paintingCollection->collection_id = $paintingId;
+        $paintingCollection->collection_id = $collectionId;
+        $paintingCollection->painting_id = $paintingId;
 
-        if ($paintingCollection->validate()) {
-            return $paintingCollection->save();
+        if ($paintingCollection->validate() && $paintingCollection->save()) {
+            return;
         }
 
-        return false;
+        throw new Exception();
     }
 
     public function actionValidateForm(): array

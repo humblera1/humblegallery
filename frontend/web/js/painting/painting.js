@@ -66,6 +66,17 @@ heartWrappers.on('click', function () {
 
 //Логика добавления в коллекцию
 
+//При загрузке страницы грузим содержимое модального окна
+let collectionModalContent = $('#collectionModalContent');
+loadCollectionModalContent();
+
+function loadCollectionModalContent () {
+    if (hasCollections) {
+        collectionModalContent.load('/collection/get-user-collections');
+    } else {
+        collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
+    }
+}
 
 function showCollectionModal() {
     overlay.addClass('overlay--active');
@@ -104,25 +115,28 @@ collectWrappers.on('click', function () {
     showCollectionModal();
 });
 
-$('#collection-form').on('beforeSubmit', function (event) {
-    const activePaintingId = $('#active-painting').data('painting-id');
-    const url = $(this).attr('action') + '?paintingId=' + activePaintingId;
 
-    const sendForm = $.ajax(
-        {
-            type: $(this).attr('method'),
-            url: url,
-            data: $(this).serializeArray()
-        }
-    );
+function addFormHandlers() {
+    $('#collection-form').on('beforeSubmit', function (event) {
+        const activePaintingId = $('#active-painting').data('painting-id');
+        const url = $(this).attr('action') + '?paintingId=' + activePaintingId;
 
-    sendForm.done(function(data) {
-        console.log('yay!');
-    });
+        const sendForm = $.ajax(
+            {
+                type: $(this).attr('method'),
+                url: url,
+                data: $(this).serializeArray()
+            }
+        );
 
-    sendForm.fail(function () {
-        console.log('ошибка при создании коллекции');
-    });
+        sendForm.done(function(data) {
+            collectionModalContent.html(data);
+        });
 
-    return false;
-})
+        sendForm.fail(function () {
+            console.log('ошибка при создании коллекции');
+        });
+
+        return false;
+    })
+}

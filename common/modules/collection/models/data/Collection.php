@@ -45,7 +45,7 @@ class Collection extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['title', 'user_id'], 'required'],
+            [['title'], 'required'],
             [['title'], 'string', 'max' => 32],
             [['is_private', 'is_archived'], 'boolean'],
             [['user_id'], 'integer'],

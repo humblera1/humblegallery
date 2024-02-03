@@ -58,4 +58,12 @@ class UserService extends Service
 
         return empty($collections) ? false : $collections;
     }
+
+    /**
+     * Returns bool flag if user has collections
+     */
+    public function hasCollections(): bool
+    {
+       return $this->model->getCollections()->exists();
+    }
 }

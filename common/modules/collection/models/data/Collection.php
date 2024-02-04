@@ -3,6 +3,7 @@
 namespace common\modules\collection\models\data;
 
 use common\modules\collection\models\query\CollectionQuery;
+use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
 use common\modules\user\models\data\User;
 use yii\behaviors\TimestampBehavior;
@@ -25,6 +26,15 @@ use yii\db\ActiveRecord;
 
 class Collection extends ActiveRecord
 {
+    public ?CollectionService $service = null;
+
+    public function init(): void
+    {
+        $this->service = new CollectionService($this);
+
+        parent::init();
+    }
+
     /** {@inheritdoc} */
     public static function tableName(): string
     {
@@ -71,7 +81,7 @@ class Collection extends ActiveRecord
     public function getPaintings(): ActiveQuery
     {
         return $this->hasMany(Painting::class, ['id' => 'painting_id'])
-            ->viaTable('{{%collection_paintings}}', ['collection_id' => 'id']);
+            ->viaTable('{{%painting_collection}}', ['collection_id' => 'id']);
     }
 
     /** {@inheritdoc} */

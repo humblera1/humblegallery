@@ -8,10 +8,10 @@ use yii\widgets\ActiveForm;
 /**
  * @var View $this
  */
-
-$hasCollections = Yii::$app->user->identity->service->hasCollections();
-
-$this->registerJsVar('hasCollections', $hasCollections);
+if (!Yii::$app->user->isGuest) {
+    $hasCollections = Yii::$app->user->identity->service->hasCollections();
+    $this->registerJsVar('hasCollections', $hasCollections);
+}
 
 ?>
 

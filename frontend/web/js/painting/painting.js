@@ -66,9 +66,12 @@ heartWrappers.on('click', function () {
 
 //Логика добавления в коллекцию
 
-//При загрузке страницы грузим содержимое модального окна
+//Загрузка содержимого модального окна в зависимости от наличия коллекций у текущего пользователя
+console.log()
 let collectionModalContent = $('#collectionModalContent');
-loadCollectionModalContent();
+if (!isGuest) {
+    loadCollectionModalContent();
+}
 
 function loadCollectionModalContent () {
     if (hasCollections) {
@@ -101,6 +104,7 @@ function hideCollectionModal() {
 
     $(overlay).removeClass('overlay--active');
     $(collectionModal).removeClass('modal--active');
+    unmarkCollections();
 
     $('body').css('overflow', 'auto');
 }
@@ -112,8 +116,47 @@ collectWrappers.on('click', function () {
     }
 
     $(this).attr('id', 'active-painting');
-    showCollectionModal();
+    //Получаем id коллекций, содержащих данную картину
+    $.ajax(
+        {
+        'url': '/collection/get-painting-collections' + '?paintingId=' + $(this).data('painting-id'),
+        }
+    )
+        .done(data => markCollections(data))
+        .done(() => bindCollectionActions())
+        .done(() => showCollectionModal());
 });
+
+function bindCollectionActions() {
+    $('#new-collection').on('click', () => {
+        collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
+    })
+
+    $('.collection-item__preview').on('click', function () {
+        const activePaintingId = $('#active-painting').data('painting-id');
+        const collectionId = $(this).parent().data('collection-id');
+
+        const url = 'collection/add' + '?paintingId=' + activePaintingId + '&collectionId=' + collectionId;
+
+        collectionModalContent.load(url, () => hideCollectionModal());
+    })
+}
+
+function markCollections (data) {
+    //Проверить содержимое модального окна
+    if (true) {
+        const collectionsContainingPaintingIds = JSON.parse(data);
+        $('.collection-item').each(function () {
+            if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
+                $(this).addClass('collection-item--marked');
+            }
+        })
+    }
+}
+
+function unmarkCollections () {
+    $('.collection-item').removeClass('collection-item--marked');
+}
 
 
 function addFormHandlers() {

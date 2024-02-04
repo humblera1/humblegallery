@@ -3,10 +3,12 @@
 namespace common\modules\collection\controllers\frontend;
 
 use common\modules\collection\models\data\Collection;
+use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
 use Exception;
 use Throwable;
 use Yii;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -46,24 +48,30 @@ class DefaultController extends Controller
     }
 
     /**
+     * Returns ids of all collections, containing specific painting
+     */
+    public function actionGetPaintingCollections($paintingId): string
+    {
+        $painting = Painting::findOne($paintingId);
+
+        return Json::encode($painting->service->getCollectionsIdsByUser());
+    }
+
+    /**
      * @throws Throwable
      */
     public function actionAdd(int $collectionId, int $paintingId): string
     {
         if ($this->request->isAjax) {
+            $collections = Yii::$app->user->identity->service->getCollections();
+
             if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
                 $paintingCollection->delete();
-
-                if ($collections = Yii::$app->user->identity->service->getCollections()) {
-                    return $this->renderPartial('includes/_collections', ['collections' => $collections]);
-                }
-
-                return $this->renderPartial('includes/_new');
+            } else {
+                $this->saveNewPaintingCollection($collectionId, $paintingId);
             }
 
-            $this->saveNewPaintingCollection($collectionId, $paintingId);
-
-            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
+            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
         }
 
         throw new Exception();
@@ -90,7 +98,7 @@ class DefaultController extends Controller
 
             $transaction->commit();
 
-            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
+            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->service->getCollections()]);
         }
 
         throw new Exception();

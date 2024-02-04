@@ -377,4 +377,44 @@ input[aria-invalid="true"] {
     padding-left: .75rem;
     font-size: 1.8rem; }
 
+.collection-item {
+  display: flex;
+  align-items: center;
+  padding-bottom: 2rem; }
+  .collection-item__preview {
+    width: 100px;
+    height: 100px;
+    margin-right: 2rem;
+    cursor: pointer; }
+    .collection-item__preview img {
+      object-fit: cover;
+      border-radius: 3rem;
+      width: 100%;
+      height: 100%; }
+    .collection-item__preview--blank {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px dashed #333131;
+      font-size: 3rem;
+      border-radius: 3rem; }
+  .collection-item__mark {
+    z-index: 11;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: none;
+    font-size: 3rem; }
+    .collection-item__mark i {
+      color: #333131; }
+  .collection-item__title {
+    font-size: 1.8rem; }
+  .collection-item--marked .collection-item__preview {
+    opacity: 50%; }
+  .collection-item--marked .collection-item__mark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3rem; }
+
 /*# sourceMappingURL=frontend.css.map */

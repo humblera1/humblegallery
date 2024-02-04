@@ -26,12 +26,19 @@
 
   &__content {
     width: 50vw;
-    height: 90vh;
     overflow-y: scroll;
     background-color: $additional-color;
     border-radius: 15px;
-
     max-width: 76.8rem;
+
+    &_login {
+      height: 90vh;
+    }
+
+    &_collections {
+      height: 70vh;
+    }
+
   }
 
   &__action {
@@ -55,13 +62,13 @@
 
   &-head {
 
-    &--close {
+    &__close {
       display: flex;
       justify-content: flex-end;
       padding: .5rem 1rem;
     }
 
-    &--title {
+    &__title {
       font-size: 1.8rem;
       display: flex;
       justify-content: center;
@@ -106,4 +113,28 @@
     background:#000;
     opacity:0.5;
   }
+}
+
+.collection-choice {
+  display: flex;
+  justify-content: center;
+
+  &__new {
+    cursor: pointer;
+    width: 25rem;
+    height: 25rem;
+    
+  }
+}
+
+.area{
+  height: 25rem;
+  width: 25rem;
+  border: grey 3px dashed;
+  border-radius: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 5rem;
 }

@@ -3,6 +3,7 @@
 use backend\components\widgets\HumbleActiveField;
 use common\modules\admin\AdminModule;
 use common\modules\artist\ArtistModule;
+use common\modules\collection\CollectionModule;
 use common\modules\movement\MovementModule;
 use common\modules\painting\PaintingModule;
 use common\modules\subject\SubjectModule;
@@ -70,6 +71,11 @@ return [
             'class' => SubjectModule::class,
             'controllerNamespace' => 'common\modules\subject\controllers\admin',
             'viewPath' => '@common/modules/subject/views/admin',
+        ],
+        'collection' => [
+            'class' => CollectionModule::class,
+            'controllerNamespace' => 'common\modules\collection\controllers\admin',
+            'viewPath' => '@common/modules/collection/views/admin',
         ],
     ],
     'components' => [

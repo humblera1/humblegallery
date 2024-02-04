@@ -2,34 +2,30 @@
 
 namespace common\modules\painting\models\query;
 
+use common\modules\painting\models\data\PaintingLike;
 use Yii;
+use yii\db\ActiveQuery;
+use yii\db\Connection;
 
 /**
  * This is the ActiveQuery class for [[\common\modules\painting\models\data\PaintingLike]].
  *
  * @see \common\modules\painting\models\data\PaintingLike
  */
-class PaintingLikeQuery extends \yii\db\ActiveQuery
+class PaintingLikeQuery extends ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * {@inheritdoc}
-     * @return \common\modules\painting\models\data\PaintingLike[]|array
      */
-    public function all($db = null)
+    public function all($db = null): PaintingLike|array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\modules\painting\models\data\PaintingLike|array|null
      */
-    public function one($db = null)
+    public function one($db = null): PaintingLike|array|null
     {
         return parent::one($db);
     }

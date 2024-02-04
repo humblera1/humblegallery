@@ -3,6 +3,7 @@
 namespace common\modules\painting\models\data;
 
 use common\modules\artist\models\data\Artist;
+use common\modules\collection\models\data\Collection;
 use common\modules\movement\models\data\Movement;
 use common\modules\painting\components\behaviors\PaintingBehavior;
 use common\modules\painting\models\query\PaintingQuery;
@@ -31,11 +32,13 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  * @property int $updated_at Дата обновления
  * @property int|null $is_deleted В архиве
  *
- * @property Artist $artist
- * @property Technique $technique
- * @property Movement[] $movements
- * @property Subject[] $subjects
- * @property PaintingLike[] $likes
+ * @property Artist $artist Художник
+ * @property Technique $technique Техника
+ * @property Movement[] $movements Направления
+ * @property Subject[] $subjects Жанры
+ * @property PaintingLike[] $likes Отметки 'Нравится'
+ * @property PaintingCollection[] $paintingCollections Коллекции
+ * @property Collection[] $collections Коллекции
  */
 class Painting extends ActiveRecord
 {
@@ -45,6 +48,7 @@ class Painting extends ActiveRecord
 
     public ?PaintingService $service = null;
 
+    /** {@inheritdoc} */
     public function init(): void
     {
         $this->service = new PaintingService($this);
@@ -52,11 +56,13 @@ class Painting extends ActiveRecord
         parent::init();
     }
 
+    /** {@inheritdoc} */
     public static function tableName(): string
     {
         return 'painting';
     }
 
+    /** {@inheritdoc} */
     public function behaviors(): array
     {
         return [
@@ -79,6 +85,7 @@ class Painting extends ActiveRecord
         ];
     }
 
+    /** {@inheritdoc} */
     public function rules(): array
     {
         return [
@@ -113,6 +120,7 @@ class Painting extends ActiveRecord
         ];
     }
 
+    /** {@inheritdoc} */
     public function attributeLabels(): array
     {
         return [
@@ -159,6 +167,18 @@ class Painting extends ActiveRecord
         return $this->hasMany(PaintingLike::class, ['painting_id' => 'id']);
     }
 
+    public function getPaintingCollections(): ActiveQuery
+    {
+        return $this->hasMany(PaintingCollection::class, ['painting_id' => 'id']);
+    }
+
+    public function getCollections(): ActiveQuery
+    {
+        return $this->hasMany(Collection::class, ['id' => 'collection_id'])
+            ->via('paintingCollections');
+    }
+
+    /** {@inheritdoc} */
     public static function find(): PaintingQuery
     {
         return new PaintingQuery(get_called_class());

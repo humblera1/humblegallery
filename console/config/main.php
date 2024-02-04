@@ -19,12 +19,12 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'modules' => [
-        'user' => [
-            'class' => \common\modules\user\UserModule::class,
-            'controllerNamespace' => 'common\modules\user\controllers',
-        ]
-    ],
+//    'modules' => [
+//        'user' => [
+//            'class' => \common\modules\user\UserModule::class,
+//            'controllerNamespace' => 'common\modules\user\controllers',
+//        ]
+//    ],
     'controllerMap' => [
         'migrate' => [
             'class' => MigrateController::class,
@@ -38,6 +38,7 @@ return [
                 '@common/modules/movement/migrations',
                 '@common/modules/subject/migrations',
                 '@common/modules/technique/migrations',
+                '@common/modules/collection/migrations',
             ]
         ],
         'fixture' => [

@@ -3,9 +3,12 @@
 namespace common\modules\painting\models\service;
 
 use common\components\Service;
-use Yii;
-use yii\db\ActiveRecord;
+use common\modules\painting\models\data\Painting;
 use yii\helpers\Url;
+
+/**
+ * @property Painting $model
+ */
 
 class PaintingService extends Service
 {
@@ -84,5 +87,21 @@ class PaintingService extends Service
     public function isLikedByCurrentUser(): bool
     {
         return $this->model->getLikes()->byCurrentUser()->exists();
+    }
+
+    /**
+     * Check if the painting is collected by the current user
+     */
+    public function isCollectedByCurrentUser(): bool
+    {
+        return $this->model->getCollections()->byCurrentUser()->exists();
+    }
+
+    public function getCollectionsIdsByUser(): array
+    {
+        return $this->model->getCollections()
+            ->byCurrentUser()
+            ->select('id')
+            ->column();
     }
 }

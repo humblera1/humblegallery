@@ -1,6 +1,7 @@
 <?php
 
 use backend\components\widgets\HumbleActiveField;
+use common\modules\collection\CollectionModule;
 use common\modules\painting\PaintingModule;
 use common\modules\user\models\data\User;
 use common\modules\user\UserModule;
@@ -38,6 +39,11 @@ return [
             'controllerNamespace' => 'common\modules\user\controllers\frontend',
             'viewPath' => '@common/modules/user/views/frontend',
         ],
+        'collection' => [
+            'class' => CollectionModule::class,
+            'controllerNamespace' => 'common\modules\collection\controllers\frontend',
+            'viewPath' => '@common/modules/collection/views/frontend',
+        ]
     ],
     'components' => [
         'request' => [
@@ -74,6 +80,7 @@ return [
             'rules' => [
                 'paintings' => 'painting/default/index',
                 'paintings/<action>' => 'painting/default/<action>',
+                'collection/<action>' => 'collection/default/<action>',
 
                 '' => 'site/index', //TODO:поправить маршрут
 

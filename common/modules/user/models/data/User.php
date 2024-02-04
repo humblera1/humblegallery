@@ -2,10 +2,13 @@
 
 namespace common\modules\user\models\data;
 
+use common\modules\collection\models\data\Collection;
+use common\modules\painting\models\data\Painting;
 use common\modules\user\components\traits\IdentityTrait;
 use common\modules\user\models\query\UserQuery;
 use common\modules\user\models\service\UserService;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -23,6 +26,9 @@ use yii\web\IdentityInterface;
  * @property int|null $is_blocked Заблокирован
  * @property int $created_at Создан
  * @property int $updated_at Обновлён
+ *
+ * @property-read Collection[] $collections Коллекции пользователя
+ * @property-read Painting[] $likedPaintings Понравившиеся картины
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -82,5 +88,16 @@ class User extends ActiveRecord implements IdentityInterface
     public static function find(): UserQuery
     {
         return new UserQuery(get_called_class());
+    }
+
+    public function getCollections(): ActiveQuery
+    {
+        return $this->hasMany(Collection::class, ['user_id' => 'id']);
+    }
+
+    public function getLikedPaintings(): ActiveQuery
+    {
+        return $this->hasMany(Painting::class, ['id' => 'painting_id'])
+            ->vaiTable('{{%painting_likes}}', ['user_id' => 'id']);
     }
 }

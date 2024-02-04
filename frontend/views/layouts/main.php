@@ -63,17 +63,16 @@ AppAsset::register($this);
 </div>
 
 <?php if (Yii::$app->user->isGuest): ?>
-
     <div id="overlay"> </div>
     <div id="login-modal" class="modal">
         <div class="modal__wrapper">
-            <div class="modal__content">
+            <div class="modal__content modal__content_login">
                 <div class="modal__header">
                     <div class="modal-head">
-                        <div class="modal-head--close">
+                        <div class="modal-head__close">
                             <div class="close-button">×</div>
                         </div>
-                        <div class="modal-head--title">
+                        <div class="modal-head__title">
                             <span>
                                 <span id="action-login" class="action-login action-active" data-action="login">Вход</span>
                                 /

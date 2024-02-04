@@ -3,6 +3,7 @@
 namespace common\modules\user\models\service;
 
 use common\components\Service;
+use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
 use Yii;
 use yii\base\Exception;
@@ -42,5 +43,27 @@ class UserService extends Service
     public function validatePassword(string $password): bool
     {
         return Yii::$app->security->validatePassword($password, $this->model->password_hash);
+    }
+
+    /**
+     * Returns array of user's collections or false if no collections are found
+     *
+     * @return bool|Collection[]
+     */
+    public function getCollections(): bool|array
+    {
+        $collections = $this->model->getCollections()
+            ->orderBy(['updated_at' => SORT_DESC])
+            ->all();
+
+        return empty($collections) ? false : $collections;
+    }
+
+    /**
+     * Returns bool flag if user has collections
+     */
+    public function hasCollections(): bool
+    {
+       return $this->model->getCollections()->exists();
     }
 }

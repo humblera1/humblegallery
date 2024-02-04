@@ -36,5 +36,9 @@ CSS);
     <?php Pjax::end() ?>
 </div>
 
+<?php if (!Yii::$app->user->isGuest): ?>
+    <?= $this->render('includes/_modal') ?>
+<?php endif; ?>
+
 
 

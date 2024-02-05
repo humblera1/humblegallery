@@ -8,6 +8,7 @@ use common\modules\painting\models\data\PaintingCollection;
 use Exception;
 use Throwable;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
@@ -18,6 +19,21 @@ use yii\widgets\ActiveForm;
  */
 class DefaultController extends Controller
 {
+    /** {@inheritdoc} */
+    public function behaviors(): array
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
 
     /**
      * Return collection creation template to display it in modal window
@@ -45,6 +61,26 @@ class DefaultController extends Controller
         }
 
         throw new Exception();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionGetModalContent(): string
+    {
+        if ($this->request->isAjax) {
+            $user = Yii::$app->user->identity;
+
+            if ($collections = $user->service->getCollections()) {
+                return $this->renderAjax('includes/_collections', ['collections' => $collections]);
+
+            }
+            
+            return $this->renderAjax('includes/_new');
+        }
+        
+        throw new Exception();
+        
     }
 
     /**

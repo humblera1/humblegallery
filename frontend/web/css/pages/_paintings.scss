@@ -125,6 +125,11 @@
     }
 
     &--blank {
+      width: 100px;
+      height: 100px;
+      margin-right: 2rem;
+      cursor: pointer;
+
       display: flex;
       justify-content: center;
       align-items: center;

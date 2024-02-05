@@ -1,7 +1,9 @@
 let content = $('.content');
 const form = $('#painting-form');
 const filters = $('.filter');
-const collectionModal = $('#collection-modal');
+
+const $collectionModal = $('#collection-modal');
+const $creationModal = $('#creation-modal');
 
 const heartWrappers = $('.action__wrapper_heart');
 const collectWrappers = $('.action__wrapper_collect');
@@ -64,49 +66,45 @@ heartWrappers.on('click', function () {
         .fail(() => heart.toggleClass('action__icon_liked'));
 })
 
-//Логика добавления в коллекцию
+//Логика работы с коллекциями
+let $collectionModalContent = $('#collectionModalContent');
+const makeRequestForCollections = (paintingId) => $.get('/collection/get-painting-collections?paintingId=' + paintingId);
 
-//Загрузка содержимого модального окна в зависимости от наличия коллекций у текущего пользователя
-console.log()
-let collectionModalContent = $('#collectionModalContent');
-if (!isGuest) {
-    loadCollectionModalContent();
+initCollectionModal();
+
+function initCollectionModal() {
+    $collectionModalContent.load('/collection/get-modal-content');
 }
 
-function loadCollectionModalContent () {
-    if (hasCollections) {
-        collectionModalContent.load('/collection/get-user-collections');
-    } else {
-        collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
-    }
+function modalHasCollections() {
+    return $('.collection-box').length;
 }
 
 function showCollectionModal() {
-    overlay.addClass('overlay--active');
-    collectionModal.addClass('modal--active');
+    prepareModal();
 
-    $('body').css('overflow', 'hidden');
-
-    //Кнопка с закрытием окна
-    $('.close-button').on('click', function () {
-        hideModal();
-    })
-
-    $('.modal__wrapper').on('click', function (event) {
-        if (event.target === this) {
-            hideCollectionModal();
-        }
-    })
+    if (modalHasCollections()) {
+        const activePaintingId = $('#active-painting').data('painting-id');
+        makeRequestForCollections(activePaintingId)
+            .done((data) => {
+                markCollections(data);
+                $collectionModal.addClass('modal--active');
+            })
+    } else {
+        $collectionModal.addClass('modal--active');
+    }
 }
 
-function hideCollectionModal() {
-    $('#active-painting').removeAttr('id');
+function markCollections (data) {
+    if (hasCollections) {
+        const collectionsContainingPaintingIds = JSON.parse(data);
 
-    $(overlay).removeClass('overlay--active');
-    $(collectionModal).removeClass('modal--active');
-    unmarkCollections();
-
-    $('body').css('overflow', 'auto');
+        $('.collection-item').each(function () {
+            if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
+                $(this).addClass('collection-item--marked');
+            }
+        })
+    }
 }
 
 collectWrappers.on('click', function () {
@@ -116,70 +114,125 @@ collectWrappers.on('click', function () {
     }
 
     $(this).attr('id', 'active-painting');
-    //Получаем id коллекций, содержащих данную картину
-    $.ajax(
-        {
-        'url': '/collection/get-painting-collections' + '?paintingId=' + $(this).data('painting-id'),
-        }
-    )
-        .done(data => markCollections(data))
-        .done(() => bindCollectionActions())
-        .done(() => showCollectionModal());
+
+    showCollectionModal();
 });
 
-function bindCollectionActions() {
-    $('#new-collection').on('click', () => {
-        collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
-    })
 
-    $('.collection-item__preview').on('click', function () {
-        const activePaintingId = $('#active-painting').data('painting-id');
-        const collectionId = $(this).parent().data('collection-id');
-
-        const url = 'collection/add' + '?paintingId=' + activePaintingId + '&collectionId=' + collectionId;
-
-        collectionModalContent.load(url, () => hideCollectionModal());
-    })
-}
-
-function markCollections (data) {
-    //Проверить содержимое модального окна
-    if (true) {
-        const collectionsContainingPaintingIds = JSON.parse(data);
-        $('.collection-item').each(function () {
-            if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
-                $(this).addClass('collection-item--marked');
-            }
-        })
-    }
-}
-
-function unmarkCollections () {
-    $('.collection-item').removeClass('collection-item--marked');
-}
-
-
-function addFormHandlers() {
-    $('#collection-form').on('beforeSubmit', function (event) {
-        const activePaintingId = $('#active-painting').data('painting-id');
-        const url = $(this).attr('action') + '?paintingId=' + activePaintingId;
-
-        const sendForm = $.ajax(
-            {
-                type: $(this).attr('method'),
-                url: url,
-                data: $(this).serializeArray()
-            }
-        );
-
-        sendForm.done(function(data) {
-            collectionModalContent.html(data);
-        });
-
-        sendForm.fail(function () {
-            console.log('ошибка при создании коллекции');
-        });
-
-        return false;
-    })
-}
+// function showCollectionModal() {
+//
+//     collectionModal.addClass('modal--active');
+//
+//
+//
+//     //Кнопка с закрытием окна
+//
+// }
+//
+// function hideCollectionModal() {
+//     $('#active-painting').removeAttr('id');
+//
+//     $(overlay).removeClass('overlay--active');
+//     $(collectionModal).removeClass('modal--active');
+//     unmarkCollections();
+//
+//     $('body').css('overflow', 'auto');
+// }
+//
+// function initCollectionModal() {
+//     // 1. Грузим содержимое модалки
+//     collectionModalContent.load('/collection/get-modal-content', () => {
+//         if ($('.collection-box')) {
+//             //2а. Обработка коллекций initCollections();
+//             const activePaintingId = $('#active-painting').data('painting-id');
+//             makeRequestForCollections(activePaintingId)
+//                 .done(data => markCollections(data))
+//                 .done(() => bindCollectionActions())
+//                 .done(() => showCollectionModal());
+//         } else {
+//             //2б. Обработка формы создания initCreationForm();
+//             addFormHandlers()
+//         }
+//     });
+// }
+//
+// const makeRequestForCollections = (paintingId) => $.get('/paintings/like', {paintingId: paintingId});
+//
+// collectWrappers.on('click', function () {
+//     if (isGuest) {
+//         showLoginModal();
+//         return;
+//     }
+//
+//     $(this).attr('id', 'active-painting');
+//
+//     initCollectionModal();
+//
+//
+//     //Получаем id коллекций, содержащих данную картину
+//     $.ajax(
+//         {
+//         'url': '/collection/get-painting-collections' + '?paintingId=' + $(this).data('painting-id'),
+//         }
+//     )
+//         .done(data => markCollections(data))
+//         .done(() => bindCollectionActions())
+//         .done(() => showCollectionModal());
+// });
+//
+// function bindCollectionActions() {
+//     $('#new-collection').on('click', () => {
+//         collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
+//     })
+//
+//     $('.collection-item__preview').on('click', function () {
+//         const activePaintingId = $('#active-painting').data('painting-id');
+//         const collectionId = $(this).parent().data('collection-id');
+//
+//         const url = 'collection/add' + '?paintingId=' + activePaintingId + '&collectionId=' + collectionId;
+//
+//         // collectionModalContent.load(url, () => hideCollectionModal());
+//     })
+// }
+//
+// function markCollections (data) {
+//     //Проверить содержимое модального окна
+//     if (true) {
+//         const collectionsContainingPaintingIds = JSON.parse(data);
+//         $('.collection-item').each(function () {
+//             if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
+//                 $(this).addClass('collection-item--marked');
+//             }
+//         })
+//     }
+// }
+//
+// function unmarkCollections () {
+//     $('.collection-item').removeClass('collection-item--marked');
+// }
+//
+//
+// function addFormHandlers() {
+//     $('#collection-form').on('beforeSubmit', function (event) {
+//         const activePaintingId = $('#active-painting').data('painting-id');
+//         const url = $(this).attr('action') + '?paintingId=' + activePaintingId;
+//
+//         const sendForm = $.ajax(
+//             {
+//                 type: $(this).attr('method'),
+//                 url: url,
+//                 data: $(this).serializeArray()
+//             }
+//         );
+//
+//         sendForm.done(function(data) {
+//             collectionModalContent.html(data);
+//         });
+//
+//         sendForm.fail(function () {
+//             console.log('ошибка при создании коллекции');
+//         });
+//
+//         return false;
+//     })
+// }

@@ -40,5 +40,5 @@ CSS);
     <?= $this->render('includes/_modal') ?>
 <?php endif; ?>
 
-
+<div id="cache" hidden></div>
 

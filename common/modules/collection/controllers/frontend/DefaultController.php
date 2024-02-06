@@ -96,19 +96,22 @@ class DefaultController extends Controller
     /**
      * @throws Throwable
      */
-    public function actionAdd(int $collectionId, int $paintingId): string
+    public function actionAdd(): string
     {
-        if ($this->request->isAjax) {
-            $collections = Yii::$app->user->identity->service->getCollections();
+//        $collectionId = $this->request->post('collectionId');
+//        $paintingId = $this->request->post('paintingId');
 
-            if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
-                $paintingCollection->delete();
-            } else {
-                $this->saveNewPaintingCollection($collectionId, $paintingId);
-            }
-
-            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
-        }
+//        if ($this->request->isAjax && isset($collectionId, $paintingId)) {
+//            $collections = Yii::$app->user->identity->service->getCollections();
+//
+//            if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
+//                $paintingCollection->delete();
+//            } else {
+//                $this->saveNewPaintingCollection($collectionId, $paintingId);
+//            }
+//
+//            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
+//        }
 
         throw new Exception();
     }
@@ -116,26 +119,28 @@ class DefaultController extends Controller
     /**
      * @throws Exception
      */
-    public function actionCreateAndAdd(int $paintingId): string
+    public function actionCreateAndAdd(): string
     {
-        if ($this->request->isAjax) {
-            $transaction = Yii::$app->db->beginTransaction();
+//        $paintingId = $this->request->post('paintingId');
 
-            try {
-                $collection = $this->saveNewCollection();
-                $this->saveNewPaintingCollection($collection->id, $paintingId);
-            } catch (Exception $exception) {
-                $transaction->rollBack();
-
-                Yii::error($exception->getMessage(), 'collection');
-
-                throw $exception;
-            }
-
-            $transaction->commit();
-
-            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->service->getCollections()]);
-        }
+//        if ($this->request->isAjax && isset($paintingId)) {
+//            $transaction = Yii::$app->db->beginTransaction();
+//
+//            try {
+//                $collection = $this->saveNewCollection();
+//                $this->saveNewPaintingCollection($collection->id, $paintingId);
+//            } catch (Exception $exception) {
+//                $transaction->rollBack();
+//
+//                Yii::error($exception->getMessage(), 'collection');
+//
+//                throw $exception;
+//            }
+//
+//            $transaction->commit();
+//
+//            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->service->getCollections()]);
+//        }
 
         throw new Exception();
     }

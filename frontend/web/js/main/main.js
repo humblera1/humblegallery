@@ -54,7 +54,7 @@ function prepareModal() {
 
 function hideModal() {
     $(overlay).removeClass('overlay--active');
-    $('modal--active').removeClass('modal--active');
+    $('.modal--active').removeClass('modal--active');
 
     $('body').css('overflow', 'auto');
 }

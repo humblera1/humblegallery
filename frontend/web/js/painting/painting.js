@@ -6,7 +6,7 @@ const $collectionModal = $('#collection-modal');
 const $creationModal = $('#creation-modal');
 
 const heartWrappers = $('.action__wrapper_heart');
-const collectWrappers = $('.action__wrapper_collect');
+const $collectWrappers = $('.action__wrapper_collect');
 
 const makeFilterRequest = () => $.post('/paintings/apply-filters', form.serializeArray());
 const makeLikeRequest = (paintingId) => $.post('/paintings/like', {paintingId: paintingId});
@@ -68,18 +68,188 @@ heartWrappers.on('click', function () {
 
 //Логика работы с коллекциями
 let $collectionModalContent = $('#collectionModalContent');
+let $cache = $('#cache');
+
+//--------------------------------------------------------------------------------------------------------------requests
+
+/**
+ * Basic POST request
+ * @returns {jqXHR}
+ */
+function postRequest (url, data) {
+    return $.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        headers: {
+            'X-CSRF-TOKEN': yii.getCsrfToken()
+        }
+    });
+}
+
+/**
+ * Request to add painting to collection
+ *
+ * @param paintingId
+ * @param collectionId
+ * @returns {jqXHR}
+ */
+function addPaintingToCollectionRequest (paintingId, collectionId) {
+    return postRequest('/collection/add', {paintingId: paintingId, collectionId: collectionId})
+}
+
+/**
+ * Request to create new collection and add painting to it
+ * @returns {jqXHR}
+ * @param data
+ */
+function createCollectionAndAddPainting (data) {
+    return postRequest('/collection/create-and-add', data)
+}
+
 const makeRequestForCollections = (paintingId) => $.get('/collection/get-painting-collections?paintingId=' + paintingId);
 
 initCollectionModal();
 
+/**
+ * Load content of modal window, adds event handlers to collection items
+ */
 function initCollectionModal() {
-    $collectionModalContent.load('/collection/get-modal-content');
+    $collectionModalContent.load('/collection/get-modal-content', function () {
+        if ($(this).find('.collection-box').length) {
+            addEventHandlersToCollections();
+        }
+    });
 }
 
+function addEventHandlersToCollections() {
+    $('#new-collection').on('click', () => {
+        loadCreationForm();
+    })
+
+    $('.collection-item__preview').on('click', function () {
+        const $collectionItem = $(this).parent();
+        const $activePainting = $('#active-painting');
+
+        const activePaintingId = $activePainting.data('painting-id');
+        const collectionId = $collectionItem.data('collection-id');
+
+        const paintingTitle = $activePainting.data('painting-title');
+        const collectionTitle = $collectionItem.data('collection-title');
+
+        const isAddition = $(this).children(":first").css('display') === 'none';
+
+        hideCollectionModal();
+
+        addPaintingToCollectionRequest(activePaintingId, collectionId)
+            .done(() => successRequestHandler(isAddition, paintingTitle, collectionTitle))
+            .fail(() => failRequestHandler(isAddition, paintingTitle, collectionTitle));
+    })
+}
+
+function loadCreationForm () {
+    // Кэш вернётся в модалку, только если форма не будет отправлена
+    // При отправке формы содержимое будет перезагружено
+    $cache.html($collectionModalContent.html());
+    $collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
+}
+
+function addFormHandlers() {
+    $('#collection-form').on('beforeSubmit', function (event) {
+        let formData = $(this).serializeArray();
+
+        const $activePainting = $('#active-painting');
+
+        const collectionTitle = formData.find(e => e.name === 'Collection[title]').value;
+        const paintingTitle = $activePainting.data('painting-title');
+        const paintingId =  $activePainting.data('painting-id');
+
+        formData.push({name: 'paintingId', value: paintingId});
+
+        createCollectionAndAddPainting(formData)
+            .done(() => successRequestHandler(true, paintingTitle, collectionTitle))
+            .fail(() => failRequestHandler(true, paintingTitle, collectionTitle));
+
+        $cache.html('');
+
+        return false;
+    })
+}
+
+function hideCollectionModal () {
+    $('#active-painting').removeAttr('id');
+
+    if ($cache.html() !== '') {
+        $collectionModalContent.html($cache.html());
+        $cache.html('');
+    }
+    hideModal();
+}
+
+/**
+ * После запроса модалка закрывается моментально, её содержимое обновляется (в случае успеха), а пользователю показывается сообщение
+ */
+function successRequestHandler (isAddition, paintingTitle, collectionTitle) {
+    initCollectionModal();
+
+    const successMessage = isAddition
+        ? `Картина '${paintingTitle}' успешно добавлена в коллекцию '${collectionTitle}'`
+        : `Картина '${paintingTitle}' успешно удалена из коллекции '${collectionTitle}'`;
+
+    showMessage(successMessage);
+}
+
+function failRequestHandler (isAddition, paintingTitle, collectionTitle) {
+    const failureMessage = isAddition
+        ? `Не удалось добавить картину '${paintingTitle}' в коллекцию '${collectionTitle}'`
+        : `Не удалось удалить картину '${paintingTitle}' из коллекции '${collectionTitle}'`;
+
+    showMessage(failureMessage);
+}
+
+function showMessage (message) {
+    console.log(message)
+}
+
+// function bindCollectionActions() {
+//     $('#new-collection').on('click', () => {
+//         $collectionModalContent.load('/collection/get-new-collection', () => addFormHandlers());
+//     })
+//
+//     $('.collection-item__preview').on('click', function () {
+//         const activePaintingId = $('#active-painting').data('painting-id');
+//         const collectionId = $(this).parent().data('collection-id');
+//
+//         const url = 'collection/add' + '?paintingId=' + activePaintingId + '&collectionId=' + collectionId;
+//
+//         // collectionModalContent.load(url, () => hideCollectionModal());
+//     })
+// }
+
+/**
+ * Helper function, checks the content of modal window
+ */
 function modalHasCollections() {
     return $('.collection-box').length;
 }
 
+/**
+ * Adds click event handlers to icon
+ */
+$collectWrappers.on('click', function () {
+    if (isGuest) {
+        showLoginModal();
+        return;
+    }
+
+    $(this).attr('id', 'active-painting');
+    showCollectionModal();
+});
+
+/**
+ * Show modal window with collections.
+ * If there are some collections, function checks which of them contains chosen painting, and marks them
+ */
 function showCollectionModal() {
     prepareModal();
 
@@ -95,39 +265,20 @@ function showCollectionModal() {
     }
 }
 
+/**
+ * Receives data from server, that contains ids of collections, containing chosen painting.
+ * Collections with this ids will be marked by special class
+ */
 function markCollections (data) {
-    if (hasCollections) {
-        const collectionsContainingPaintingIds = JSON.parse(data);
+    const collectionsContainingPaintingIds = JSON.parse(data);
 
-        $('.collection-item').each(function () {
-            if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
-                $(this).addClass('collection-item--marked');
-            }
-        })
-    }
+    $('.collection-item').each(function () {
+        if (collectionsContainingPaintingIds.includes($(this).data('collection-id'))) {
+            $(this).addClass('collection-item--marked');
+        }
+    })
 }
 
-collectWrappers.on('click', function () {
-    if (isGuest) {
-        showLoginModal();
-        return;
-    }
-
-    $(this).attr('id', 'active-painting');
-
-    showCollectionModal();
-});
-
-
-// function showCollectionModal() {
-//
-//     collectionModal.addClass('modal--active');
-//
-//
-//
-//     //Кнопка с закрытием окна
-//
-// }
 //
 // function hideCollectionModal() {
 //     $('#active-painting').removeAttr('id');

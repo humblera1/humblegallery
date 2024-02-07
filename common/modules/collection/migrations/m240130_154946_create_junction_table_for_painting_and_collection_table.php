@@ -17,8 +17,9 @@ class m240130_154946_create_junction_table_for_painting_and_collection_table ext
     public function safeUp(): void
     {
         $this->createTable('{{%painting_collection}}', [
-            'painting_id' => $this->integer(),
-            'collection_id' => $this->integer(),
+            'painting_id' => $this->integer()->comment('ID картины'),
+            'collection_id' => $this->integer()->comment('ID коллекции'),
+            'created_at' => $this->integer()->notNull()->comment('Время добавления'),
             'PRIMARY KEY(painting_id, collection_id)',
         ]);
 

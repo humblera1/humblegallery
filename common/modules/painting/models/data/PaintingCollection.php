@@ -4,12 +4,14 @@ namespace common\modules\painting\models\data;
 
 use common\modules\collection\models\data\Collection;
 use common\modules\collection\models\query\PaintingCollectionQuery;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
  * @property int $painting_id
  * @property int $collection_id
+ * @property int $created_at
  *
  * @property Painting $painting
  * @property Collection $collection
@@ -20,6 +22,16 @@ class PaintingCollection extends ActiveRecord
     public static function tableName(): string
     {
         return '{{%painting_collection}}';
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => false,
+            ],
+        ];
     }
 
     public function rules(): array

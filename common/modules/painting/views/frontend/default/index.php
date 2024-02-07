@@ -1,5 +1,6 @@
 <?php
 
+use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\search\PaintingSearch;
 use frontend\assets\MasonryAsset;
 use yii\data\ActiveDataProvider;

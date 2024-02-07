@@ -8,18 +8,21 @@ use yii\helpers\Html;
  * @var Painting $model
  */
 
+$isGuest = Yii::$app->user->isGuest;
+
+
 ?>
 <div class="paint-container">
     <div class="paint-container__actions">
         <div class="action__wrapper action__wrapper_heart" data-painting-id="<?= $model->id ?>">
             <div class="action__content">
-                <?php $class = $model->service->isLikedByCurrentUser() ? 'action__icon_liked' : ''; ?>
-                <i class="<?= $class ?> action__icon fa-solid fa-heart"></i>
+                <?php $class = (!$isGuest && $model->service->isLikedByCurrentUser()) ? 'action__icon_liked' : '' ?>
+                    <i class="<?= $class ?> action__icon fa-solid fa-heart"></i>
             </div>
         </div>
         <div class="action__wrapper action__wrapper_collect" data-painting-id="<?= $model->id ?>" data-painting-title="<?= $model->title ?>">
             <div class="action__content">
-                <?php $icon = $model->service->isCollectedByCurrentUser() ? 'check' : 'plus'; ?>
+                <?php $icon = (!$isGuest && $model->service->isCollectedByCurrentUser()) ? 'check' : 'plus'; ?>
                 <i class="action__icon fa-solid fa-<?= $icon ?>"></i>
             </div>
         </div>

@@ -174,41 +174,22 @@ function addFormHandlers() {
     })
 }
 
-function updateIcon ($painting) {
+function updateIcon ($painting, isAddition) {
+    let collectionsCount = $painting[0].dataset['collectionsCount'];
 
-    const collectionsIds = $painting.data('collections-ids');
-
-    if (collectionsIds !== '') {
-        if (typeof collectionsIds === 'number') {
-            $collectionItems.each(function () {
-                if (collectionsIds === $(this).data('collection-id')) {
-                    $(this).addClass('collection-item--marked');
-                }
-            })
-
-            return;
-        }
-
-        const collectionsIdsAsArray = collectionsIds.split(',');
-        $collectionItems.each(function () {
-            if (collectionsIdsAsArray.includes(String($(this).data('collection-id')))) {
-                $(this).addClass('collection-item--marked');
-            }
-        })
-    }
-    console.log($painting);
     const $icon = $painting.find('i');
-    const id = $painting.data('painting-id');
 
-    makeRequestForCollections(id)
-        .done(data => {
-            const collectionsContainingPaintingIds = JSON.parse(data);
-            if (collectionsContainingPaintingIds.includes(id)) {
-                $icon.removeClass('fa-plus').addClass('fa-check');
-            } else {
-                $icon.removeClass('fa-check').addClass('fa-plus');
-            }
-        })
+    if (isAddition) {
+        collectionsCount++;
+        $icon.removeClass('fa-plus').addClass('fa-check');
+    } else {
+        collectionsCount--;
+        if (collectionsCount === 0) {
+            $icon.removeClass('fa-check').addClass('fa-plus');
+        }
+    }
+
+    $painting.attr('data-collections-count', collectionsCount);
 }
 
 function hideCollectionModal () {
@@ -230,7 +211,7 @@ function hideCollectionModal () {
  */
 function successRequestHandler (isAddition, paintingTitle, collectionTitle, $painting) {
     initCollectionModal();
-    updateIcon($painting);
+    updateIcon($painting, isAddition);
 
     const successMessage = isAddition
         ? `Картина '${paintingTitle}' успешно добавлена в коллекцию '${collectionTitle}'`

@@ -104,4 +104,11 @@ class PaintingService extends Service
             ->select('id')
             ->column();
     }
+
+    public function getCollectionsCountByUser(): int
+    {
+        return $this->model->getCollections()
+            ->byCurrentUser()
+            ->count();
+    }
 }

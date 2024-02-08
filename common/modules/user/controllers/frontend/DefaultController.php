@@ -7,6 +7,7 @@ use common\modules\user\models\enums\ProfileSectionsEnum;
 use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
+use common\modules\user\models\search\UserFavoritesSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -51,15 +52,48 @@ class DefaultController extends Controller
         }
 
         if ($this->request->isAjax) {
-            return $this->renderPartial('sections/' . $section);
+            return match ($section)  {
+                'info' => $this->getInfo(),
+                'collections' => $this->getCollections(),
+                'courses' => $this->getCourses(),
+                'favorites' => $this->getFavorites(),
+                'settings' => $this->getSettings(),
+                default => throw new NotFoundHttpException('Not found section ' . $section),
+
+            };
         }
 
-        return $this->render('sections/' . $section);
+        return $this->render('sections/info');
     }
 
-    public function actionInfo()
+    protected function getInfo(): string
     {
+        return $this->renderPartial('sections/info');
+    }
 
+    public function getCollections(): string
+    {
+        return $this->renderPartial('sections/collections');
+    }
+
+    protected function getCourses()
+    {
+        return $this->renderPartial('sections/courses');
+    }
+
+    protected function getFavorites(): string
+    {
+        $searchModel = new UserFavoritesSearch();
+        $searchModel->search($this->request->post());
+
+        return $this->renderAjax('sections/favorites', [
+            'provider' => $searchModel->search($this->request->post())
+        ]);
+    }
+
+    protected function getSettings()
+    {
+        return $this->renderPartial('sections/settings');
     }
 
     /**

@@ -98,6 +98,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getLikedPaintings(): ActiveQuery
     {
         return $this->hasMany(Painting::class, ['id' => 'painting_id'])
-            ->vaiTable('{{%painting_likes}}', ['user_id' => 'id']);
+            ->viaTable('{{%painting_likes}}', ['user_id' => 'id']);
     }
 }

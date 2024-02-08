@@ -13,7 +13,7 @@ use yii\web\View;
 <div class="collection-choice_existing">
     <div class="collection-box">
         <div class="collection-item">
-            <div id="new-collection" class="collection-item__preview collection-item__preview--blank">
+            <div id="new-collection" class="collection-item__preview--blank">
                 <i class="fa-solid fa-plus"></i>
             </div>
             <div class="collection-item__title"> <span>Новая коллекция</span> </div>

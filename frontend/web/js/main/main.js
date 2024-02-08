@@ -17,21 +17,10 @@ loginButton.on('click', () => {
 })
 
 function showLoginModal() {
-    overlay.addClass('overlay--active');
+    prepareModal();
     loginModal.addClass('modal--active');
 
-    $('body').css('overflow', 'hidden');
 
-    //Кнопка с закрытием окна
-    $('.close-button').on('click', function () {
-        hideModal();
-    })
-
-    $('.modal__wrapper').on('click', function (event) {
-        if (event.target === this) {
-            hideModal();
-        }
-    })
 
     showLoginForm();
 }
@@ -48,9 +37,24 @@ function showSignupForm() {
     loginContent.load('/user/signup');
 }
 
+function prepareModal() {
+    overlay.addClass('overlay--active');
+    $('body').css('overflow', 'hidden');
+
+    $('.close-button').on('click', function () {
+        hideModal();
+    })
+
+    $('.modal__wrapper').on('click', function (event) {
+        if (event.target === this) {
+            hideModal();
+        }
+    })
+}
+
 function hideModal() {
     $(overlay).removeClass('overlay--active');
-    $(loginModal).removeClass('modal--active');
+    $('.modal--active').removeClass('modal--active');
 
     $('body').css('overflow', 'auto');
 }

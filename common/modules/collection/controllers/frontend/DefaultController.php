@@ -8,6 +8,7 @@ use common\modules\painting\models\data\PaintingCollection;
 use Exception;
 use Throwable;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
@@ -18,6 +19,41 @@ use yii\widgets\ActiveForm;
  */
 class DefaultController extends Controller
 {
+    /** {@inheritdoc} */
+    public function behaviors(): array
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionGetModalContent(): string
+    {
+        if ($this->request->isAjax) {
+            $user = Yii::$app->user->identity;
+
+            if ($collections = $user->service->getCollections()) {
+                return $this->renderAjax('includes/_collections', ['collections' => $collections]);
+
+            }
+
+            return $this->renderAjax('includes/_new');
+        }
+
+        throw new Exception();
+
+    }
 
     /**
      * Return collection creation template to display it in modal window
@@ -28,20 +64,6 @@ class DefaultController extends Controller
     {
         if ($this->request->isAjax) {
             return $this->renderAjax('includes/_new');
-        }
-
-        throw new Exception();
-    }
-
-    /**
-     * Return list of user's collections to display it in modal window
-     *
-     * @throws Exception
-     */
-    public function actionGetUserCollections(): string
-    {
-        if ($this->request->isAjax && $collections = Yii::$app->user->identity->service->getCollections()) {
-            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
         }
 
         throw new Exception();
@@ -60,18 +82,19 @@ class DefaultController extends Controller
     /**
      * @throws Throwable
      */
-    public function actionAdd(int $collectionId, int $paintingId): string
+    public function actionAdd(): void
     {
-        if ($this->request->isAjax) {
-            $collections = Yii::$app->user->identity->service->getCollections();
+        $collectionId = $this->request->post('collectionId');
+        $paintingId = $this->request->post('paintingId');
 
+        if ($this->request->isAjax && isset($collectionId, $paintingId)) {
             if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
                 $paintingCollection->delete();
             } else {
                 $this->saveNewPaintingCollection($collectionId, $paintingId);
             }
 
-            return $this->renderPartial('includes/_collections', ['collections' => $collections]);
+            return;
         }
 
         throw new Exception();
@@ -80,9 +103,11 @@ class DefaultController extends Controller
     /**
      * @throws Exception
      */
-    public function actionCreateAndAdd(int $paintingId): string
+    public function actionCreateAndAdd(): void
     {
-        if ($this->request->isAjax) {
+        $paintingId = $this->request->post('paintingId');
+
+        if ($this->request->isAjax && isset($paintingId)) {
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
@@ -98,7 +123,7 @@ class DefaultController extends Controller
 
             $transaction->commit();
 
-            return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->service->getCollections()]);
+            return;
         }
 
         throw new Exception();

@@ -2,12 +2,14 @@
 
 namespace common\modules\user\controllers\frontend;
 
+use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
 use common\modules\user\models\enums\ProfileSectionsEnum;
 use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use common\modules\user\models\search\FavoritePaintingSearch;
+use common\modules\user\models\search\UserCollectionSearch;
 use common\modules\user\models\search\UserFavoritesSearch;
 use Yii;
 use yii\filters\AccessControl;
@@ -74,7 +76,23 @@ class DefaultController extends Controller
 
     public function getCollections(): string
     {
-        return $this->renderPartial('sections/collections');
+        $model = new Collection();
+
+        if ($model->load($this->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+
+            $model->save();
+        }
+
+        $searchModel = new UserCollectionSearch();
+
+        $dataProvider = $searchModel->search($this->request->post());
+
+        return $this->renderAjax('sections/collections', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'provider' => $dataProvider,
+        ]);
     }
 
     protected function getCourses()

@@ -14,10 +14,10 @@ use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 /**
-* @var View $this
-* @var ActiveDataProvider $provider
+ * @var View $this
+ * @var ActiveDataProvider $provider
  * @var FavoritePaintingSearch $model
-*/
+ */
 
 ?>
 

@@ -2,15 +2,16 @@
 
 use common\modules\painting\models\data\Painting;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
+ * @var View $this
  * @var Painting $model
  */
 
 $collectionsCount = (!$isGuest = Yii::$app->user->isGuest) ? $model->service->getCollectionsCountByUser() : 0;
 
 ?>
-
 
 <div class="paint-container">
     <div class="paint-container__actions">
@@ -42,3 +43,7 @@ $collectionsCount = (!$isGuest = Yii::$app->user->isGuest) ? $model->service->ge
         </div>
     </div>
 </div>
+
+<?php
+
+$this->registerJsVar('isGuest', Yii::$app->user->isGuest);

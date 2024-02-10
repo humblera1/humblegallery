@@ -39,6 +39,18 @@
   };
 }
 
+.section_favorites {
+  .paint-container {
+    @include for-big-desktop {
+      width: 33.333%;
+    }
+
+    width: 25%;
+  }
+}
+
+
+
 .action {
   &__wrapper {
     display: flex;

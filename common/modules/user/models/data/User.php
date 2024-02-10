@@ -95,7 +95,14 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Collection::class, ['user_id' => 'id']);
     }
 
+    // TODO: deprecated
     public function getLikedPaintings(): ActiveQuery
+    {
+        return $this->hasMany(Painting::class, ['id' => 'painting_id'])
+            ->viaTable('{{%painting_likes}}', ['user_id' => 'id']);
+    }
+
+    public function getFavoritePaintings(): ActiveQuery
     {
         return $this->hasMany(Painting::class, ['id' => 'painting_id'])
             ->viaTable('{{%painting_likes}}', ['user_id' => 'id']);

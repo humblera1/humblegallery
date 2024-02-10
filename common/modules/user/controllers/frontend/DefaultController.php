@@ -7,6 +7,7 @@ use common\modules\user\models\enums\ProfileSectionsEnum;
 use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
+use common\modules\user\models\search\FavoritePaintingSearch;
 use common\modules\user\models\search\UserFavoritesSearch;
 use Yii;
 use yii\filters\AccessControl;
@@ -81,13 +82,15 @@ class DefaultController extends Controller
         return $this->renderPartial('sections/courses');
     }
 
+
     protected function getFavorites(): string
     {
-        $searchModel = new UserFavoritesSearch();
-        $searchModel->search($this->request->post());
+        $searchModel = new FavoritePaintingSearch();
+        $dataProvider = $searchModel->search($this->request->post());
 
         return $this->renderAjax('sections/favorites', [
-            'provider' => $searchModel->search($this->request->post())
+            'model' => $searchModel,
+            'provider' => $dataProvider,
         ]);
     }
 

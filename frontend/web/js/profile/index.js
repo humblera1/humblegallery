@@ -40,6 +40,9 @@ function loadSectionContent (sectionName) {
     $sectionContent.load(url, function () {
         if ($(this).find('#section').data('section-name') === SECTION_FAVORITES) {
             initMasonry();
+            $("#favorite-pjax").on("pjax:end", function() {
+                initMasonry();
+            });
         }
     });
 }

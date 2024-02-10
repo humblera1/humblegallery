@@ -1,9 +1,7 @@
-let content = $('.content');
 const form = $('#painting-form');
 const filters = $('.filter');
 
 const $collectionModal = $('#collection-modal');
-const $creationModal = $('#creation-modal');
 
 const heartWrappers = $('.action__wrapper_heart');
 const $collectWrappers = $('.action__wrapper_collect');
@@ -22,30 +20,28 @@ filters.each((index, filter) => {
 
 function applyFilters () {
     makeFilterRequest()
-        .done(data => {
-            reloadContent(data);
-        })
-        .done(() => reloadMasonry())
+        .done(data => reloadContent(data))
         .fail(error => console.log(error));
 }
 
 function reloadContent (data) {
-    content.html(data);
+    $('.content').html(data);
+    reloadMasonry()
 }
 
-function reloadMasonry () {
-    content.masonry('reloadItems');
-    content.masonry();
-}
+// function reloadMasonry () {
+//     content.masonry('reloadItems');
+//     content.masonry();
+// }
 
-function initMasonry () {
-    content.masonry({
-        columnWidth: '.paint-container',
-        itemSelector: '.paint-container',
-        transitionDuration: '1s',
-        percentPosition: true
-    })
-}
+// function initMasonry () {
+//     content.masonry({
+//         columnWidth: '.paint-container',
+//         itemSelector: '.paint-container',
+//         transitionDuration: '1s',
+//         percentPosition: true
+//     })
+// }
 
 
 //Работа со стилизацией фильтров

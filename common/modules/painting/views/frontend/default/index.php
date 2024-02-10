@@ -1,8 +1,7 @@
 <?php
 
-use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\search\PaintingSearch;
-use frontend\assets\MasonryAsset;
+use frontend\assets\painting\PaintingAsset;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use yii\widgets\Pjax;
@@ -13,7 +12,7 @@ use yii\widgets\Pjax;
  * @var ActiveDataProvider $dataProvider
  */
 
-MasonryAsset::register($this);
+PaintingAsset::register($this);
 
 $this->registerCss(<<<CSS
 

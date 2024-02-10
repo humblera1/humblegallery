@@ -334,6 +334,12 @@ input[aria-invalid="true"] {
     .paint-container {
       width: 25%; } }
 
+.section_favorites .paint-container {
+  width: 25%; }
+  @media (max-width: 1800px) {
+    .section_favorites .paint-container {
+      width: 33.333%; } }
+
 .action__wrapper {
   display: flex;
   justify-content: center;

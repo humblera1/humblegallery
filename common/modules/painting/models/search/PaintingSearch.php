@@ -22,6 +22,7 @@ class PaintingSearch extends Painting
     public string|array $artists = '';
 
 
+    /** {@inheritdoc} */
     public function rules(): array
     {
         return [
@@ -32,6 +33,7 @@ class PaintingSearch extends Painting
         ];
     }
 
+    /** {@inheritdoc} */
     public function scenarios(): array
     {
         return Model::scenarios();
@@ -66,6 +68,9 @@ class PaintingSearch extends Painting
         return $dataProvider;
     }
 
+    /**
+     * Applies subject filter to query
+     */
     public function applySubjectFilter(PaintingQuery $query): void
     {
         if ($this->subjects) {
@@ -75,6 +80,9 @@ class PaintingSearch extends Painting
         }
     }
 
+    /**
+     * Applies movement filter to query
+     */
     public function applyMovementFilter(PaintingQuery $query): void
     {
         if ($this->movements) {
@@ -84,6 +92,9 @@ class PaintingSearch extends Painting
         }
     }
 
+    /**
+     * Applies technique filter to query
+     */
     public function applyTechniqueFilter(PaintingQuery $query): void
     {
         if ($this->techniques) {
@@ -93,6 +104,9 @@ class PaintingSearch extends Painting
         }
     }
 
+    /**
+     * Applies artist filter to query
+     */
     public function applyArtistFilter(PaintingQuery $query): void
     {
         if ($this->artists) {

@@ -1,6 +1,5 @@
 <?php
 
-use frontend\assets\MasonryAsset;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use yii\widgets\ListView;
@@ -11,11 +10,10 @@ use yii\widgets\Pjax;
 * @var ActiveDataProvider $provider
 */
 
-MasonryAsset::register($this);
 ?>
 
 
-<div class="section">
+<div id="section" class="section section_favorites" data-section-name="favorites">
     <div class="section__header">
         <div class="section-search">
             <input type="text">

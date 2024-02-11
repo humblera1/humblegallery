@@ -85,6 +85,7 @@ return [
                 '' => 'site/index', //TODO:поправить маршрут
 
                 'user/<action>' => 'user/default/<action>',
+//                'profile/<section>' => 'user/default/<section>',
                 [
                     'pattern' => 'profile/<section:\w+>',
                     'route' => 'user/default/profile',

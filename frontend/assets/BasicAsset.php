@@ -8,7 +8,7 @@ use yii\web\YiiAsset;
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
+class BasicAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -17,10 +17,11 @@ class AppAsset extends AssetBundle
         'css/site.css',
         'css/frontend.css',
     ];
+
     public $js = [
-        'https://kit.fontawesome.com/59b8304312.js',
-        'js/main/main.js',
+        'js/main/index.js',
     ];
+
     public $depends = [
         YiiAsset::class,
         FontAwesomeAsset::class

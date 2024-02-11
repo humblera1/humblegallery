@@ -1,11 +1,14 @@
 <?php
 
+use frontend\assets\profile\ProfileAsset;
 use yii\web\View;
 
 /**
  * @var View $this
  * @var string $content
  */
+
+ProfileAsset::register($this)
 
 ?>
 

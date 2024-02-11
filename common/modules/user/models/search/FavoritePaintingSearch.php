@@ -1,20 +1,20 @@
 <?php
 
-namespace common\modules\painting\models\search;
+namespace common\modules\user\models\search;
+
 
 use common\modules\artist\models\data\Artist;
 use common\modules\movement\models\data\Movement;
+use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\modules\painting\models\data\Painting;
+use yii\db\ActiveQuery;
 
-/**
- * PaintingSearch represents the model behind the search form of `common\modules\painting\models\data\Painting`.
- */
-class PaintingSearch extends Painting
+class FavoritePaintingSearch extends Painting
 {
     public string|array $subjects = '';
     public string|array $movements = '';
@@ -27,9 +27,10 @@ class PaintingSearch extends Painting
     {
         return [
             [['title', 'start_date', 'end_date'], 'string'],
-            [['artist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Artist::class, 'targetAttribute' => ['artist_id' => 'id']],
-            [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
-            [['subjects', 'movements', 'techniques', 'artists'], 'each', 'rule' => ['integer']],
+            [['artist_id'], 'exist', 'skipOnError' => true, 'targetRelation' => 'artist'],
+            //TODO: ЗА ЧТО
+//            [['subjects', 'movements', 'techniques', 'artists'], 'each', 'rule' => ['integer']],
+            [['subjects', 'movements', 'techniques', 'artists'], 'safe'],
         ];
     }
 
@@ -44,7 +45,8 @@ class PaintingSearch extends Painting
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = Painting::find();
+        $user = Yii::$app->user->identity;
+        $query = $user->getFavoritePaintings();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,9 +63,7 @@ class PaintingSearch extends Painting
         $this->applyTechniqueFilter($query);
         $this->applyArtistFilter($query);
 
-        $query->andFilterWhere(['start_date' => $this->start_date])
-            ->andFilterWhere(['end_date' => $this->end_date])
-            ->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }
@@ -71,7 +71,7 @@ class PaintingSearch extends Painting
     /**
      * Applies subject filter to query
      */
-    public function applySubjectFilter(PaintingQuery $query): void
+    public function applySubjectFilter(ActiveQuery $query): void
     {
         if ($this->subjects) {
             $query->joinWith('subjects');
@@ -83,7 +83,7 @@ class PaintingSearch extends Painting
     /**
      * Applies movement filter to query
      */
-    public function applyMovementFilter(PaintingQuery $query): void
+    public function applyMovementFilter(ActiveQuery $query): void
     {
         if ($this->movements) {
             $query->joinWith('movements');
@@ -95,7 +95,7 @@ class PaintingSearch extends Painting
     /**
      * Applies technique filter to query
      */
-    public function applyTechniqueFilter(PaintingQuery $query): void
+    public function applyTechniqueFilter(ActiveQuery $query): void
     {
         if ($this->techniques) {
             $query->joinWith('technique');
@@ -107,7 +107,7 @@ class PaintingSearch extends Painting
     /**
      * Applies artist filter to query
      */
-    public function applyArtistFilter(PaintingQuery $query): void
+    public function applyArtistFilter(ActiveQuery $query): void
     {
         if ($this->artists) {
             $query->joinWith('artist');

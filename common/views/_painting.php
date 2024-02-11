@@ -2,22 +2,23 @@
 
 use common\modules\painting\models\data\Painting;
 use yii\helpers\Html;
-
+use yii\web\View;
 
 /**
+ * @var View $this
  * @var Painting $model
  */
 
 $collectionsCount = (!$isGuest = Yii::$app->user->isGuest) ? $model->service->getCollectionsCountByUser() : 0;
 
-
 ?>
+
 <div class="paint-container">
     <div class="paint-container__actions">
         <div class="action__wrapper action__wrapper_heart" data-painting-id="<?= $model->id ?>">
             <div class="action__content">
                 <?php $class = (!$isGuest && $model->service->isLikedByCurrentUser()) ? 'action__icon_liked' : '' ?>
-                    <i class="<?= $class ?> action__icon fa-solid fa-heart"></i>
+                <i class="<?= $class ?> action__icon fa-solid fa-heart"></i>
             </div>
         </div>
         <div class="action__wrapper action__wrapper_collect"

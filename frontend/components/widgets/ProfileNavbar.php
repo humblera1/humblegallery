@@ -25,7 +25,7 @@ class ProfileNavbar extends Widget
     /** {@inheritdoc} */
     public function run(): string
     {
-        $this->registerAssets();
+//        $this->registerAssets();
         return Html::tag('ul', $this->renderItems($this->items));
     }
 
@@ -57,8 +57,8 @@ class ProfileNavbar extends Widget
         ]);
     }
 
-    public function registerAssets(): void
-    {
-        ProfileNavbarBundle::register($this->getView());
-    }
+//    public function registerAssets(): void
+//    {
+//        ProfileNavbarBundle::register($this->getView());
+//    }
 }

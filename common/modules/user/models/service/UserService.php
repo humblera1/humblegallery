@@ -66,4 +66,11 @@ class UserService extends Service
     {
        return $this->model->getCollections()->exists();
     }
+
+    public function getFavorites(): array
+    {
+        return $this->model
+            ->getLikedPaintings()
+            ->all();
+    }
 }

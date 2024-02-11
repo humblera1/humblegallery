@@ -49,10 +49,6 @@ class DefaultController extends Controller
             $userId = Yii::$app->user->getId();
             $paintingId = Yii::$app->request->post('paintingId');
 
-            if (Yii::$app->user->isGuest) {
-                //окно логина
-            }
-
             if ($like = PaintingLike::findOne(['user_id' => $userId, 'painting_id' => $paintingId])) {
                 return $like->delete();
             }

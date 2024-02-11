@@ -35,6 +35,13 @@ class DefaultController extends Controller
         ];
     }
 
+    public function actionView($id): string
+    {
+        $collection = Collection::findOne($id);
+
+        return '';
+    }
+
     /**
      * @throws Exception
      */

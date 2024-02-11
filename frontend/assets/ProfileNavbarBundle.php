@@ -14,6 +14,7 @@ class ProfileNavbarBundle extends AssetBundle
     ];
 
     public $depends = [
-        AppAsset::class,
+        BasicAsset::class,
+        MasonryAsset::class,
     ];
 }

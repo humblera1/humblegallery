@@ -42,15 +42,9 @@ YiiAsset::register($this);
                 'name',
                 'surname',
                 'is_verified:boolean',
-                'is_blocked',
-                [
-                    'attribute' => 'created_at',
-                    'format' => ['date', 'php:d.m.Y'],
-                ],
-                [
-                    'attribute' => 'updated_at',
-                    'format' => ['date', 'php:d.m.Y'],
-                ],
+                'is_blocked:boolean',
+                'created_at:date',
+                'updated_at:date',
             ],
         ]) ?>
     </div>

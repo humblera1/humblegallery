@@ -10,6 +10,8 @@ use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for Painting model.
+ *
+ * @var Painting $model
  */
 class DefaultController extends CRUDController
 {
@@ -46,6 +48,7 @@ class DefaultController extends CRUDController
     /** {@inheritDoc} */
     public function actionUpdate($id): string|Response
     {
+        /** @var Painting $model */
         $model = $this->findModel($id);
 
         if ($this->request->isPost) {

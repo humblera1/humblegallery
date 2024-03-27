@@ -10,7 +10,9 @@ use common\modules\subject\SubjectModule;
 use common\modules\technique\TechniqueModule;
 use common\modules\user\UserModule;
 use kartik\date\DatePicker;
+use yii\i18n\Formatter;
 use yii\widgets\ActiveForm;
+use yii\widgets\DetailView;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -20,7 +22,7 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'HUMBLEGALLERY',
+    'id' => 'humblegallery',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -32,6 +34,12 @@ return [
             DatePicker::class => [
                 'options' => [
                     'class' => ['form-group'],
+                ],
+            ],
+            DetailView::class => [
+                'formatter' => [
+                    'class' => Formatter::class,
+                    'dateFormat' => 'php:d.m.Y',
                 ],
             ],
         ],

@@ -17,9 +17,11 @@ services:
   app:
     container_name: ${COMPOSE_PROJECT_NAME}-app
     build:
-      context: ./docker/php
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./:/var/www
+      - vendor_data:/var/www/vendor
     env_file:
       - .env
     networks:
@@ -27,6 +29,8 @@ services:
       - web
     depends_on:
       - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 
   # MYSQL
@@ -40,16 +44,16 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - 3306:3306
+      - "3336:3306"
     volumes:
-      - ${COMPOSE_PROJECT_NAME}-mysql-data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     networks:
       - internal
 
 networks:
   internal:
-    internal: true
+    # internal: true
   web:
 volumes:
   db-data:
-    name: ${COMPOSE_PROJECT_NAME}-mysql-data
+  vendor_data:

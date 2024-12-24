@@ -7,13 +7,13 @@
 
 use common\widgets\Alert;
 use frontend\assets\BasicAsset;
+use frontend\assets\FrontendAsset;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
 use yii\web\View;
 
-BasicAsset::register($this);
+FrontendAsset::register($this);
+//BasicAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

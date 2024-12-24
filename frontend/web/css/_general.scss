@@ -1,4 +1,4 @@
-@import 'colors';
+@use 'colors' as colors;
 
 * {
   box-sizing: border-box;
@@ -13,7 +13,7 @@ a {
   text-decoration: none;
   color: grey;
   &:hover {
-    color: $orange;
+    color: colors.$orange;
   }
 }
 
@@ -26,7 +26,7 @@ body {
   margin: 0;
   padding: 0;
   //font-family: 'Ubuntu', sans-serif;
-  background-color: $primary-color;
+  background-color: colors.$primary-color;
   color: grey;
 }
 
@@ -60,12 +60,12 @@ fieldset {
 
   &-orange {
     color: #fff;
-    border-color: $orange;
-    background-color: $orange;
+    border-color: colors.$orange;
+    background-color: colors.$orange;
     &:hover {
       color: #fff;
-      background-color: darken($orange, 5);
-      border-color: lighten($orange, 5);
+      background-color: darken(colors.$orange, 5);
+      border-color: lighten(colors.$orange, 5);
     }
   }
 }

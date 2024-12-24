@@ -1,0 +1,70 @@
+@use "@styles/colors" as colors;
+
+#filter-widget {
+    .filters {
+        width: 250px;
+        height: fit-content;
+        padding: 36px 32px;
+        border-radius: 36px;
+        background-color: colors.$additional-color;
+
+        &__header {
+
+        }
+
+        &__body {
+
+        }
+
+        .filter-section {
+            &__caption {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            &__actions {
+                display: flex;
+                gap: 8px;
+            }
+        }
+
+        .filter-item {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            &__box {
+                pointer-events: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 16px;
+                min-height: 16px;
+                border: 1px solid #000;
+                border-radius: 50px;
+            }
+
+            &__circle {
+                width: 6px;
+                height: 6px;
+                background-color: #000;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+
+            &__label {
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            input {
+                visibility: hidden;
+                display: none;
+            }
+        }
+    }
+}

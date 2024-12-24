@@ -1,6 +1,7 @@
 <?php
 
 use common\modules\painting\models\search\PaintingSearch;
+use common\modules\painting\widgets\FilterWidget;
 use frontend\assets\painting\PaintingAsset;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
@@ -25,7 +26,10 @@ CSS);
 
 ?>
 <div class="painting-container">
-    <?= $this->render('includes/_sidebar', ['model' => $model]) ?>
+    <?= FilterWidget::widget([
+            'model' => $model,
+    ]) ?>
+<!--    --><?php //= $this->render('includes/_sidebar', ['model' => $model]) ?>
 
     <?php Pjax::begin() ?>
     <div class="painting-catalog">

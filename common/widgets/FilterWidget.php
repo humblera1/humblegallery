@@ -1,8 +1,8 @@
 <?php
 
-namespace common\modules\painting\widgets;
+namespace common\widgets;
 
-use common\components\trais\widgets\WithCustomPath;
+use common\components\traits\widgets\WithCustomPath;
 use yii\base\Widget;
 use yii\db\ActiveRecord;
 
@@ -27,8 +27,6 @@ class FilterWidget extends Widget
      */
     public bool $withPeriod = false;
 
-    public ActiveRecord $model;
-
     public function init()
     {
         parent::init();
@@ -36,6 +34,9 @@ class FilterWidget extends Widget
 
     public function run()
     {
-        return $this->render('index', ['model' => $this->model]);
+        return $this->render('index', [
+            'searchModel' => $this->searchModel,
+            'models' => $this->models,
+        ]);
     }
 }

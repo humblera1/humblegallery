@@ -1,7 +1,8 @@
 <?php
 
+use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\search\PaintingSearch;
-use common\modules\painting\widgets\FilterWidget;
+use common\widgets\FilterWidget;
 use frontend\assets\painting\PaintingAsset;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
@@ -27,7 +28,10 @@ CSS);
 ?>
 <div class="painting-container">
     <?= FilterWidget::widget([
-            'model' => $model,
+        'searchModel' => $model,
+        'models' => [
+            Movement::class,
+        ],
     ]) ?>
 <!--    --><?php //= $this->render('includes/_sidebar', ['model' => $model]) ?>
 

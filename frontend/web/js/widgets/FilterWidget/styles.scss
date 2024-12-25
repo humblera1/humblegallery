@@ -1,4 +1,5 @@
 @use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
 
 #filter-widget {
     .filters {
@@ -8,8 +9,22 @@
         border-radius: 36px;
         background-color: colors.$additional-color;
 
-        &__header {
+        &__title {
+            @include mixins.main-font(500, 18, colors.$text-accent-brown);
+        }
 
+        &__header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        &__icon {
+            width: 16px;
+            min-width: 16px;
+            max-width: 16px;
+            color: colors.$text-accent-brown;
         }
 
         &__body {
@@ -20,11 +35,76 @@
             &__caption {
                 display: flex;
                 justify-content: space-between;
+                margin-bottom: 12px;
+            }
+
+            &__title {
+                @include mixins.main-font(500, 16, colors.$text-chocolate);
+            }
+
+            &__badge {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                max-width: 28px;
+                height: 16px;
+                background-color: colors.$badge-wheat;
+                border-radius: 50px;
+
+                span {
+                    @include mixins.main-font(500, 10, colors.$text-accent-brown);
+                }
+            }
+
+            &__minus {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 12px;
+                max-width: 12px;
+                color: colors.$text-accent-brown;
+
+                @include mixins.hover-transition;
+
+                &:hover {
+                    color: colors.$text-accent-orange;
+                }
             }
 
             &__actions {
                 display: flex;
                 gap: 8px;
+            }
+
+            &__list {
+                display: flex;
+                flex-direction: column;
+                max-height: 90px;
+                overflow-y: hidden;
+                margin-bottom: 12px;
+
+                &_opened {
+                    max-height: 180px;
+                    overflow-y: scroll;
+                }
+            }
+
+            &__basement {
+                cursor: pointer;
+                display: flex;
+                justify-content: flex-end;
+                width: 100%;
+
+                @include mixins.main-font(500, 14, colors.$text-accent-brown);
+
+                @include mixins.hover-transition;
+
+                &:hover {
+                    color: colors.$text-accent-orange;
+                    text-decoration: underline;
+                }
             }
         }
 
@@ -33,22 +113,23 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 4px 0;
 
             &__box {
                 pointer-events: none;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 16px;
-                min-height: 16px;
-                border: 1px solid #000;
+                min-width: 12px;
+                min-height: 12px;
+                border: 1px solid colors.$accent-gray;
                 border-radius: 50px;
             }
 
             &__circle {
                 width: 6px;
                 height: 6px;
-                background-color: #000;
+                background-color: colors.$accent-gray;
                 border-radius: 50%;
                 transition: background-color 0.3s;
             }
@@ -59,6 +140,14 @@
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 text-overflow: ellipsis;
+
+                @include mixins.main-font(400, 14, colors.$text-chocolate);
+
+                @include mixins.hover-transition;
+
+                &:hover {
+                    color: colors.$text-accent-orange;
+                }
             }
 
             input {

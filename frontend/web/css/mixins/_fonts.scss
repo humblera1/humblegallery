@@ -1,0 +1,22 @@
+$mainFont: Ubuntu, sans-serif;
+
+@function pxToRem($font-size) {
+    $remValue: calc($font-size / 16) + rem;
+    @return $remValue;
+}
+
+@mixin font($name, $weight, $size, $color, $height, $style) {
+    font-family: $name;
+    font-style: $style;
+    font-weight: $weight;
+    font-size: pxToRem($size);
+    color: $color;
+
+    @if $height != 1 {
+        line-height: calc($height / $size);
+    }
+}
+
+@mixin main-font($weight, $size, $color: null, $height: 1, $style: normal) {
+    @include font($mainFont, $weight, $size, $color, $height, $style);
+}

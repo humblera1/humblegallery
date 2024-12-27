@@ -1,31 +1,31 @@
 @import 'colors';
 
 .page {
-  width: 100wv;
-  height: auto;
-  padding: 5rem 10rem;
-  display: flex;
-  justify-content: center;
+    width: 100wv;
+    height: auto;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: center;
 
-  &__content {
-    height: 100vh;
-    width: 100%;
-    max-width: 2048px;
-  }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        height: 100vh;
+        width: 100%;
+        max-width: 2048px;
+    }
 }
 
 .page-container {
-  width: 100%;
-  height: 100%;
-  margin-top: 25rem;
+    width: 100%;
+    height: 100%;
 
-  display: grid;
-  //grid-template-columns: 1fr 3fr;
+    display: grid;
+    //grid-template-columns: 1fr 3fr;
 }
 
 .content {
-  width: 100%;
-  margin-top: 3rem;
-
-  //border: #0a53be 1px solid;
+    width: 100%;
+    margin-top: 3rem;
 }

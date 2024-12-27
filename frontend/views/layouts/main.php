@@ -6,14 +6,12 @@
  */
 
 use common\widgets\Alert;
-use frontend\assets\BasicAsset;
 use frontend\assets\FrontendAsset;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\web\View;
 
 FrontendAsset::register($this);
-//BasicAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -30,33 +28,26 @@ FrontendAsset::register($this);
 <div class="page">
     <div class="page__content">
         <header class="header">
-            <nav class="header__navigation">
-                <div class="nav-block">
-                    <div class="nav-item--logo"></div>
-                    <div class="nav-item">Художники</div>
-                    <div class="nav-item"><a href="/paintings">Картины</a></div>
-                    <div class="nav-item">Статьи</div>
-                </div>
-                <div class="nav-block">
-                    <div class="nav-item">
-                        <?php if (Yii::$app->user->isGuest): ?>
-                            <?php $text = "<i class='fa-solid fa-right-to-bracket'></i>    Вход"; ?>
-                            <div class='' id='login-button'>
-                                <p><i class='fa-solid fa-right-to-bracket'></i>   Вход</p>
-                            </div>
-                        <?php else: ?>
-                            <?= Html::a('Профиль', ['/profile'], ['class' => 'nav-item']); ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
+            <nav class="navigation">
+                <div class="navigation__item navigation__item_logo">лого!!!</div>
+                <a class="navigation__item" href="/about">О нас</a>
+                <a class="navigation__item" href="/artists">Художники</a>
+                <a class="navigation__item" href="/paintings">Картины</a>
             </nav>
+            <div class="auth">
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <div class="auth__actions">
+                        <button id='login-button' class="btn btn_orange">Регистрация</button>
+                        <button class="btn btn_brown">Вход</button>
+                    </div>
+                <?php else: ?>
+                    <?= Html::a('Профиль', ['/profile'], ['class' => 'nav-item']); ?>
+                <?php endif; ?>
+            </div>
         </header>
         <div class="page-container">
             <?= $content ?>
 
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
         <?= Alert::widget() ?>
         </div>
     </div>

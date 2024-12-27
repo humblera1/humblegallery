@@ -1,67 +1,55 @@
-@use 'colors' as colors;
+@use '@styles/colors' as colors;
+@use '@styles/mixins' as mixins;
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 a:active,
 a {
-  text-decoration: none;
-  color: grey;
-  &:hover {
-    color: colors.$orange;
-  }
+    text-decoration: none;
+    color: grey;
+    &:hover {
+        color: colors.$orange;
+    }
 }
 
 input, select, textarea {
-  outline: none;
-  padding-left: 1.5rem !important;
+    outline: none;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  //font-family: 'Ubuntu', sans-serif;
-  background-color: colors.$primary-color;
-  color: grey;
+    margin: 0;
+    padding: 0;
+    //font-family: 'Ubuntu', sans-serif;
+    background-color: colors.$primary-color;
+    color: grey;
 }
 
 hr, ul, li {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 ul, li {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 form {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 fieldset {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  position: relative;
-  height: 100%;
-  width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    position: relative;
+    height: 100%;
+    width: 100%;
 }
 
-.btn {
-  border-radius: 20px;
-  padding: 0.375rem 1.5rem;
-
-  &-orange {
-    color: #fff;
-    border-color: colors.$orange;
-    background-color: colors.$orange;
-    &:hover {
-      color: #fff;
-      background-color: darken(colors.$orange, 5);
-      border-color: lighten(colors.$orange, 5);
-    }
-  }
+.title {
+    @include mixins.main-font(500, 24, colors.$text-chocolate);
 }

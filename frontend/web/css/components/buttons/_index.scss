@@ -1,0 +1,59 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.btn {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 24px;
+    border-radius: 50px;
+
+    @include mixins.hover-transition();
+
+    &_orange {
+        background-color: colors.$btn-orange;
+
+        @include mixins.main-font(500, 14, colors.$btn-text-white);
+
+        &:hover {
+            background-color: colors.$btn-orange--hovered;
+        }
+
+        &:active {
+            background-color: colors.$btn-orange--active;
+        }
+    }
+
+    &_brown {
+        background-color: colors.$btn-brown;
+
+        @include mixins.main-font(500, 14, colors.$btn-text-white);
+
+        &:hover {
+            background-color: colors.$btn-brown--hovered;
+        }
+
+        &:active {
+            background-color: colors.$btn-brown--active;
+        }
+    }
+
+    &_light-orange {
+        background-color: colors.$btn-light-orange;
+
+        @include mixins.main-font(500, 14, colors.$btn-text-brown);
+
+        &:hover {
+            background-color: colors.$btn-light-orange--hovered;
+        }
+
+        &:active {
+            background-color: colors.$btn-light-orange--active;
+        }
+    }
+
+    &_full {
+        width: 100%;
+    }
+}

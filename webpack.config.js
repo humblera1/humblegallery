@@ -35,6 +35,14 @@ module.exports = {
                     'sass-loader',
                 ],
             },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: '[name][ext]',
+                    publicPath: '/fonts/'
+                },
+            }
         ],
     },
     optimization: {
@@ -45,9 +53,8 @@ module.exports = {
     resolve: {
         alias: {
             '@styles': path.resolve(__dirname, 'frontend/web/css'),
-            '@artists': path.resolve(__dirname, 'web/js/artists/'),
-            '@paintings': path.resolve(__dirname, 'web/js/paintings/'),
-            '@modules': path.resolve(__dirname, 'web/js/modules/'),
+
+            '@fonts': path.resolve(__dirname, 'common/web/fonts')
         },
     },
     // npm install --save-dev mini-css-extract-plugin

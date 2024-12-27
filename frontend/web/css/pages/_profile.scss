@@ -1,5 +1,4 @@
-
-@import '../mixins/media-queries';
+@use "@styles/mixins" as mixins;
 
 .profile {
   display: grid;
@@ -21,7 +20,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
 
-      @include for-desktop {
+      @include mixins.for-desktop {
         grid-template-columns: 1fr;
       }
 

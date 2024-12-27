@@ -1,3 +1,9 @@
+@mixin shadow($x, $y, $blur, $spread, $color) {
+  -webkit-box-shadow: #{$x}px #{$y}px #{$blur}px #{$spread}px $color;
+  -moz-box-shadow: #{$x}px #{$y}px #{$blur}px #{$spread}px $color;
+  box-shadow: #{$x}px #{$y}px #{$blur}px #{$spread}px $color;
+}
+
 @mixin basic-shadow {
   -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
   -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);

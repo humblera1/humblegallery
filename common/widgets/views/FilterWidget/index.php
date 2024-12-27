@@ -6,8 +6,10 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var $searchModel ActiveRecord
- * @var $models ActiveRecord[]
+ * @var array<string, ActiveRecord> $filters
  */
+
+//$len = count($models);
 
 ?>
 
@@ -21,14 +23,23 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="filters__body">
             <?php $form = ActiveForm::begin([
-                'id' => 'painting-form',
-                'action' => "filtering",
+                'id' => 'filter-widget-form',
+                'options' => [
+                    'data-pjax' => true,
+                ],
             ]);
             ?>
-            <?php foreach ($models as $model): ?>
-                <?= $this->render('includes/_section', ['searchModel' => $searchModel, 'model' => $model]) ?>
+            <?php foreach ($filters as $title => $model): ?>
+                <?= $this->render('includes/_section', compact('searchModel', 'title', 'model')); ?>
+                <?php if (true): ?>
+                    <div class="filters__separator"></div>
+                <?php endif; ?>
             <?php endforeach; ?>
             <?php ActiveForm::end(); ?>
+        </div>
+        <div class="filters__footer">
+            <button type="submit" form="filter-widget-form" class="btn btn_orange btn_full">Применить</button>
+            <button type="button" id="reset-all-filters" class="btn btn_light-orange btn_full">Сбросить</button>
         </div>
     </div>
 </aside>

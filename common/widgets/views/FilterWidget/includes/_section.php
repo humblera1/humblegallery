@@ -8,17 +8,18 @@ use yii\helpers\ArrayHelper;
 /**
  * @var $searchModel ActiveRecord
  * @var $model ActiveRecord
+ * @var $title string
  */
 ?>
 
 <div class="filter-section">
     <div class="filter-section__caption">
-        <p class="filter-section__title"><?= $model::displayPluralLabel() ?></p>
+        <p class="filter-section__title"><?= $title ?></p>
         <div class="filter-section__actions">
             <div class="filter-section__badge">
                 <span> 0 </span>
             </div>
-            <div id="reset-filter" class="filter-section__minus">
+            <div class="filter-section__minus">
                 <?= Html::icon('dash'); ?>
             </div>
         </div>

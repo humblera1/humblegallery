@@ -16,11 +16,9 @@ class FilterWidget extends Widget
     public ActiveRecord $searchModel;
 
     /**
-     * Модели для формирования фильтров.
-     *
-     * @var array<ActiveRecord> $models
+     * @var array<string, ActiveRecord> $filters
      */
-    public array $models;
+    public array $filters;
 
     /**
      * Флаг, указывающий, что нужно отображать фильтр по периоду.
@@ -36,7 +34,7 @@ class FilterWidget extends Widget
     {
         return $this->render('index', [
             'searchModel' => $this->searchModel,
-            'models' => $this->models,
+            'filters' => $this->filters,
         ]);
     }
 }

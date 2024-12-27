@@ -4,9 +4,11 @@ export default class FilterManager {
     constructor() {
         this.sections = $('.filter-section');
         this.items = $('.filter-item');
-        // todo: избавиться от id
-        this.reset = $('#reset-filter');
-        this.open = $('#open-filter');
+        this.reset = $('.filter-section__minus');
+        this.open = $('.filter-section__basement');
+        this.form = $('#filter-widget-form');
+        this.resetAllButton = $('#reset-all-filters');
+
         this.init();
     }
 
@@ -14,6 +16,10 @@ export default class FilterManager {
         this.items.on('click', (event) => this.handleClickOnItem(event));
         this.reset.on('click', (event) => this.handleReset(event));
         this.open.on('click', event => this.handleListOpening(event));
+        this.form.off('submit').on('submit', (event) => this.handleFilterApplying(event));
+
+        this.resetAllButton.on('click', () => this.handleResetAllFilters());
+
 
         // Не нужно, если при перезагрузке все фильтры сбрасываются (что является нормальным поведением)
         // this.sections.each((index, section) => {
@@ -42,6 +48,7 @@ export default class FilterManager {
         if ($list.hasClass('filter-section__list_opened')) {
             $item.text('скрыть');
         } else {
+            $list.scrollTop(0);
             $item.text('ещё...');
         }
     }
@@ -63,6 +70,36 @@ export default class FilterManager {
         });
 
         this.updateFilterCount($section);
+    }
+
+    handleResetAllFilters() {
+        this.sections.find('.filter-item__checkbox').each((_index, checkbox) => {
+            const $checkbox = $(checkbox);
+            if ($checkbox.prop('checked')) {
+                const $item = $checkbox.closest('.filter-item');
+                const $circle = $item.find('.filter-item__circle');
+
+                $item.removeClass('filter-item_active');
+                $circle.hide();
+                $checkbox.prop('checked', false);
+            }
+        });
+
+        this.sections.each((_index, section) => {
+            this.updateFilterCount($(section));
+        });
+
+        this.form.submit();
+    }
+
+    /**
+     * Данное событие используется для обновления той или иной части данных в представлении.
+     * @param event
+     */
+    handleFilterApplying(event) {
+        event.preventDefault();
+
+        $(document).trigger('filters:applied', [$(event.currentTarget).serializeArray()]);
     }
 
     updateFilterCount($section) {

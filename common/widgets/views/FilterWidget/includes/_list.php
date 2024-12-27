@@ -2,13 +2,16 @@
 
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 /**
  * @var $searchModel ActiveRecord
  * @var $model ActiveRecord
  */
 
-$inputName = $searchModel->formName() . "[" . $model::getPluralName() . "]" . "[]";
+$pluralForm = Inflector::pluralize($model::tableName());
+$inputName = "{$searchModel->formName()}[$pluralForm][]";
+
 $items = ArrayHelper::map($model::find()->orderBy('name')->all(), 'id', 'name');
 
 ?>
@@ -20,8 +23,8 @@ $items = ArrayHelper::map($model::find()->orderBy('name')->all(), 'id', 'name');
             <span class="filter-item__circle" style="display: none;"></span>
         </label>
         <span class="filter-item__label">
-        <?= $name ?>
-    </span>
+            <?= $name ?>
+        </span>
     </div>
 <?php endforeach; ?>
 

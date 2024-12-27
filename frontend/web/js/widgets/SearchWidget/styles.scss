@@ -1,0 +1,55 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+#search-widget {
+    .search {
+        &__container {
+            display: flex;
+            gap: 12px;
+            width: 250px;
+            height: 36px;
+            padding: 4px;
+            border-radius: 24px;
+            background-color: colors.$additional-color;
+        }
+
+        &__badge {
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+            min-height: 28px;
+            border-radius: 50px;
+            background-color: colors.$primary-color;
+            color: colors.$accent-brown;
+
+            @include mixins.hover-transition;
+            @include mixins.shadow(0, 4, 15, 0, colors.$shadow-gray);
+
+            svg {
+                width: 12px;
+                height: 12px;
+            }
+
+            &:hover {
+                color: colors.$accent-orange;
+            }
+        }
+
+        &__input {
+            background-color: transparent;
+            border: none;
+
+            @include mixins.main-font(400, 16, colors.$text-chocolate);
+
+            &::placeholder,
+            &::-webkit-input-placeholder,
+            &::-moz-placeholder {
+                @include mixins.main-font(400, 16, colors.$text-accent-tuscany, 1, italic);
+            }
+        }
+    }
+}

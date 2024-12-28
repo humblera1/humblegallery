@@ -20,3 +20,13 @@ $mainFont: Ubuntu, sans-serif;
 @mixin main-font($weight, $size, $color: null, $height: 1, $style: normal) {
     @include font($mainFont, $weight, $size, $color, $height, $style);
 }
+
+@mixin lineclamp($lines) {
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
+    overflow: hidden;
+}

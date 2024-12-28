@@ -19,4 +19,25 @@ class ArtistService extends Service
 
         return '/uploads/images/artists/' . $model->image_name;
     }
+
+    public function getLimitedMovementNames(int $limit = 3): array
+    {
+        $movementNames = [];
+
+        if (!$this->model->isRelationPopulated('paintings')) {
+            return $movementNames;
+        }
+
+        foreach ($this->model->paintings as $painting) {
+            if ($painting->isRelationPopulated('movements')) {
+                foreach ($painting->movements as $movement) {
+                    $movementNames[] = $movement->name;
+                }
+            }
+        }
+
+        $movementNames = array_unique($movementNames);
+
+        return array_slice($movementNames, 0, $limit);
+    }
 }

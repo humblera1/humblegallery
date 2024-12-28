@@ -29,6 +29,8 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property int $created_at Дата создания
  * @property int $updated_at Дата обновления
  * @property int|null $is_deleted ID
+ *
+ * @property Painting[] $paintings
  */
 class Artist extends ActiveRecord
 {
@@ -122,12 +124,4 @@ class Artist extends ActiveRecord
     {
         return $this->hasMany(Painting::class, ['artist_id' => 'id']);
     }
-
-//    public function getMovements(): ActiveQuery
-//    {
-//        return $this->hasMany(Movement::class, ['id' => 'movement_id'])
-//            ->via('paintings', function ($query) {
-//                return $query->joinWith('movements');
-//            });
-//    }
 }

@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $model = new ArtistSearch();
 
         return $this->render('index', [
-            'dataProvider' => $this->getProvider(),
+            'dataProvider' => $this->getProvider(loadRelations: true),
             'model' => $model,
         ]);
     }
@@ -43,10 +43,10 @@ class DefaultController extends Controller
         ]);
     }
 
-    protected function getProvider(): ActiveDataProvider
+    protected function getProvider($loadRelations = false): ActiveDataProvider
     {
         $searchModel = new ArtistSearch();
 
-        return $searchModel->search($this->request->post());
+        return $searchModel->search($this->request->post(), $loadRelations);
     }
 }

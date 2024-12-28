@@ -27,9 +27,12 @@ use yii\web\View;
                 <?= Html::encode($model->description) ?>
             </p>
         </div>
-        <div class="artist__tags">
-<!--            --><?php //var_dump($model->paintings) ?>
-
+        <div class="artist__movements">
+            <?php foreach($model->service->getLimitedMovementNames() as $movementName): ?>
+                <div class="artist__movement">
+                    <?= $movementName ?>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
     <div class="artist__badge">

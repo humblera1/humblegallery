@@ -83,6 +83,22 @@
         }
     }
 
+    &__movements {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 400px;
+        column-gap: 4px;
+        row-gap: 6px;
+    }
+
+    &__movement {
+        padding: 8px 16px;
+        border-radius: 50px;
+        background-color: colors.$badge-wheat;
+
+        @include mixins.main-font(500, 12, colors.$text-accent-brown);
+    }
+
     &__name {
         @include mixins.main-font(500, 22, colors.$text-chocolate);
     }

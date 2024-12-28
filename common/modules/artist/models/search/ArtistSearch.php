@@ -40,9 +40,13 @@ class ArtistSearch extends Artist
     /**
      * Creates data provider instance with search query applied
      */
-    public function search(array $params): ActiveDataProvider
+    public function search(array $params, $loadRelations = false): ActiveDataProvider
     {
         $query = Artist::find();
+
+        if ($loadRelations) {
+            $query->with(['paintings.movements']);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -2,6 +2,7 @@
 
 namespace common\modules\artist\models\search;
 
+use common\modules\artist\models\query\ArtistQuery;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\modules\artist\models\data\Artist;
@@ -11,6 +12,12 @@ use common\modules\artist\models\data\Artist;
  */
 class ArtistSearch extends Artist
 {
+    public string|array $movements = [];
+
+    public string|array $subjects = [];
+
+    public string|array $techniques = [];
+
     /**
      * {@inheritdoc}
      */
@@ -18,6 +25,7 @@ class ArtistSearch extends Artist
     {
         return [
             [['name', 'born', 'died'], 'string'],
+            [['movements', 'subjects', 'techniques'], 'each', 'rule' => ['integer']],
         ];
     }
 
@@ -46,6 +54,10 @@ class ArtistSearch extends Artist
             return $dataProvider;
         }
 
+        $this->applyMovementFilter($query);
+        $this->applySubjectFilter($query);
+        $this->applyTechniqueFilter($query);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'born' => $this->born,
@@ -54,9 +66,39 @@ class ArtistSearch extends Artist
             'is_deleted' => $this->is_deleted,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', Artist::tableName() . '.name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
+    }
+
+    /**
+     * Applies movement filter to query.
+     */
+    public function applyMovementFilter(ArtistQuery $query): void
+    {
+        if ($this->movements) {
+            $query->filterByMovement($this->movements);
+        }
+    }
+
+    /**
+     * Applies subject filter to query.
+     */
+    public function applySubjectFilter(ArtistQuery $query): void
+    {
+        if ($this->subjects) {
+            $query->filterBySubject($this->subjects);
+        }
+    }
+
+    /**
+     * Applies technique filter to query
+     */
+    public function applyTechniqueFilter(ArtistQuery $query): void
+    {
+        if ($this->techniques) {
+            $query->filterByTechnique($this->techniques);
+        }
     }
 }

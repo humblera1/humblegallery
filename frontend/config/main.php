@@ -1,6 +1,7 @@
 <?php
 
 use backend\components\widgets\HumbleActiveField;
+use common\modules\artist\ArtistModule;
 use common\modules\collection\CollectionModule;
 use common\modules\painting\PaintingModule;
 use common\modules\user\models\data\User;
@@ -33,6 +34,11 @@ return [
             'class' => PaintingModule::class,
             'controllerNamespace' => 'common\modules\painting\controllers\frontend',
             'viewPath' => '@common/modules/painting/views/frontend',
+        ],
+        'artist' => [
+            'class' => ArtistModule::class,
+            'controllerNamespace' => 'common\modules\artist\controllers\frontend',
+            'viewPath' => '@common/modules/artist/views/frontend',
         ],
         'user' => [
             'class' => UserModule::class,
@@ -79,6 +85,13 @@ return [
             'enableStrictParsing' => true,
             'rules' => [
                 'paintings' => 'painting/default/index',
+
+                'artists' => 'artist/default/index',
+                'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',
+
+                'about' => 'site/about',
+
+
                 'paintings/<action>' => 'painting/default/<action>',
                 'collection/<action>' => 'collection/default/<action>',
 

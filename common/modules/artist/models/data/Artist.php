@@ -2,10 +2,15 @@
 
 namespace common\modules\artist\models\data;
 
+use common\components\behaviors\SelfHealingUrlBehavior;
 use common\modules\artist\components\behaviors\ArtistBehavior;
 use common\modules\artist\models\query\ArtistQuery;
 use common\modules\artist\models\service\ArtistService;
+use common\modules\movement\models\data\Movement;
+use common\modules\painting\models\data\Painting;
+use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
@@ -59,7 +64,14 @@ class Artist extends ActiveRecord
             ],
             'mainBehavior' => [
                 'class' => ArtistBehavior::class,
-            ]
+            ],
+            'sluggable' => [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'name',
+            ],
+            'selfHealingUrl' => [
+                'class' => SelfHealingUrlBehavior::class,
+            ],
         ];
     }
 
@@ -105,4 +117,17 @@ class Artist extends ActiveRecord
     {
         return new ArtistQuery(get_called_class());
     }
+
+    public function getPaintings(): ActiveQuery
+    {
+        return $this->hasMany(Painting::class, ['artist_id' => 'id']);
+    }
+
+//    public function getMovements(): ActiveQuery
+//    {
+//        return $this->hasMany(Movement::class, ['id' => 'movement_id'])
+//            ->via('paintings', function ($query) {
+//                return $query->joinWith('movements');
+//            });
+//    }
 }

@@ -2,7 +2,6 @@
 
 namespace common\modules\movement\models\data;
 
-use common\components\traits\models\WithName;
 use common\modules\movement\models\query\MovementQuery;
 use Yii;
 use yii\db\ActiveRecord;
@@ -12,16 +11,9 @@ use yii\db\ActiveRecord;
  *
  * @property int $id ID
  * @property string|null $name Направление
- *
- * @method static string displayLabel()
- * @method static string displayPluralLabel()
- * @method static string getName()
- * @method static string getPluralName()
  */
 class Movement extends ActiveRecord
 {
-    use WithName;
-
     public static function tableName(): string
     {
         return 'movement';

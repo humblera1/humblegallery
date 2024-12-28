@@ -3,6 +3,7 @@
 namespace common\modules\subject\models\data;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "subject".
@@ -10,7 +11,7 @@ use Yii;
  * @property int $id ID
  * @property string $name Жанр
  */
-class Subject extends \yii\db\ActiveRecord
+class Subject extends ActiveRecord
 {
     /**
      * {@inheritdoc}

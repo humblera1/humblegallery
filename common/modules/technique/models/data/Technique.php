@@ -3,6 +3,7 @@
 namespace common\modules\technique\models\data;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "technique".
@@ -10,7 +11,7 @@ use Yii;
  * @property int $id ID
  * @property string $name Техника
  */
-class Technique extends \yii\db\ActiveRecord
+class Technique extends ActiveRecord
 {
     /**
      * {@inheritdoc}

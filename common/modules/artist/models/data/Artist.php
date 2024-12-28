@@ -15,6 +15,7 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  *
  * @property int $id ID
  * @property string $name Имя
+ * @property string $slug Слаг
  * @property int|null $born Дата рождения
  * @property int|null $died Дата смерти
  * @property string|null $description Описание

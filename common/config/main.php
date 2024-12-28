@@ -1,5 +1,6 @@
 <?php
 
+use common\components\filters\SelfHealingUrlFilter;
 use notamedia\sentry\SentryTarget;
 use yii\i18n\I18N;
 use yii\i18n\PhpMessageSource;
@@ -17,6 +18,13 @@ return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'language' => 'ru-RU',
     'sourceLanguage' => 'ru-RU',
+    'container' => [
+        'definitions' => [
+            SelfHealingUrlFilter::class => [
+                'urlParamName' => 'slugHash',
+            ],
+        ],
+    ],
     'components' => [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

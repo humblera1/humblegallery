@@ -6,6 +6,7 @@ use common\modules\artist\models\query\ArtistQuery;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\modules\artist\models\data\Artist;
+use yii\db\Query;
 
 /**
  * ArtistSearch represents the model behind the search form of `common\modules\artist\models\data\Artist`.
@@ -50,6 +51,9 @@ class ArtistSearch extends Artist
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         $this->load($params);
@@ -78,11 +82,21 @@ class ArtistSearch extends Artist
 
     /**
      * Applies movement filter to query.
+     * Previously, attempting to filter by movements using joinWith would cause only the
+     * filtered movements to appear in the related data.
+     *
+     * Now the main query remains fully populated with the movement relationships, while still applying the filter.
      */
     public function applyMovementFilter(ArtistQuery $query): void
     {
         if ($this->movements) {
-            $query->filterByMovement($this->movements);
+            $subquery = (new Query())
+                ->select('p.artist_id')
+                ->from('painting p')
+                ->innerJoin('movement_painting mp', 'mp.painting_id = p.id')
+                ->where(['mp.movement_id' => $this->movements]);
+
+            $query->andWhere(['IN', 'artist.id', $subquery]);
         }
     }
 

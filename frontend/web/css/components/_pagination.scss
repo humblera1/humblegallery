@@ -1,0 +1,56 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+
+    &__page {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        min-height: 32px;
+        border-radius: 50px;
+
+        &_active {
+            background-color: colors.$accent-orange;
+
+            @include mixins.basic-shadow;
+
+            .pagination__link {
+                color: colors.$text-accent-white;
+
+                &:hover {
+                    color: colors.$text-accent-white;
+                }
+            }
+        }
+    }
+
+    &__link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+
+        @include mixins.hover-transition;
+        @include mixins.main-font(500, 12, colors.$text-chocolate);
+
+        &:hover {
+            color: colors.$text-accent-orange;
+        }
+    }
+
+    &__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__separator {
+        line-height: 1;
+        @include mixins.main-font(500, 12, colors.$text-chocolate);
+    }
+}

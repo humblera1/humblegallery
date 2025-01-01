@@ -1,6 +1,7 @@
 <?php
 
 use backend\components\widgets\HumbleActiveField;
+use common\components\widgets\LinkPager;
 use common\modules\artist\ArtistModule;
 use common\modules\collection\CollectionModule;
 use common\modules\painting\PaintingModule;
@@ -26,6 +27,22 @@ return [
         'definitions' => [
             ActiveForm::class => [
                 'fieldClass' => HumbleActiveField::class
+            ],
+            LinkPager::class => [
+                'options' => [
+                    'class' => 'pagination'
+                ],
+                'linkContainerOptions' => [
+                    'class' => 'pagination__item',
+                ],
+                'linkOptions' => [
+                    'class' => 'pagination__link',
+                ],
+                'pageCssClass' => 'pagination__page',
+                'activePageCssClass' => 'pagination__page_active',
+                'separatorContainerClass' => 'pagination__container',
+                'separatorContentClass' => 'pagination__separator',
+                'registerLinkTags' => true,
             ],
         ],
     ],

@@ -1,5 +1,6 @@
 <?php
 
+use common\components\widgets\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use yii\widgets\ListView;
@@ -17,5 +18,8 @@ use yii\widgets\ListView;
     'itemView' => '@common/views/_artist',
     'options' => [
         'class' => 'artists__list',
+    ],
+    'pager' => [
+        'class' => LinkPager::class,
     ],
 ]); ?>

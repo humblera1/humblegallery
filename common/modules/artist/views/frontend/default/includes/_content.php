@@ -15,7 +15,7 @@ use yii\widgets\ListView;
 <?= ListView::widget([
     'dataProvider' => $provider,
     'layout' => "{items}\n{pager}",
-    'itemView' => '@common/views/_artist',
+    'itemView' => '@common/views/_artist-card',
     'options' => [
         'class' => 'artists__list',
     ],

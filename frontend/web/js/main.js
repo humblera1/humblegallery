@@ -15,6 +15,14 @@ $(document).ready(() => {
             .then(({ default: SearchWidget }) => {
                 new SearchWidget();
             })
-            .catch((error) => console.error('Ошибка при загрузке виджета фильтра:', error));
+            .catch((error) => console.error('Ошибка при загрузке виджета поиска:', error));
+    }
+
+    if ($('#swiper-widget').length > 0) {
+        import(/* webpackChunkName: "swiper-widget" */ './widgets/SwiperWidget/index.js')
+            .then(({ default: SwiperWidget }) => {
+                new SwiperWidget();
+            })
+            .catch((error) => console.error('Ошибка при загрузке виджета свайпера:', error));
     }
 });

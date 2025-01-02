@@ -4,6 +4,7 @@ namespace common\modules\artist\models\service;
 
 use common\components\Service;
 use common\modules\artist\models\data\Artist;
+use DateTime;
 
 /**
  * @property Artist $model
@@ -15,9 +16,21 @@ class ArtistService extends Service
      */
     public function getImage(): string
     {
+        return '/uploads/images/artists/' . $this->model->image_name;
+    }
+
+    public function getYears(): string
+    {
         $model = $this->model;
 
-        return '/uploads/images/artists/' . $model->image_name;
+        $bornYear = $model->born ? (new DateTime($model->born))->format('Y') : null;
+        $diedYear = $model->died ? (new DateTime($model->died))->format('Y') : null;
+
+        if ($bornYear && $diedYear) {
+            return "$bornYear — $diedYear";
+        }
+
+        return $bornYear ?? $diedYear ?? '—';
     }
 
     public function getLimitedMovementNames(int $limit = 3): array

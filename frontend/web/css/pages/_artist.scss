@@ -1,0 +1,98 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.artist {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+    &__head {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    &__preview {
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__image {
+        position: relative;
+        z-index: 11;
+        width: 420px;
+        height: 420px;
+        margin-top: 48px;
+
+        img {
+            object-fit: contain;
+            height: 100%;
+        }
+    }
+
+    &__circle {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 72px;
+        left: 60px;
+        width: 360px;
+        height: 360px;
+        border-radius: 100%;
+        margin: auto;
+        background-color: colors.$additional-color;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 32px;
+        padding: 24px 16px;
+    }
+
+    &__swiper {
+        width: 300px;
+        position: relative;
+    }
+
+    &__name {
+        margin-bottom: 4px;
+        @include mixins.main-font(600, 36, colors.$text-chocolate);
+    }
+
+    &__years {
+        margin-bottom: 36px;
+        @include mixins.main-font(600, 24, colors.$text-warm-gray);
+    }
+
+    &__description {
+        @include mixins.main-font(400, 16, colors.$text-accent-cinereous);
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 36px;
+    }
+
+    &__title {
+        @include mixins.main-font(500, 24, colors.$text-chocolate);
+    }
+
+    &__about {
+        @include mixins.main-font(400, 16, colors.$text-accent-cinereous);
+    }
+
+    .swiper-wrapper {
+        width: 100%;
+        /* другие стили для слайдов */
+    }
+
+    .swiper-slide {
+        width: 100%;
+        /* другие стили для слайдов */
+    }
+}

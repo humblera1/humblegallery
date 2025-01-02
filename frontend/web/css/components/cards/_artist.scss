@@ -1,7 +1,7 @@
 @use "@styles/colors" as colors;
 @use "@styles/mixins" as mixins;
 
-.artist {
+.artist-card {
     cursor: pointer;
     position: relative;
     display: flex;
@@ -11,7 +11,7 @@
     background-color: colors.$additional-color;
 
     &:hover {
-        .artist__badge {
+        .artist-card__badge {
             opacity: 1;
             visibility: visible;
         }

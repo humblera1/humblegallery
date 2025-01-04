@@ -44,5 +44,11 @@ phpunit.phar
 /backend/web/index-test.php
 /backend/web/robots.txt
 
+# webpack
+frontend/web/js/dist/
+
+# uploads
+/common/uploads
+
 .env
 .qodo

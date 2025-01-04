@@ -50,11 +50,7 @@
         justify-content: space-between;
         gap: 32px;
         padding: 24px 16px;
-    }
-
-    &__swiper {
-        width: 300px;
-        position: relative;
+        overflow: hidden;
     }
 
     &__name {
@@ -84,15 +80,5 @@
 
     &__about {
         @include mixins.main-font(400, 16, colors.$text-accent-cinereous);
-    }
-
-    .swiper-wrapper {
-        width: 100%;
-        /* другие стили для слайдов */
-    }
-
-    .swiper-slide {
-        width: 100%;
-        /* другие стили для слайдов */
     }
 }

@@ -1,9 +1,7 @@
 import Swiper from 'swiper';
 import 'swiper/swiper-bundle.css';
 import { Navigation } from 'swiper/modules';
-
-// import Swiper from 'swiper/swiper-bundle';
-// import 'swiper/swiper-bundle.css';
+import * as styles from './styles.scss';
 
 export default class SwiperWidget {
     constructor() {
@@ -11,22 +9,21 @@ export default class SwiperWidget {
     }
 
     init() {
-        console.log('SwiperWidget initialized');
-        const swiperContainer = document.querySelector('.artist__swiper');
+        const swiperContainer = document.querySelector('.swiper-container');
         const nextButton = document.querySelector('.swiper-button-next');
 
         if (swiperContainer && nextButton) {
-            console.log('Swiper container and navigation button found');
             Swiper.use([Navigation]);
+
             const swiper = new Swiper(swiperContainer, {
-                loop: true,
-                // navigation: {
-                //     nextEl: nextButton,
-                // },
-                // slidesPerView: 1,
-                // spaceBetween: 10,
+                navigation: {
+                    nextEl: nextButton,
+                },
+                slidesPerView: 'auto',
+                spaceBetween: 16,
             });
         } else {
+            // todo: обработка ошибки
             console.error('Swiper container or navigation button not found');
         }
     }

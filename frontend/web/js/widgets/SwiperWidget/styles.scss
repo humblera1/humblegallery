@@ -1,0 +1,56 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+#swiper-widget {
+    position: relative;
+    display: flex;
+    //width: 100%;
+
+    .swiper {
+        &-container {
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+
+        &-wrapper {
+            width: 100%;
+        }
+
+        &-slide {
+            height: 120px;
+            max-height: 120px;
+            width: auto;
+            border-radius: 12px;
+            overflow: hidden;
+
+            img {
+                object-fit: contain;
+                height: 100%;
+            }
+        }
+
+        &-button-next {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 32px;
+            width: 32px;
+            height: 32px;
+            margin-left: 32px;
+            border-radius: 100%;
+            background-color: colors.$accent-brown;
+
+            svg {
+                color: colors.$text-accent-white;
+                width: 8px;
+                height: 13px;
+            }
+
+            &::after {
+                display: none;
+            }
+        }
+    }
+}

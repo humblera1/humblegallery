@@ -33,6 +33,14 @@ class ArtistService extends Service
         return $bornYear ?? $diedYear ?? '—';
     }
 
+    public function getTopRatedPaintings($amount = 5): array
+    {
+        return $this->model->getPaintings()
+            ->orderBy(['rating' => SORT_DESC])
+            ->limit($amount)
+            ->all();
+    }
+
     public function getLimitedMovementNames(int $limit = 3): array
     {
         $movementNames = [];

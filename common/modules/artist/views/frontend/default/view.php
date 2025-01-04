@@ -1,6 +1,7 @@
 <?php
 
 use common\modules\artist\models\data\Artist;
+use common\widgets\SwiperWidget;
 
 /**
  * @var $model Artist
@@ -28,20 +29,9 @@ use common\modules\artist\models\data\Artist;
                     <?= $model->description ?>
                 </p>
             </div>
-            <div id="swiper-widget" class="artist__swiper swiper-container">
-                <div class="swiper-wrapper">
-                    <!-- Add your swiper slides here -->
-                    <div class="swiper-slide">Slide 1</div>
-                    <div class="swiper-slide">Slide 2</div>
-                    <div class="swiper-slide">Slide 3</div>
-                    <div class="swiper-slide">Slide 4</div>
-                    <div class="swiper-slide">Slide 5</div>
-
-                    <!-- ... -->
-                </div>
-                <!-- Add Navigation -->
-                <div class="swiper-button-next"></div>
-            </div>
+            <?= SwiperWidget::widget([
+                'paintings' => $model->service->getTopRatedPaintings(),
+            ]) ?>
         </section>
     </div>
     <div class="artist__body">

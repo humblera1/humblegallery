@@ -1,7 +1,7 @@
 @forward 'components/_pagination';
 @forward 'components/cards/_index';
-@import 'components/sidebars/_index';
-@import 'components/header/_index';
-@import 'components/modals/_index';
-@import 'components/form/_index';
-@import 'components/buttons/_index';
+@forward 'components/sidebars/_index';
+@forward 'components/header/_index';
+@forward 'components/modals/_index';
+@forward 'components/form/_index';
+@forward 'components/buttons/_index';

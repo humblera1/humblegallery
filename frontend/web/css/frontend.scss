@@ -1,16 +1,16 @@
 // fonts
 @forward "fonts";
 
-@import 'reset';
+@forward 'reset';
 
 //general styles file
-@import 'general';
+@forward 'general';
 
 //layout
-@import 'layout';
+@forward 'layout';
 
 //components
-@import 'components';
+@forward 'components';
 
 //pages
-@import 'pages';
+@forward 'pages';

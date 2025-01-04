@@ -1,4 +1,4 @@
-@import '../../colors';
+@use '@styles/colors' as colors;
 
 .modal {
   z-index: 1000;
@@ -27,7 +27,7 @@
   &__content {
     width: 50vw;
     overflow-y: scroll;
-    background-color: $additional-color;
+    background-color: colors.$additional-color;
     border-radius: 15px;
     max-width: 76.8rem;
 
@@ -80,7 +80,7 @@
   cursor: pointer;
 
   &:hover {
-    color: $orange;
+    color: colors.$orange;
   }
 }
 

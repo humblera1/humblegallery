@@ -41,11 +41,11 @@
 
 .section_favorites {
   .paint-container {
+    width: 25%;
+
     @include mixins.for-big-desktop {
       width: 33.333%;
     }
-
-    width: 25%;
   }
 }
 

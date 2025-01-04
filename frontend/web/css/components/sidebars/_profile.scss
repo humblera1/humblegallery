@@ -1,54 +1,55 @@
-@import '../../mixins/shadows';
-@import '../../colors';
+@use "@styles/mixins" as mixins;
+@use "@styles/colors" as colors;
 
 .profile {
-  &__sidebar {
-    grid-column: 1/2;
-    display: flex;
-    min-width: 30rem;
-    height: auto;
+    &__sidebar {
+        grid-column: 1/2;
+        display: flex;
+        min-width: 30rem;
+        height: auto;
 
-    &-navigation {
-      width: 100%;
-      padding: 1rem;
-    }
-  }
-
-  .navigation {
-    &__li {
-      cursor: pointer;
-      background-color: $primary-color-darken;
-      border-radius: 1.75rem;
-
-      margin-bottom: 1.25rem;
-
-      &_active {
-        @include basic-shadow();
-        background-color: $additional-color;
-      }
-
-      &_exit {
-          margin-top: 20rem;
-      }
-
-      &:hover {
-          color: #424141;
-      }
+        &-navigation {
+            width: 100%;
+            padding: 1rem;
+        }
     }
 
-    &__link {
-      display: flex;
-      //justify-content: center;
-      align-items: center;
-      font-size: 1.8rem;
-      padding: 2rem;
-    }
+    .navigation {
+        &__li {
+            cursor: pointer;
+            background-color: colors.$primary-color-darken;
+            border-radius: 1.75rem;
 
-    &__icon {
-      font-size: 2.5rem;
-      margin-left: 2.5rem;
-      margin-right: 4rem;
+            margin-bottom: 1.25rem;
 
+            &_active {
+                @include mixins.basic-shadow;
+
+                background-color: colors.$additional-color;
+            }
+
+            &_exit {
+                margin-top: 20rem;
+            }
+
+            &:hover {
+                color: #424141;
+            }
+        }
+
+        &__link {
+            display: flex;
+            //justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            padding: 2rem;
+        }
+
+        &__icon {
+            font-size: 2.5rem;
+            margin-left: 2.5rem;
+            margin-right: 4rem;
+
+        }
     }
-  }
 }

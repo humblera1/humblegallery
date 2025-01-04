@@ -1,4 +1,4 @@
-@import 'fonts';
-@import 'media-queries';
-@import 'shadows';
-@import 'transitions';
+@forward 'fonts';
+@forward 'media-queries';
+@forward 'shadows';
+@forward 'transitions';

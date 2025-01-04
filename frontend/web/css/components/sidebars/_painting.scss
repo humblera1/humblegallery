@@ -1,57 +1,57 @@
-@import '../../colors';
+@use '@styles/colors' as colors;
 
 .sidebar {
-  grid-column: 1 / 2;
-  width: 18vw;
-  max-width: 40rem;
-  min-width: 25rem;
-  height: 100%;
-  background-color: $additional-color;
-  border-radius: 3rem;
-  margin: 30px;
+    grid-column: 1 / 2;
+    width: 18vw;
+    max-width: 40rem;
+    min-width: 25rem;
+    height: 100%;
+    background-color: colors.$additional-color;
+    border-radius: 3rem;
+    margin: 30px;
 
-  -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
-  -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
-  box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+    -webkit-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+    -moz-box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
+    box-shadow: -4px 4px 8px 0px rgba(131, 129, 112, 0.2);
 }
 
 .filters-modal {
-  padding: 8rem 4rem;
+    padding: 8rem 4rem;
 }
 
 .painting-filter {
-  &__block {
-    padding-bottom: 2rem;
+    &__block {
+        padding-bottom: 2rem;
 
-    &--title {
-      font-size: 2rem;
-      text-align: center;
-    }
-
-    &--item {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        font-size: 1.8rem;
-
-        &:hover {
-          cursor: pointer;
+        &--title {
+            font-size: 2rem;
+            text-align: center;
         }
-      }
 
-      input{
-        visibility: hidden;
+        &--item {
+            display: flex;
+            flex-direction: column;
 
-        &:checked + label {
-          font-weight: bold;
-          color: red;
+            label {
+                font-size: 1.8rem;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                visibility: hidden;
+
+                &:checked + label {
+                    font-weight: bold;
+                    color: red;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 .filter--active {
-  font-weight: bold;
+    font-weight: bold;
 }

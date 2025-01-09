@@ -110,7 +110,7 @@ return [
 
 
                 'paintings/<action>' => 'painting/default/<action>',
-                'collection/<action>' => 'collection/default/<action>',
+                'collections/<action>' => 'collection/default/<action>',
 
                 '' => 'site/index', //TODO:поправить маршрут
 

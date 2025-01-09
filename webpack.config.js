@@ -56,8 +56,10 @@ module.exports = {
     },
     resolve: {
         alias: {
+            '@modules': path.resolve(__dirname, 'frontend/web/js/modules/'),
+            '@widgets': path.resolve(__dirname, 'frontend/web/js/widgets/'),
+            '@utils': path.resolve(__dirname, 'frontend/web/js/utils/'),
             '@styles': path.resolve(__dirname, 'frontend/web/css'),
-
             '@fonts': path.resolve(__dirname, 'common/web/fonts')
         },
     },

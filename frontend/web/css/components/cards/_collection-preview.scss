@@ -1,0 +1,75 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.collection-preview {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+
+    &__content {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        &:hover {
+            .collection-preview__title {
+                color: colors.$text-accent-orange;
+            }
+        }
+    }
+
+    &__preview {
+        width: 50px;
+        height: 50px;
+
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        &_new {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            background-color: colors.$badge-wheat;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                color: colors.$accent-brown;
+            }
+        }
+    }
+
+    &__title {
+        @include mixins.default-transition;
+        @include mixins.main-font(500, 16, colors.$text-chocolate);
+    }
+
+    &__icons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__check {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        width: 10px;
+        height: 7px;
+        color: colors.$text-warm-gray;
+    }
+
+    &__lock {
+        cursor: pointer;
+        display: flex;
+        width: 10px;
+        height: 12px;
+        color: colors.$text-chocolate;
+    }
+}

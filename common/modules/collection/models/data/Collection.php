@@ -28,6 +28,8 @@ class Collection extends ActiveRecord
 {
     public ?CollectionService $service = null;
 
+    public int $contains_painting = 0;
+
     public function init(): void
     {
         $this->service = new CollectionService($this);

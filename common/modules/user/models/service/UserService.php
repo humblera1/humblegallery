@@ -67,6 +67,21 @@ class UserService extends Service
        return $this->model->getCollections()->exists();
     }
 
+    public function getCollectionsContainingPainting(int $paintingId): array
+    {
+        return $this->model->getCollections()
+            ->alias('c')
+            ->addSelect([
+                'c.*',
+                'contains_painting' => new \yii\db\Expression(
+                    'CASE WHEN pc.painting_id IS NOT NULL THEN 1 ELSE 0 END'
+                )
+            ])
+            ->andWhere(['c.is_archived' => false])
+            ->leftJoin(['pc' => 'painting_collection'], 'pc.collection_id = c.id AND pc.painting_id = :paintingId', [':paintingId' => $paintingId])
+            ->all();
+    }
+
     public function getFavorites(): array
     {
         return $this->model

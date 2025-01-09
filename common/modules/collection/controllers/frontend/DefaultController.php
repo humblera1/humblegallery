@@ -9,10 +9,12 @@ use common\modules\collection\models\form\PaintingCollectionForm;
 use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
+use common\modules\user\models\data\User;
 use Exception;
 use Throwable;
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\AjaxFilter;
 use yii\helpers\Json;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -23,11 +25,12 @@ use yii\widgets\ActiveForm;
 class DefaultController extends FrontendController
 {
     /** {@inheritdoc} */
-    public function behaviors(): array
+    public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'only' => ['get-form', 'get-list'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -35,35 +38,24 @@ class DefaultController extends FrontendController
                     ],
                 ],
             ],
+            'ajax' => [
+                'class' => AjaxFilter::class,
+                'only' => ['get-form', 'get-list'],
+            ],
         ];
     }
 
-    public function actionView($id): string
-    {
-        $collection = Collection::findOne($id);
-
-        return '';
-    }
-
     /**
-     * @throws Exception
+     * Возвращает форму создания коллекции.
      */
-    public function actionGetModalContent(): string
+    public function actionGetForm(int $paintingId): string
     {
-        if ($this->request->isAjax) {
-            $user = Yii::$app->user->identity;
-
-            if ($collections = $user->service->getCollections()) {
-                return $this->renderAjax('includes/_collections', ['collections' => $collections]);
-
-            }
-
-            return $this->renderAjax('includes/_new');
-        }
-
-        throw new Exception();
-
+        return $this->renderAjax('includes/_collections-form', [
+            'model' => new AddPaintingToNewCollectionForm(),
+            'paintingId' => $paintingId,
+        ]);
     }
+
 
     /**
      * Return collection creation template to display it in modal window

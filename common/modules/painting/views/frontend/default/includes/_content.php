@@ -1,5 +1,6 @@
 <?php
 
+use common\components\widgets\LinkPager;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
 use yii\widgets\ListView;
@@ -13,6 +14,13 @@ use yii\widgets\ListView;
 
 <?= ListView::widget([
     'dataProvider' => $provider,
-    'itemView' => '@common/views/_painting',
+    'layout' => "{items}\n{pager}",
+    'itemView' => '@common/views/_painting-card',
+    'options' => [
+        'class' => 'paintings__masonry',
+    ],
+    'pager' => [
+        'class' => LinkPager::class,
+    ],
 ]); ?>
 

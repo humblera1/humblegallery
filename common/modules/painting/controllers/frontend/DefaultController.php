@@ -2,20 +2,40 @@
 
 namespace common\modules\painting\controllers\frontend;
 
-use common\modules\collection\models\data\Collection;
-use common\modules\painting\models\data\PaintingCollection;
-use common\modules\painting\models\data\PaintingLike;
+use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
+use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
 use Exception;
-use Throwable;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\db\Query;
-use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
+use yii\filters\AjaxFilter;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class DefaultController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['toggle-like'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'ajax' => [
+                'class' => AjaxFilter::class,
+                'only' => ['toggle-like', 'collections'],
+            ],
+        ];
+    }
+
     public function actionIndex(): string
     {
         $model = new PaintingSearch();
@@ -26,49 +46,34 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionApplyFilters(): string
-    {
-        if ($this->request->isAjax) {
-            return $this->renderPartial('includes/_content', [
-                'provider' => $this->getProvider()
-            ]);
-        }
-
-        throw new Exception();
-    }
-
     /**
      * This function handles the action of liking a painting.
      *
      * @throws Exception if the request is not an AJAX request.
-     * @throws StaleObjectException|Throwable if deleting fails
      */
-    public function actionLike(): bool
+    public function actionToggleLike()
     {
-        if ($this->request->isAjax) {
-            $userId = Yii::$app->user->getId();
-            $paintingId = Yii::$app->request->post('paintingId');
+        $this->response->format = Response::FORMAT_JSON;
 
-            if ($like = PaintingLike::findOne(['user_id' => $userId, 'painting_id' => $paintingId])) {
-                return $like->delete();
-            }
+        $paintingId = $this->request->post('paintingId');
+        $painting = Painting::findOne($paintingId);
 
-            $newLike = new PaintingLike();
-
-            $newLike->user_id = $userId;
-            $newLike->painting_id = $paintingId;
-
-            return $newLike->save();
+        if (!$painting) {
+            throw new NotFoundHttpException("Painting with ID $paintingId not found.");
         }
 
-        throw new Exception();
+        return [
+            'success' => $painting->service->toggleLike(),
+        ];
     }
+
+
+
 
     public function actionGetUserCollections(): string
     {
         return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
     }
-
 
     protected function getProvider(): ActiveDataProvider
     {

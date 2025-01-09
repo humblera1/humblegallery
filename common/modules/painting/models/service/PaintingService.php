@@ -4,6 +4,9 @@ namespace common\modules\painting\models\service;
 
 use common\components\Service;
 use common\modules\painting\models\data\Painting;
+use common\modules\painting\models\data\PaintingLike;
+use Exception;
+use Yii;
 use yii\helpers\Url;
 
 /**
@@ -28,7 +31,8 @@ class PaintingService extends Service
     public function getThumbnail(): string
     {
         $model = $this->model;
-        return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->title . '.webp';
+
+        return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->image_name;
     }
 
     /**
@@ -110,5 +114,46 @@ class PaintingService extends Service
         return $this->model->getCollections()
             ->byCurrentUser()
             ->count();
+    }
+
+    public function toggleLike(): bool
+    {
+        $user = Yii::$app->user->identity;
+
+        if (!$user) {
+            return false;
+        }
+
+        $userId = $user->id;
+        $paintingId = $this->model->id;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            $like = PaintingLike::findOne(['user_id' => $userId, 'painting_id' => $paintingId]);
+
+            if ($like) {
+                $like->delete();
+            } else {
+                $newLike = new PaintingLike([
+                    'user_id' => $userId,
+                    'painting_id' => $paintingId,
+                ]);
+
+                if (!$newLike->save()) {
+                    throw new Exception('Failed to save like');
+                }
+            }
+
+            $transaction->commit();
+
+            return true;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+
+            Yii::error("Error toggling like: " . $e->getMessage(), __METHOD__);
+
+            return false;
+        }
     }
 }

@@ -102,6 +102,7 @@ return [
             'enableStrictParsing' => true,
             'rules' => [
                 'paintings' => 'painting/default/index',
+                'paintings/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'painting/default/view',
 
                 'artists' => 'artist/default/index',
                 'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',

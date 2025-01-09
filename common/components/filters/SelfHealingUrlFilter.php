@@ -22,7 +22,6 @@ class SelfHealingUrlFilter extends ActionFilter
 
     private SelfHealingUrlHandlerInterface $handler;
 
-
     /**
      * @param $action
      * @return bool

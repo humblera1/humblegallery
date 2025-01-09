@@ -2,7 +2,8 @@
 
 namespace common\modules\painting\controllers\frontend;
 
-use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
+use common\components\filters\SelfHealingUrlFilter;
+use common\modules\artist\models\data\Artist;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
 use Exception;
@@ -14,6 +15,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
+/**
+ * @property Painting $model
+ */
 class DefaultController extends Controller
 {
     public function behaviors()
@@ -33,6 +37,13 @@ class DefaultController extends Controller
                 'class' => AjaxFilter::class,
                 'only' => ['toggle-like', 'collections'],
             ],
+            [
+                'class' => SelfHealingUrlFilter::class,
+                'only' => [
+                    'view',
+                ],
+                'modelClass' => Painting::class,
+            ],
         ];
     }
 
@@ -43,6 +54,13 @@ class DefaultController extends Controller
         return $this->render('index', [
             'dataProvider' => $this->getProvider(),
             'model' => $model,
+        ]);
+    }
+
+    public function actionView(): string
+    {
+        return $this->render('view', [
+            'model' => $this->model,
         ]);
     }
 

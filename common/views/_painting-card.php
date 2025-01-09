@@ -14,7 +14,7 @@ $likedByUser = !$isGuest && $model->service->isLikedByCurrentUser();
 
 ?>
 
-<div class="painting-card">
+<a class="painting-card" href="<?= '/paintings/' . $model->getSelfHealingUrl() ?>">
     <div class="painting-card__actions">
         <div class="painting-card__wrapper painting-card__wrapper_heart <?= $likedByUser ? 'liked' : '' ?>" data-painting-id="<?= $model->id ?>">
             <?= Html::icon('heart-empty') ?>
@@ -32,7 +32,7 @@ $likedByUser = !$isGuest && $model->service->isLikedByCurrentUser();
             <p class="painting-card__date"><?= $model->service->getDateToDisplay() ?></p>
         </div>
     </div>
-</div>
+</a>
 
 <?php
 

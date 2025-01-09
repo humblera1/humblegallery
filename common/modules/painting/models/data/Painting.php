@@ -2,6 +2,7 @@
 
 namespace common\modules\painting\models\data;
 
+use common\components\behaviors\SelfHealingUrlBehavior;
 use common\modules\artist\models\data\Artist;
 use common\modules\collection\models\data\Collection;
 use common\modules\movement\models\data\Movement;
@@ -10,6 +11,7 @@ use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
+use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -81,6 +83,13 @@ class Painting extends ActiveRecord
             ],
             'mainBehavior' => [
                 'class' => PaintingBehavior::class,
+            ],
+            'sluggable' => [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'title',
+            ],
+            'selfHealingUrl' => [
+                'class' => SelfHealingUrlBehavior::class,
             ],
         ];
     }

@@ -1,0 +1,47 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.modal-collections {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 600px;
+    height: 480px;
+    border-radius: 36px;
+    padding: 36px 32px;
+    background-color: colors.$primary-color;
+
+    &__header {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__title {
+        @include mixins.main-font(500, 24, colors.$text-chocolate);
+    }
+
+    &__body {
+        display: grid;
+        grid-template-columns: 180px auto;
+        gap: 32px;
+    }
+
+    &__preview {
+        max-width: 180px;
+
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 300px;
+        overflow: scroll;
+    }
+}

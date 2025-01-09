@@ -1,6 +1,7 @@
 <?php
 
 use common\modules\collection\models\data\Collection;
+use common\widgets\ModalWidget;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\ActiveForm;
@@ -9,32 +10,22 @@ use yii\widgets\ActiveForm;
  * @var View $this
  */
 
-if (!Yii::$app->user->isGuest) {
-    $hasCollections = Yii::$app->user->identity->service->hasCollections();
-}
-
 ?>
 
-<div id="overlay"> </div>
-<div id="collection-modal" class="modal">
-    <div class="modal__wrapper">
-        <div class="modal__content modal_content_collections">
-            <div class="modal__header">
-                <div class="modal-head">
-                    <div class="modal-head__close">
-                        <div class="close-button">×</div>
-                    </div>
-                    <div class="modal-head__title">
-                        <h3><?= $hasCollections ? 'Выберите коллекцию' : 'Создайте свою первую коллекцию!' ?></h3>
-                    </div>
-                </div>
+<?php ModalWidget::begin([
+    'toggleButton' => '.painting-card__wrapper_collect',
+]); ?>
+    <div id="modal-collections" class="modal-collections">
+        <div class="modal-collections__header">
+            <h3 class="modal-collections__title"><?= 'Добавление в коллекцию' ?></h3>
+        </div>
+        <div class="modal-collections__body">
+            <div id="collections-preview" class="modal-collections__preview">
+                <img src="" alt="Painting" />
             </div>
-            <div class="modal__body">
-                <div class="modal__body-content">
-                    <div id="collectionModalContent" class="collection-choice">
-                    </div>
-                </div>
+            <div id="collections-content" class="modal-collections__content">
+                <!-- user collections preview -->
             </div>
         </div>
     </div>
-</div>
+<?php ModalWidget::end(); ?>

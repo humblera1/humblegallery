@@ -1,0 +1,61 @@
+#modal-widget {
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+
+    &.center {
+        align-items: center;
+    }
+
+    &.top {
+        align-items: flex-start;
+    }
+
+    &.bottom {
+        align-items: flex-end;
+    }
+
+    &.active {
+        display: flex;
+        justify-content: center;
+
+        .modal {
+            display: block;
+        }
+
+        .modal__overlay {
+            opacity: 0.5;
+            visibility: visible;
+        }
+    }
+
+    .modal {
+        &__overlay {
+            //z-index: 999;
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &__close {
+
+        }
+
+        &__wrapper {
+            position: relative;
+            width: fit-content;
+        }
+    }
+}
+
+.modal {
+    display: none;
+}

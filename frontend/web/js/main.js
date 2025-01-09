@@ -1,3 +1,4 @@
+import '@modules/paintings/index.js';
 import '@styles/frontend.scss';
 
 $(document).ready(() => {
@@ -24,5 +25,13 @@ $(document).ready(() => {
                 new SwiperWidget();
             })
             .catch((error) => console.error('Ошибка при загрузке виджета свайпера:', error));
+    }
+
+    if ($('#modal-widget').length > 0) {
+        import(/* webpackChunkName: "modal-widget" */ './widgets/ModalWidget/index.js')
+            .then(({ default: ModalWidget, closeModal }) => {
+                new ModalWidget();
+            })
+            .catch((error) => console.error('Ошибка при загрузке виджета модального окна:', error));
     }
 });

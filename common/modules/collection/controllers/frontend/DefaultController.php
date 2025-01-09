@@ -2,7 +2,11 @@
 
 namespace common\modules\collection\controllers\frontend;
 
+use common\components\FrontendController;
 use common\modules\collection\models\data\Collection;
+use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
+use common\modules\collection\models\form\PaintingCollectionForm;
+use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
 use Exception;
@@ -10,14 +14,13 @@ use Throwable;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
-use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 /**
  * Default controller for the `collection` module
  */
-class DefaultController extends Controller
+class DefaultController extends FrontendController
 {
     /** {@inheritdoc} */
     public function behaviors(): array
@@ -87,98 +90,29 @@ class DefaultController extends Controller
     }
 
     /**
-     * @throws Throwable
-     */
-    public function actionAdd(): void
-    {
-        $collectionId = $this->request->post('collectionId');
-        $paintingId = $this->request->post('paintingId');
-
-        if ($this->request->isAjax && isset($collectionId, $paintingId)) {
-            if ($paintingCollection = PaintingCollection::findOne(['collection_id' => $collectionId, 'painting_id' => $paintingId])) {
-                $paintingCollection->delete();
-            } else {
-                $this->saveNewPaintingCollection($collectionId, $paintingId);
-            }
-
-            return;
-        }
-
-        throw new Exception();
-    }
-
-    /**
      * @throws Exception
      */
-    public function actionCreateAndAdd(): void
+    public function actionCreateAndAdd(): array
     {
-        $paintingId = $this->request->post('paintingId');
+        $this->response->format = Response::FORMAT_JSON;
 
-        if ($this->request->isAjax && isset($paintingId)) {
-            $transaction = Yii::$app->db->beginTransaction();
+        $indicator = Yii::$container->get(CollectionService::class)->performCreateAndAdd($this->request->post());
 
-            try {
-                $collection = $this->saveNewCollection();
-                $this->saveNewPaintingCollection($collection->id, $paintingId);
-            } catch (Exception $exception) {
-                $transaction->rollBack();
-
-                Yii::error($exception->getMessage(), 'collection');
-
-                throw $exception;
-            }
-
-            $transaction->commit();
-
-            return;
-        }
-
-        throw new Exception();
+        return [
+            'success' => $indicator,
+        ];
     }
 
     /**
-     * Save new collection to database
+     * Обеспечивает AJAX-валидацию формы.
      *
-     * @throws Exception
+     * @return array
      */
-    protected function saveNewCollection(): Collection
-    {
-        $collection = new Collection();
-
-        $collection->load($this->request->post());
-        $collection->user_id = Yii::$app->user->id;
-
-        if ($collection->validate() && $collection->save()) {
-            return $collection;
-        }
-
-        throw new Exception();
-    }
-
-    /**
-     * Save new painting to specific collection
-     *
-     * @throws Exception
-     */
-    protected function saveNewPaintingCollection(int $collectionId, int $paintingId): void
-    {
-        $paintingCollection = new PaintingCollection();
-
-        $paintingCollection->collection_id = $collectionId;
-        $paintingCollection->painting_id = $paintingId;
-
-        if ($paintingCollection->validate() && $paintingCollection->save()) {
-            return;
-        }
-
-        throw new Exception();
-    }
-
     public function actionValidateForm(): array
     {
         $this->response->format = Response::FORMAT_JSON;
 
-        $model = new Collection();
+        $model = new AddPaintingToNewCollectionForm();
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);

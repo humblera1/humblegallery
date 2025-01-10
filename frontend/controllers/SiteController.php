@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use common\models\LoginForm;
+use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResendVerificationEmailForm;
@@ -35,7 +35,7 @@ class SiteController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['login', 'signup'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -102,16 +102,15 @@ class SiteController extends Controller
 
     /**
      * Logs in a user.
-     *
-     * @return mixed
      */
-    public function actionLogin()
+    public function actionLogin(): string|Response
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }

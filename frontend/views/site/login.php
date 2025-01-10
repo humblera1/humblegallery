@@ -1,41 +1,44 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-/** @var \common\models\LoginForm $model */
-
+use common\modules\user\models\forms\LoginForm;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
+use yii\web\View;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+/**
+ * @var View $this
+ * @var ActiveForm $form
+ * @var LoginForm $model
+ */
+
+$this->title = 'Вход';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+<div class="login">
+    <div class="login__preview">
+        <img class="login__image" src="/images/login.png" alt="Login Image">
+    </div>
+    <section class="login__content">
+        <h1 class="title">Вход</h1>
+        <?php $form = ActiveForm::begin(['id' => 'login-signup', 'options' => ['class' => 'login__form']]); ?>
+        <div class="login__body">
+            <section class="login__section">
+                <?= $form->field($model, 'email')->textInput() ?>
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="my-1 mx-0" style="color:#999;">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
-                </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
+                <a href="/reset-password" class="login__forgot-password">
+                    Забыли пароль?
+                </a>
+            </section>
         </div>
-    </div>
+        <div class="login__footer">
+            <?= Html::submitButton('Войти', ['class' => 'btn btn_brown', 'name' => 'login-button']) ?>
+
+            <p class="login__signup">
+                Впервые на нашем сайте? <a href="/signup">Зарегистрируйтесь здесь!</a>
+            </p>
+        </div>
+        <?php ActiveForm::end(); ?>
+    </section>
 </div>

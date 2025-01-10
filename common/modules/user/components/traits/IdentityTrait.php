@@ -34,10 +34,10 @@ trait IdentityTrait
     }
 
     /**
-     * Find User by provided username
+     * Find User by provided email.
      */
-    public static function findByUsername(string $username): ?User
+    public static function findByEmail(string $email): ?User
     {
-        return parent::findOne(['username' => $username]);
+        return parent::findOne(['email' => $email]);
     }
 }

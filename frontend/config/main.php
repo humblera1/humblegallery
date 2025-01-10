@@ -1,14 +1,13 @@
 <?php
 
-use backend\components\widgets\HumbleActiveField;
 use common\components\widgets\LinkPager;
 use common\modules\artist\ArtistModule;
 use common\modules\collection\CollectionModule;
 use common\modules\painting\PaintingModule;
 use common\modules\user\models\data\User;
 use common\modules\user\UserModule;
+use yii\bootstrap5\ActiveField;
 use yii\caching\FileCache;
-use yii\widgets\ActiveForm;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -25,8 +24,11 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'container' => [
         'definitions' => [
-            ActiveForm::class => [
-                'fieldClass' => HumbleActiveField::class
+            ActiveField::class => [
+                'template' => "<div class='form-group__content'>{label}\n{input}</div>\n{error}",
+                'options' => [
+                    'class' => 'form-group form-group_horizontal',
+                ],
             ],
             LinkPager::class => [
                 'options' => [
@@ -108,6 +110,9 @@ return [
                 'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',
 
                 'about' => 'site/about',
+                'login' => 'site/login',
+                'signup' => 'site/signup',
+                'site/captcha' => 'site/captcha',
 
 
                 'paintings/<action>' => 'painting/default/<action>',

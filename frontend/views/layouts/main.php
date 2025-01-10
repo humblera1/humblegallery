@@ -39,8 +39,12 @@ $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
             <div class="auth">
                 <?php if (Yii::$app->user->isGuest): ?>
                     <div class="auth__actions">
-                        <button id='login-button' class="btn btn_orange">Регистрация</button>
-                        <button class="btn btn_brown">Вход</button>
+                        <a href="/signup">
+                            <button id='login-button' class="btn btn_orange">Регистрация</button>
+                        </a>
+                        <a href="/login">
+                            <button class="btn btn_brown">Вход</button>
+                        </a>
                     </div>
                 <?php else: ?>
                     <?= Html::a('Профиль', ['/profile'], ['class' => 'nav-item']); ?>

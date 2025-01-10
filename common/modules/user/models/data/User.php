@@ -2,6 +2,7 @@
 
 namespace common\modules\user\models\data;
 
+use common\components\traits\models\WithAuth;
 use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\data\Painting;
 use common\modules\user\components\traits\IdentityTrait;
@@ -22,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property string|null $name Имя
  * @property string|null $surname Фамилия
  * @property string $auth_key
+ * @property string $verification_token Токен для подтверждения почты
  * @property int|null $is_verified Подтверждён
  * @property int|null $is_blocked Заблокирован
  * @property int $created_at Создан
@@ -32,7 +34,7 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    use IdentityTrait;
+    use IdentityTrait, WithAuth;
 
     public ?UserService $service = null;
 

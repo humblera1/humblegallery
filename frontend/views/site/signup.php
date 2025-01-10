@@ -1,35 +1,62 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-/** @var \frontend\models\SignupForm $model */
-
-use yii\bootstrap5\Html;
+use common\modules\user\models\forms\SignupForm;
 use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\Html;
+use yii\captcha\Captcha;
+use yii\web\View;
 
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+/**
+ * @var View $this
+ * @var ActiveForm $form
+ * @var SignupForm $model
+ */
+
+$this->title = 'Регистрация';
 ?>
-<div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'email') ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
+<div class="signup">
+    <div class="signup__preview">
+        <img class="signup__image" src="/images/signup.png" alt="">
     </div>
+    <section class="signup__content">
+        <h1 class="title">Регистрация</h1>
+        <?php $form = ActiveForm::begin(['id' => 'form-signup', 'options' => ['class' => 'signup__form']]); ?>
+            <div class="signup__body">
+                <section class="signup__section">
+                    <?= $form->field($model, 'name')->textInput() ?>
+
+                    <?= $form->field($model, 'surname')->textInput() ?>
+
+                    <?= $form->field($model, 'username')->textInput() ?>
+
+                    <?= $form->field($model, 'email')->textInput() ?>
+                </section>
+                <section class="signup__section">
+                    <?= $form->field($model, 'password')->passwordInput() ?>
+
+                    <?= $form->field($model, 'passwordAgain')->passwordInput() ?>
+                </section>
+                <section class="signup__section">
+                    <?= $form->field(
+                            $model,
+                            'captcha',
+                        [
+                            'template' => "<div class='form-group__content'>{label}\n{input}</div>\n{error}",
+                            'options' => [
+                                'class' => 'form-group form-group_captcha',
+                            ],
+
+                        ],
+                    )->widget(Captcha::class, [
+                        'captchaAction' => 'site/captcha',
+                            'template' => "{input}<div class='form-group__captcha'>{image}</div>"
+                    ]) ?>
+                </section>
+            </div>
+            <div class="signup__footer">
+                <?= Html::submitButton('Продолжить', ['class' => 'btn btn_orange', 'name' => 'signup-button']) ?>
+            </div>
+        <?php ActiveForm::end(); ?>
+    </section>
 </div>

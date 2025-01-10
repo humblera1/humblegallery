@@ -3,24 +3,22 @@
 namespace common\modules\painting\controllers\frontend;
 
 use common\components\filters\SelfHealingUrlFilter;
-use common\modules\artist\models\data\Artist;
+use common\components\FrontendController;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\search\PaintingSearch;
 use Exception;
-use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\AjaxFilter;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 
 /**
  * @property Painting $model
  */
-class DefaultController extends Controller
+class DefaultController extends FrontendController
 {
-    public function behaviors()
+    /** {@inheritdoc} */
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -35,9 +33,9 @@ class DefaultController extends Controller
             ],
             'ajax' => [
                 'class' => AjaxFilter::class,
-                'only' => ['toggle-like', 'collections'],
+                'only' => ['toggle-like'],
             ],
-            [
+            'selfHealingUtl' => [
                 'class' => SelfHealingUrlFilter::class,
                 'only' => [
                     'view',
@@ -69,10 +67,8 @@ class DefaultController extends Controller
      *
      * @throws Exception if the request is not an AJAX request.
      */
-    public function actionToggleLike()
+    public function actionToggleLike(): array
     {
-        $this->response->format = Response::FORMAT_JSON;
-
         $paintingId = $this->request->post('paintingId');
         $painting = Painting::findOne($paintingId);
 
@@ -80,17 +76,13 @@ class DefaultController extends Controller
             throw new NotFoundHttpException("Painting with ID $paintingId not found.");
         }
 
-        return [
-            'success' => $painting->service->toggleLike(),
-        ];
-    }
+        $success = $painting->service->toggleLike();
 
+        if (!$success) {
+            return $this->errorResponse('Не удалось выполнить запрос');
+        }
 
-
-
-    public function actionGetUserCollections(): string
-    {
-        return $this->renderPartial('includes/_collections', ['collections' => Yii::$app->user->identity->getCollections()]);
+        return $this->successResponse();
     }
 
     protected function getProvider(): ActiveDataProvider

@@ -3,13 +3,11 @@
 namespace common\modules\painting\models\search;
 
 use common\modules\artist\models\data\Artist;
-use common\modules\movement\models\data\Movement;
+use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\query\PaintingQuery;
-use common\modules\subject\models\data\Subject;
-use common\modules\technique\models\data\Technique;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\modules\painting\models\data\Painting;
 
 /**
  * PaintingSearch represents the model behind the search form of `common\modules\painting\models\data\Painting`.
@@ -48,6 +46,9 @@ class PaintingSearch extends Painting
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => Yii::$app->params['paintingsPerPage'],
+            ],
         ]);
 
         $this->load($params);
@@ -61,6 +62,8 @@ class PaintingSearch extends Painting
         $this->applyTechniqueFilter($query);
         $this->applyArtistFilter($query);
 
+        $query->andFilterWhere(['like', Painting::tableName() . '.title', $this->title]);
+
         $query->andFilterWhere(['start_date' => $this->start_date])
             ->andFilterWhere(['end_date' => $this->end_date])
             ->andFilterWhere(['like', 'title', $this->title]);
@@ -69,50 +72,42 @@ class PaintingSearch extends Painting
     }
 
     /**
-     * Applies subject filter to query
+     * Applies subject filter to query.
      */
     public function applySubjectFilter(PaintingQuery $query): void
     {
         if ($this->subjects) {
-            $query->joinWith('subjects');
-
-            $query->andFilterWhere([Subject::tableName() . '.id' => $this->subjects]);
+            $query->filterBySubject($this->subjects);
         }
     }
 
     /**
-     * Applies movement filter to query
+     * Applies movement filter to query.
      */
     public function applyMovementFilter(PaintingQuery $query): void
     {
         if ($this->movements) {
-            $query->joinWith('movements');
-
-            $query->andFilterWhere([Movement::tableName() . '.id' => $this->movements]);
+            $query->filterByMovement($this->movements);
         }
     }
 
     /**
-     * Applies technique filter to query
+     * Applies technique filter to query.
      */
     public function applyTechniqueFilter(PaintingQuery $query): void
     {
         if ($this->techniques) {
-            $query->joinWith('technique');
-
-            $query->andFilterWhere([Technique::tableName() . '.id' => $this->techniques]);
+            $query->filterByTechnique($this->techniques);
         }
     }
 
     /**
-     * Applies artist filter to query
+     * Applies artist filter to query.
      */
     public function applyArtistFilter(PaintingQuery $query): void
     {
         if ($this->artists) {
-            $query->joinWith('artist');
-
-            $query->andFilterWhere([Artist::tableName() . '.id' => $this->artists]);
+            $query->filterByArtist($this->artists);
         }
     }
 }

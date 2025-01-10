@@ -3,6 +3,7 @@
 namespace common\modules\artist\models\search;
 
 use common\modules\artist\models\query\ArtistQuery;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\modules\artist\models\data\Artist;
@@ -52,7 +53,7 @@ class ArtistSearch extends Artist
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => Yii::$app->params['artistsPerPage'],
             ],
         ]);
 

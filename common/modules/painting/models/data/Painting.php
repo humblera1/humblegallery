@@ -41,6 +41,8 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  * @property PaintingLike[] $likes Отметки 'Нравится'
  * @property PaintingCollection[] $paintingCollections Коллекции
  * @property Collection[] $collections Коллекции
+ *
+ * @method SelfHealingUrlBehavior getSelfHealingUrl Generate a self-healing URL for the painting
  */
 class Painting extends ActiveRecord
 {

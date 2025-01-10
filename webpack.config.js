@@ -5,8 +5,8 @@ module.exports = {
     entry: './frontend/web/js/main.js',
     output: {
         filename: 'bundle.js',
+        chunkFilename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'frontend/web/js/dist'),
-        // publicPath: '/js/dist/',
     },
     externals: {
         jquery: 'jQuery',
@@ -49,11 +49,12 @@ module.exports = {
             }
         ],
     },
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-    },
+    // optimization: {
+    //     splitChunks: {
+    //         chunks: 'all',
+    //         name: false,
+    //     },
+    // },
     resolve: {
         alias: {
             '@modules': path.resolve(__dirname, 'frontend/web/js/modules/'),

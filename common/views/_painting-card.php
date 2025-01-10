@@ -9,8 +9,7 @@ use yii\web\View;
  * @var Painting $model
  */
 
-$collectionsCount = (!$isGuest = Yii::$app->user->isGuest) ? $model->service->getCollectionsCountByUser() : 0;
-$likedByUser = !$isGuest && $model->service->isLikedByCurrentUser();
+$likedByUser = !Yii::$app->user->isGuest && $model->service->isLikedByCurrentUser();
 
 ?>
 
@@ -33,7 +32,3 @@ $likedByUser = !$isGuest && $model->service->isLikedByCurrentUser();
         </div>
     </div>
 </a>
-
-<?php
-
-$this->registerJsVar('isGuest', Yii::$app->user->isGuest);

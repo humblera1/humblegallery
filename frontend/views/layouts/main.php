@@ -7,11 +7,13 @@
 
 use common\widgets\Alert;
 use frontend\assets\FrontendAsset;
-use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\web\View;
 
 FrontendAsset::register($this);
+
+$this->registerJsVar('isGuest', Yii::$app->user->isGuest);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

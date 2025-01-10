@@ -15,7 +15,6 @@ class FrontendController extends BaseWebController
         return [
             'success' => true,
             'message' => $message,
-            'newCsrfToken' => Yii::$app->request->getCsrfToken(),
         ];
     }
 
@@ -26,7 +25,6 @@ class FrontendController extends BaseWebController
         return [
             'success' => false,
             'message' => $message,
-            'newCsrfToken' => Yii::$app->request->getCsrfToken(),
         ];
     }
 }

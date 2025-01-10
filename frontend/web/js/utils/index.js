@@ -1,3 +1,5 @@
+const LOGIN_URL = '/site/login'
+
 export function showSuccessMessage(message) {
     console.log('Success: ' + message);
 }
@@ -18,4 +20,8 @@ export function get(url, data = {}) {
     return $.get({
         url, data,
     });
+}
+
+export function redirectToLoginPage() {
+    window.location.href = LOGIN_URL;
 }

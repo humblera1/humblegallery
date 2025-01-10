@@ -6,6 +6,8 @@ return [
     'senderName' => 'Example.com mailer',
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
+    'artistsPerPage' => 10,
+    'paintingsPerPage' => 15,
 
     'bsVersion' => '5.x',
 ];

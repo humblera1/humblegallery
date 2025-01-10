@@ -21,12 +21,12 @@ use yii\widgets\ActiveForm;
 class DefaultController extends FrontendController
 {
     /** {@inheritdoc} */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['get-form', 'get-list'],
+                'only' => ['get-form', 'get-list', 'create-and-add', 'toggle-painting'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -36,13 +36,16 @@ class DefaultController extends FrontendController
             ],
             'ajax' => [
                 'class' => AjaxFilter::class,
-                'only' => ['get-form', 'get-list'],
+                'only' => ['get-form', 'get-list', 'create-and-add', 'validate-form', 'toggle-painting'],
             ],
         ];
     }
 
     /**
      * Возвращает форму создания коллекции.
+     *
+     * @param int $paintingId
+     * @return string
      */
     public function actionGetForm(int $paintingId): string
     {
@@ -74,17 +77,19 @@ class DefaultController extends FrontendController
     }
 
     /**
+     * Отвечает за создание новой коллекции с последующим добавлением картины.
+     *
      * @throws Exception
      */
     public function actionCreateAndAdd(): array
     {
-        $this->response->format = Response::FORMAT_JSON;
+        $success = Yii::$container->get(CollectionService::class)->performCreateAndAdd($this->request->post());
 
-        $indicator = Yii::$container->get(CollectionService::class)->performCreateAndAdd($this->request->post());
+        if (!$success) {
+            return $this->errorResponse('Не удалось создать коллекцию');
+        }
 
-        return [
-            'success' => $indicator,
-        ];
+        return $this->successResponse('Картина успешно добавлена в новую коллекцию!');
     }
 
     /**
@@ -102,7 +107,11 @@ class DefaultController extends FrontendController
         return ActiveForm::validate($model);
     }
 
-
+    /**
+     * Обрабатывает добавление или удаление картины из существующей коллекции.
+     *
+     * @return array
+     */
     public function actionTogglePainting(): array
     {
         $paintingCollection = new PaintingCollectionForm();

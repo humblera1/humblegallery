@@ -1,10 +1,7 @@
 <?php
 
-use common\modules\collection\models\data\Collection;
 use common\widgets\ModalWidget;
-use yii\helpers\Html;
 use yii\web\View;
-use yii\widgets\ActiveForm;
 
 /**
  * @var View $this
@@ -17,10 +14,11 @@ use yii\widgets\ActiveForm;
 ]); ?>
     <div id="modal-collections" class="modal-collections">
         <div class="modal-collections__header">
-            <h3 class="modal-collections__title"><?= 'Добавление в коллекцию' ?></h3>
+            <h3 class="modal-collections__title">Добавление в коллекцию</h3>
         </div>
         <div class="modal-collections__body">
             <div id="collections-preview" class="modal-collections__preview">
+                <!-- painting preview -->
                 <img src="" alt="Painting" />
             </div>
             <div id="collections-content" class="modal-collections__content">

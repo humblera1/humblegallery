@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property string|null $name Имя
  * @property string|null $surname Фамилия
  * @property string $auth_key
+ * @property string $password_reset_token Токен для сброса пароля
  * @property string $verification_token Токен для подтверждения почты
  * @property int|null $is_verified Подтверждён
  * @property int|null $is_blocked Заблокирован

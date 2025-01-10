@@ -3,6 +3,7 @@
 namespace common\modules\user\models\service;
 
 use common\components\Service;
+use common\components\services\AuthService;
 use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
 use Yii;
@@ -43,6 +44,33 @@ class UserService extends Service
     public function validatePassword(string $password): bool
     {
         return Yii::$app->security->validatePassword($password, $this->model->password_hash);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function validatePasswordResetToken(): bool
+    {
+        $model = $this->model;
+
+        if (!AuthService::isPasswordResetTokenValid($model->password_reset_token)) {
+            $this->generatePasswordResetToken();
+
+            if (!$model->save()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Generates new password reset token.
+     * @throws Exception
+     */
+    public function generatePasswordResetToken(): void
+    {
+        $this->model->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**

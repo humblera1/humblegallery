@@ -38,6 +38,8 @@ trait IdentityTrait
      */
     public static function findByEmail(string $email): ?User
     {
+        // todo: not blocked
+
         return parent::findOne(['email' => $email]);
     }
 }

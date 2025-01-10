@@ -111,6 +111,7 @@ return [
 
                 'auth/signup' => 'auth/signup',
                 'auth/login' => 'auth/login',
+                'auth/request-password-reset' => 'auth/request-password-reset',
                 'auth/captcha' => 'auth/captcha',
 
                 'about' => 'site/about',

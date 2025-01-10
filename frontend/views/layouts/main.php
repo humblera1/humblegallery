@@ -39,10 +39,10 @@ $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
             <div class="auth">
                 <?php if (Yii::$app->user->isGuest): ?>
                     <div class="auth__actions">
-                        <a href="/signup">
+                        <a href="/auth/signup">
                             <button id='login-button' class="btn btn_orange">Регистрация</button>
                         </a>
-                        <a href="/login">
+                        <a href="/auth/login">
                             <button class="btn btn_brown">Вход</button>
                         </a>
                     </div>

@@ -109,10 +109,14 @@ return [
                 'artists' => 'artist/default/index',
                 'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',
 
+                'auth/signup' => 'auth/signup',
+                'auth/login' => 'auth/login',
+                'auth/captcha' => 'auth/captcha',
+
                 'about' => 'site/about',
                 'login' => 'site/login',
                 'signup' => 'site/signup',
-                'site/captcha' => 'site/captcha',
+
 
 
                 'paintings/<action>' => 'painting/default/<action>',

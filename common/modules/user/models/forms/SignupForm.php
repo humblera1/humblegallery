@@ -75,7 +75,7 @@ class SignupForm extends Model
                 'message' => 'Пароли не совпадают',
             ],
             ['captcha', 'required'],
-            ['captcha', 'captcha'],
+            ['captcha', 'captcha', 'captchaAction'=>'/auth/captcha'],
         ];
     }
 

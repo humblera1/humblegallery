@@ -10,10 +10,12 @@ use common\modules\user\models\forms\LoginForm;
 use common\modules\user\models\forms\SignupForm;
 use common\modules\user\models\search\FavoritePaintingSearch;
 use common\modules\user\models\search\UserCollectionSearch;
-use common\modules\user\models\search\UserFavoritesSearch;
+//use common\modules\user\models\search\UserFavoritesSearch;
 use Yii;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\ErrorAction;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -22,161 +24,162 @@ class DefaultController extends Controller
 {
     public $layout = 'profile';
 
+    protected ?User $currentUser = null;
+
+    /**
+     * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
+     */
+    public function beforeAction($action)
+    {
+        $username = $this->request->get('username');
+
+        if ($username !== null) {
+            $this->currentUser = User::findOne(['username' => $username]);
+
+            if ($this->currentUser === null) {
+                throw new NotFoundHttpException('User not found.');
+            }
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['personal-area'],
-                'rules' => [
-                    [
-                        'actions' => ['personal-area'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-                'denyCallback' => function ($rule, $action) {
-                    $cache = Yii::$app->cache;
-                    $cache->set('needToShowLoginModal', true, 10);
-
-                    return $this->redirect('/');
-                },
-            ],
+//            'access' => [
+//                'class' => AccessControl::class,
+//                'only' => ['personal-area'],
+//                'rules' => [
+//                    [
+//                        'actions' => ['personal-area'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//                'denyCallback' => function ($rule, $action) {
+//                    $cache = Yii::$app->cache;
+//                    $cache->set('needToShowLoginModal', true, 10);
+//
+//                    return $this->redirect('/');
+//                },
+//            ],
         ];
+    }
+
+    public function actionView(string $username): string
+    {
+        return $this->render('view', [
+            'user' => $this->currentUser,
+        ]);
+    }
+
+    public function actionFavorites(): string
+    {
+        return $this->render('favorites', [
+            'user' => $this->currentUser,
+        ]);
+    }
+
+    public function actionCollections(): string
+    {
+        return $this->render('collections', [
+            'user' => $this->currentUser,
+        ]);
+    }
+
+    public function actionCollectionView(): string
+    {
+        return $this->render('collection-view', [
+            'user' => $this->currentUser,
+        ]);
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    public function actionProfile($section): string
+    protected function findUser(string $username): User
     {
-        if (!in_array($section, ProfileSectionsEnum::getLabels())) {
+        $user = User::findOne(['username' => $username]);
+
+        if (!$user) {
             throw new NotFoundHttpException();
         }
 
-        if ($this->request->isAjax) {
-            return match ($section)  {
-                'info' => $this->getInfo(),
-                'collections' => $this->getCollections(),
-                'courses' => $this->getCourses(),
-                'favorites' => $this->getFavorites(),
-                'settings' => $this->getSettings(),
-                default => throw new NotFoundHttpException('Not found section ' . $section),
-
-            };
-        }
-
-        return $this->render('sections/info');
-    }
-
-    protected function getInfo(): string
-    {
-        return $this->renderPartial('sections/info');
-    }
-
-    public function getCollections(): string
-    {
-        $model = new Collection();
-
-        if ($model->load($this->request->post())) {
-            $model->user_id = Yii::$app->user->id;
-
-            $model->save();
-        }
-
-        $searchModel = new UserCollectionSearch();
-
-        $dataProvider = $searchModel->search($this->request->post());
-
-        return $this->renderAjax('sections/collections', [
-            'model' => $model,
-            'searchModel' => $searchModel,
-            'provider' => $dataProvider,
-        ]);
-    }
-
-    protected function getCourses()
-    {
-        return $this->renderPartial('sections/courses');
+        return $user;
     }
 
 
-    protected function getFavorites(): string
-    {
-        $searchModel = new FavoritePaintingSearch();
-        $dataProvider = $searchModel->search($this->request->post());
-
-        return $this->renderAjax('sections/favorites', [
-            'model' => $searchModel,
-            'provider' => $dataProvider,
-        ]);
-    }
-
-    protected function getSettings()
-    {
-        return $this->renderPartial('sections/settings');
-    }
-
-    /**
-     * New user registration action
-     */
-    public function actionSignup(): string|Response
-    {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            return $this->redirect(['personal-area', 'id' => Yii::$app->user->id]);
-        }
-
-        return $this->renderAjax('includes/_signup', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logs in a user
-     */
-    public function actionLogin(): string|Response
-    {
-        $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(['personal-area', 'id' => Yii::$app->user->id]);
-        }
-
-        $model->password = '';
-
-        return $this->renderAjax('includes/_login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logs out the current user.
-     */
-    public function actionLogout(): Response
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    public function actionValidateLogin(): array
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $model = new LoginForm();
-        $model->load(Yii::$app->request->post());
-
-        return ActiveForm::validate($model);
-    }
-
-    public function actionValidateSignup(): array
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $model = new SignupForm();
-        $model->load(Yii::$app->request->post());
-
-        return ActiveForm::validate($model);
-    }
+//    /**
+//     * @throws NotFoundHttpException
+//     */
+//    public function actionProfile($section): string
+//    {
+//        if (!in_array($section, ProfileSectionsEnum::getLabels())) {
+//            throw new NotFoundHttpException();
+//        }
+//
+//        if ($this->request->isAjax) {
+//            return match ($section)  {
+//                'info' => $this->getInfo(),
+//                'collections' => $this->getCollections(),
+//                'courses' => $this->getCourses(),
+//                'favorites' => $this->getFavorites(),
+//                'settings' => $this->getSettings(),
+//                default => throw new NotFoundHttpException('Not found section ' . $section),
+//
+//            };
+//        }
+//
+//        return $this->render('sections/info');
+//    }
+//
+//    protected function getInfo(): string
+//    {
+//        return $this->renderPartial('sections/info');
+//    }
+//
+//    public function getCollections(): string
+//    {
+//        $model = new Collection();
+//
+//        if ($model->load($this->request->post())) {
+//            $model->user_id = Yii::$app->user->id;
+//
+//            $model->save();
+//        }
+//
+//        $searchModel = new UserCollectionSearch();
+//
+//        $dataProvider = $searchModel->search($this->request->post());
+//
+//        return $this->renderAjax('sections/collections', [
+//            'model' => $model,
+//            'searchModel' => $searchModel,
+//            'provider' => $dataProvider,
+//        ]);
+//    }
+//
+//    protected function getCourses()
+//    {
+//        return $this->renderPartial('sections/courses');
+//    }
+//
+//
+//    protected function getFavorites(): string
+//    {
+//        $searchModel = new FavoritePaintingSearch();
+//        $dataProvider = $searchModel->search($this->request->post());
+//
+//        return $this->renderAjax('sections/favorites', [
+//            'model' => $searchModel,
+//            'provider' => $dataProvider,
+//        ]);
+//    }
+//
+//    protected function getSettings()
+//    {
+//        return $this->renderPartial('sections/settings');
+//    }
 }

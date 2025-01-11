@@ -1,6 +1,6 @@
 <?php
 
-use frontend\assets\profile\ProfileAsset;
+use common\widgets\ProfileNavWidget;
 use yii\web\View;
 
 /**
@@ -8,19 +8,29 @@ use yii\web\View;
  * @var string $content
  */
 
-ProfileAsset::register($this)
-
 ?>
 
-<?php $this->beginContent('@app/views/layouts/main.php'); ?>
-    <div class="profile">
-        <section class="profile__sidebar">
-            <?= $this->render('includes/_sidebar'); ?>
-        </section>
-        <div class="profile__section">
-            <div class="profile__section-content">
-                <?= $content ?>
+<?php $this->beginContent('@frontend/views/layouts/main.php'); ?>
+
+<div class="profile">
+    <aside class="profile__aside">
+        <header class="profile__header">
+            <div class="profile__avatar">
+                <img src="" alt="">
             </div>
+            <div class="profile__info">
+                <p class="profile__name">Максим Кошкин</p>
+                <p class="profile__email">koshkin@mail.ru</p>
+            </div>
+        </header>
+        <div class="profile__navigation">
+            <?= ProfileNavWidget::widget() ?>
         </div>
+        <!-- виджет навигации -->
+    </aside>
+    <div class="profile__content">
+        <?= $content ?>
     </div>
+</div>
+
 <?php $this->endContent(); ?>

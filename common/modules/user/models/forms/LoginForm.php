@@ -2,6 +2,7 @@
 
 namespace common\modules\user\models\forms;
 
+use common\components\services\AuthService;
 use common\modules\user\models\data\User;
 use Yii;
 use yii\base\Model;
@@ -62,7 +63,7 @@ class LoginForm extends Model
     public function getUser(): ?User
     {
         if ($this->_user === null) {
-            $this->_user = User::findByEmail($this->email);
+            $this->_user = AuthService::findUserByEmail($this->email);
         }
 
         return $this->_user;

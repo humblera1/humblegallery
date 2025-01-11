@@ -2,7 +2,6 @@
 
 namespace common\modules\user\models\data;
 
-use common\components\traits\models\WithAuth;
 use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\data\Painting;
 use common\modules\user\components\traits\IdentityTrait;
@@ -35,7 +34,7 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    use IdentityTrait, WithAuth;
+    use IdentityTrait;
 
     public ?UserService $service = null;
 

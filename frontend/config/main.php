@@ -109,14 +109,9 @@ return [
                 'artists' => 'artist/default/index',
                 'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',
 
-                'auth/signup' => 'auth/signup',
-                'auth/login' => 'auth/login',
-                'auth/logout' => 'auth/logout',
-                'auth/request-password-reset' => 'auth/request-password-reset',
-                'auth/reset-password' => 'auth/reset-password',
-                'auth/resend-verification-email' => 'auth/resend-verification-email',
-                'auth/verify-email' => 'auth/verify-email',
-                'auth/captcha' => 'auth/captcha',
+                'auth/<action:(signup|login|logout|request-password-reset|resend-verification-email|captcha)>' => 'auth/<action>',
+                'auth/reset-password/<token:\w+>' => 'auth/reset-password',
+                'auth/verify-email/<token:\w+>' => 'auth/verify-email',
 
                 'about' => 'site/about',
 //                'login' => 'site/login',

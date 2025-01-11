@@ -88,4 +88,15 @@ class AuthService
             'is_blocked' => false,
         ]);
     }
+
+    /**
+     * Find User by provided email.
+     */
+    public static function findUserByEmail(string $email): ?User
+    {
+        return User::findOne([
+            'email' => $email,
+            'is_blocked' => false,
+        ]);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace common\modules\user\models\forms;
 
+use common\components\services\AuthService;
 use common\modules\user\models\data\User;
 use Yii;
 use yii\base\Exception;
@@ -39,7 +40,7 @@ class PasswordResetRequestForm extends Model
      */
     public function sendEmail(): bool
     {
-        $user = User::findByEmail($this->email);
+        $user = AuthService::findUserByEmail($this->email);
 
         if ($user && $user->service->regeneratePasswordResetToken()) {
             $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['auth/reset-password', 'token' => $user->password_reset_token]);

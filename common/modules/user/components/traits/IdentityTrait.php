@@ -32,17 +32,4 @@ trait IdentityTrait
     {
         return $this->auth_key === $authKey;
     }
-
-    /**
-     * Find User by provided email.
-     */
-    public static function findByEmail(string $email): ?User
-    {
-        // todo: not blocked
-
-        return parent::findOne([
-            'email' => $email,
-            'is_blocked' => false,
-        ]);
-    }
 }

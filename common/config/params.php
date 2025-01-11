@@ -6,6 +6,7 @@ return [
     'senderName' => 'Example.com mailer',
 
     'user.passwordResetTokenExpire' => 3600,
+    'user.verificationTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
     'user.loginDuration' => 30 * 24 * 60 * 60,
 

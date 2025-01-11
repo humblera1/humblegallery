@@ -3,7 +3,6 @@
 namespace common\modules\user\models\service;
 
 use common\components\Service;
-use common\components\services\AuthService;
 use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
 use Yii;
@@ -61,19 +60,21 @@ class UserService extends Service
     /**
      * @throws Exception
      */
-    public function regeneratePasswordResetTokenIfNeeded(): bool
+    public function regeneratePasswordResetToken(): bool
     {
-        $model = $this->model;
+        $this->generatePasswordResetToken();
 
-        if (!AuthService::isPasswordResetTokenValid($model->password_reset_token)) {
-            $this->generatePasswordResetToken();
+        return $this->model->save();
+    }
 
-            if (!$model->save()) {
-                return false;
-            }
-        }
+    /**
+     * @throws Exception
+     */
+    public function regenerateVerificationToken(): bool
+    {
+        $this->generateVerificationToken();
 
-        return true;
+        return $this->model->save();
     }
 
     /**
@@ -83,6 +84,15 @@ class UserService extends Service
     public function generatePasswordResetToken(): void
     {
         $this->model->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Generates new email verification token.
+     * @throws Exception
+     */
+    public function generateVerificationToken(): void
+    {
+        $this->model->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**

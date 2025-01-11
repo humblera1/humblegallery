@@ -1,0 +1,30 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.resend-verification-email {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: -32px;
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 48px;
+    }
+
+    &__subtitle {
+        text-align: center;
+
+        @include mixins.main-font(400, 16, colors.$text-warm-gray);
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: center;
+    }
+}

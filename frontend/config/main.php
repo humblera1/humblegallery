@@ -111,13 +111,16 @@ return [
 
                 'auth/signup' => 'auth/signup',
                 'auth/login' => 'auth/login',
+                'auth/logout' => 'auth/logout',
                 'auth/request-password-reset' => 'auth/request-password-reset',
                 'auth/reset-password' => 'auth/reset-password',
+                'auth/resend-verification-email' => 'auth/resend-verification-email',
+                'auth/verify-email' => 'auth/verify-email',
                 'auth/captcha' => 'auth/captcha',
 
                 'about' => 'site/about',
-                'login' => 'site/login',
-                'signup' => 'site/signup',
+//                'login' => 'site/login',
+//                'signup' => 'site/signup',
 
 
 

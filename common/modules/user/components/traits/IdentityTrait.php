@@ -40,6 +40,9 @@ trait IdentityTrait
     {
         // todo: not blocked
 
-        return parent::findOne(['email' => $email]);
+        return parent::findOne([
+            'email' => $email,
+            'is_blocked' => false,
+        ]);
     }
 }

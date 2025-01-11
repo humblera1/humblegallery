@@ -41,7 +41,7 @@ class PasswordResetRequestForm extends Model
     {
         $user = User::findByEmail($this->email);
 
-        if ($user && $user->service->validatePasswordResetToken()) {
+        if ($user && $user->service->regeneratePasswordResetTokenIfNeeded()) {
             $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['auth/reset-password', 'token' => $user->password_reset_token]);
 
             return Yii::$app

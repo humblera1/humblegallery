@@ -136,6 +136,7 @@ class AuthController extends Controller
      *
      * @param string $token
      * @return string|Response
+     * @throws Exception
      */
     public function actionResetPassword(string $token): string|Response
     {

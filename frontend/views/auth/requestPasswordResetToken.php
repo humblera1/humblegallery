@@ -12,6 +12,7 @@ use yii\web\View;
  */
 
 $this->title = 'Сброс пароля';
+$this->params['image'] = 'reset-password.png';
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form', 'options' => ['class' => 'request-password-reset']]); ?>

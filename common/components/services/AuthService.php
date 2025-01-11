@@ -25,13 +25,22 @@ class AuthService
         return $timestamp + $expire >= time();
     }
 
-    public static function validatePasswordResetToken(string $token): bool
+    /**
+     * Finds user by password reset token.
+     *
+     * @param string $token password reset token.
+     * @return static|null
+     */
+    public static function findByPasswordResetToken($token): ?User
     {
-        if ($token && AuthService::findUserByVerificationToken($token)) {
-            return true;
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
         }
 
-        return false;
+        return User::findOne([
+            'password_reset_token' => $token,
+            'is_blocked' => false,
+        ]);
     }
 
     /**

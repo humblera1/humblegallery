@@ -21,15 +21,27 @@ class UserService extends Service
     }
 
     /**
+     * @param string $password
+     * @return void
      * @throws Exception
-     */
+    */
     public function setPassword(string $password): void
     {
         $this->model->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
-     * Generates 'remember me' authentication key
+     * Removes password reset token.
+     *
+     * @return void
+     */
+    public function removePasswordResetToken(): void
+    {
+        $this->model->password_reset_token = null;
+    }
+
+    /**
+     * Generates 'remember me' authentication key.
      *
      * @throws Exception if string can't be generated
      */
@@ -49,7 +61,7 @@ class UserService extends Service
     /**
      * @throws Exception
      */
-    public function validatePasswordResetToken(): bool
+    public function regeneratePasswordResetTokenIfNeeded(): bool
     {
         $model = $this->model;
 

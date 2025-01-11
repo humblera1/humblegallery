@@ -16,6 +16,8 @@ class ResetPasswordForm extends Model
 {
     public ?string $password = null;
 
+    public ?string $passwordAgain = null;
+
     private ?User $_user = null;
 
 
@@ -28,7 +30,7 @@ class ResetPasswordForm extends Model
      */
     public function __construct(string $token, array $config = [])
     {
-        if ($token && ($this->_user = AuthService::findUserByVerificationToken($token))) {
+        if ($token && ($this->_user = AuthService::findByPasswordResetToken($token))) {
             return parent::__construct($config);
         }
 
@@ -41,8 +43,25 @@ class ResetPasswordForm extends Model
     public function rules(): array
     {
         return [
-            ['password', 'required'],
-            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            [['password', 'passwordAgain'], 'required'],
+            [['password', 'passwordAgain'], 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            [
+                'passwordAgain',
+                'compare',
+                'compareAttribute' => 'password',
+                'message' => 'Пароли не совпадают',
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'password' => 'Пароль',
+            'passwordAgain' => 'Пароль ещё раз',
         ];
     }
 
@@ -52,14 +71,13 @@ class ResetPasswordForm extends Model
      * @return bool if password was reset.
      * @throws Exception
      */
-    public function resetPassword()
+    public function resetPassword(): bool
     {
         $user = $this->_user;
 
-        // todo: implement password reset logic
-        $user->setPassword($this->password);
-        $user->removePasswordResetToken();
-        $user->generateAuthKey();
+        $user->service->setPassword($this->password);
+        $user->service->removePasswordResetToken();
+        $user->service->generateAuthKey();
 
         return $user->save(false);
     }

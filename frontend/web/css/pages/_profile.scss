@@ -60,7 +60,7 @@
     }
 
     &__navigation {
-
+        height: 100%;
     }
 }
 
@@ -70,6 +70,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    height: 100%;
 
     &__item {
         cursor: pointer;
@@ -83,6 +84,27 @@
 
         &:hover {
             background-color: colors.$additional-color-hovered;
+        }
+
+        &_active {
+            background-color: colors.$accent-orange;
+
+            .profile-nav__label {
+                color: colors.$text-accent-white;
+            }
+
+            .profile-nav__icon svg {
+                color: colors.$text-accent-white;
+            }
+
+            &:hover {
+                background-color: colors.$accent-orange;
+            }
+        }
+
+        &:last-child {
+            margin-top: auto;
+            background-color: transparent;
         }
     }
 

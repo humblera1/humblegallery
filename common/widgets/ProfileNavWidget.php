@@ -26,6 +26,10 @@ class ProfileNavWidget extends Widget
             'label' => 'Настройки',
             'url' => '/user/default/settings',
         ],
+        [
+            'label' => 'Выход',
+            'url' => 'auth/logout',
+        ],
     ];
 
     public function run()
@@ -49,7 +53,7 @@ class ProfileNavWidget extends Widget
         $label = $item['label'];
         $url = $item['url'];
 
-        $isActive = Yii::$app->request->url === $url ? 'profile-nav__item_active' : '';
+        $isActive = $this->isItemActive($item) ? 'profile-nav__item_active' : '';
 
         return Html::tag('li', $this->renderItemContent($label, $url), ['class' => "profile-nav__item $isActive"]);
     }
@@ -72,7 +76,16 @@ class ProfileNavWidget extends Widget
             'Коллекции' => 'paintings',
             'Избранное' => 'heart',
             'Настройки' => 'gear',
+            'Выход' => 'exit',
             default => throw new InvalidConfigException('No icon specified for label: ' . $label),
         };
+    }
+
+    protected function isItemActive(array $item): bool
+    {
+        $url = Yii::$app->request->url;
+        $routeUrl = Yii::$app->urlManager->createUrl([$item['url'], 'username' => Yii::$app->user->identity->username]);
+
+        return $url === $routeUrl;
     }
 }

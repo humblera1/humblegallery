@@ -24,9 +24,9 @@ use yii\web\View;
             </div>
         </header>
         <div class="profile__navigation">
+            <!-- виджет навигации -->
             <?= ProfileNavWidget::widget() ?>
         </div>
-        <!-- виджет навигации -->
     </aside>
     <div class="profile__content">
         <?= $content ?>

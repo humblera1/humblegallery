@@ -4,11 +4,29 @@ namespace common\widgets;
 
 use common\helpers\Html;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Widget;
 
 class ProfileNavWidget extends Widget
 {
-    public array $items = [];
+    public array $items = [
+        [
+            'label' => 'Профиль',
+            'url' => '/user/default/view',
+        ],
+        [
+            'label' => 'Коллекции',
+            'url' => '/user/default/collections',
+        ],
+        [
+            'label' => 'Избранное',
+            'url' => '/user/default/favorites',
+        ],
+        [
+            'label' => 'Настройки',
+            'url' => '/user/default/settings',
+        ],
+    ];
 
     public function run()
     {
@@ -28,10 +46,33 @@ class ProfileNavWidget extends Widget
 
     protected function renderItem(array $item): string
     {
-        $label = Html::encode($item['label']);
-        $url = Html::encode($item['url']);
+        $label = $item['label'];
+        $url = $item['url'];
+
         $isActive = Yii::$app->request->url === $url ? 'profile-nav__item_active' : '';
 
-        return Html::tag('li', Html::a($label, $url), ['class' => "profile-nav__item $isActive"]);
+        return Html::tag('li', $this->renderItemContent($label, $url), ['class' => "profile-nav__item $isActive"]);
+    }
+
+    protected function renderItemContent(string $itemLabel, string $itemUrl): string
+    {
+        $itemContent = Html::tag('div', Html::icon($this->getIconName($itemLabel)), ['class' => 'profile-nav__icon']);
+        $itemContent .= Html::tag('p', $itemLabel, ['class' => 'profile-nav__label']);
+
+        return Html::a($itemContent, [$itemUrl, 'username' => Yii::$app->user->identity->username], ['class' => 'profile-nav__link']);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    protected function getIconName($label): string
+    {
+        return match ($label) {
+            'Профиль' => 'user',
+            'Коллекции' => 'paintings',
+            'Избранное' => 'heart',
+            'Настройки' => 'gear',
+            default => throw new InvalidConfigException('No icon specified for label: ' . $label),
+        };
     }
 }

@@ -1,36 +1,154 @@
+@use "@styles/colors" as colors;
 @use "@styles/mixins" as mixins;
 
 .profile {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
 
-  &__section {
-
-    &-content {
-      padding: 1rem 8vw;
+    &__aside {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 250px;
+        height: 100%;
+        gap: 56px;
     }
 
-  }
+    &__content {
+        display: flex;
+    }
 
-  .info {
-    &-header {
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+    }
+
+    &__avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        overflow: hidden;
+
+        background-color: lightgray;
+
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__name {
+        text-align: center;
+
+        @include mixins.main-font(600, 16, colors.$text-chocolate);
+    }
+
+    &__email {
+        text-align: center;
+
+        @include mixins.main-font(400, 12, colors.$text-warm-gray);
+    }
+
+    &__navigation {
 
     }
-    &-form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-
-      @include mixins.for-desktop {
-        grid-template-columns: 1fr;
-      }
-
-      &__column {
-        padding: 2.5rem;
-      }
-    }
-  }
 }
 
-.form-group {
-  max-width: 50rem;
+
+// Стили виджета навигации
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &__item {
+        cursor: pointer;
+        width: 100%;
+        max-width: 250px;
+        height: 60px;
+        border-radius: 100px;
+        background-color: colors.$additional-color;
+
+        @include mixins.default-transition;
+
+        &:hover {
+            background-color: colors.$additional-color-hovered;
+        }
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 36px;
+        padding: 0 24px;
+
+        @include mixins.default-transition;
+
+        &:hover {
+            //color: transparent;
+        }
+    }
+
+    &__icon {
+        width: 18px;
+        height: 18px;
+
+        svg {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            color: colors.$text-warm-gray;
+        }
+    }
+
+    &__label {
+        @include mixins.main-font(500, 18, colors.$text-warm-gray);
+    }
 }
+
+//.profile {
+//  display: grid;
+//  grid-template-columns: 1fr 4fr;
+//
+//  &__section {
+//
+//    &-content {
+//      padding: 1rem 8vw;
+//    }
+//
+//  }
+//
+//  .info {
+//    &-header {
+//
+//    }
+//    &-form {
+//      display: grid;
+//      grid-template-columns: 1fr 1fr;
+//
+//      @include mixins.for-desktop {
+//        grid-template-columns: 1fr;
+//      }
+//
+//      &__column {
+//        padding: 2.5rem;
+//      }
+//    }
+//  }
+//}
+//
+//.form-group {
+//  max-width: 50rem;
+//}

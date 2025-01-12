@@ -47,7 +47,16 @@ $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
                         </a>
                     </div>
                 <?php else: ?>
-                    <?= Html::a('Профиль', ['/profile'], ['class' => 'nav-item']); ?>
+                    <?= Html::a(
+                        'Профиль',
+                        [
+                            '/user/default/view',
+                            'username' => Yii::$app->user->identity->username
+                        ],
+                        [
+                            'class' => 'nav-item'
+                        ]
+                    ); ?>
                 <?php endif; ?>
             </div>
         </header>

@@ -32,4 +32,25 @@ class CollectionQuery extends ActiveQuery
     {
         return $this->andWhere(['user_id' => Yii::$app->user->getId()]);
     }
+
+    /**
+     * Filters the query to include only public collections.
+     * Method adds a condition to exclude collections marked as private.
+     *
+     * @return CollectionQuery
+     */
+    public function publicOnly(): CollectionQuery
+    {
+        return $this->andWhere(['is_private' => false]);
+    }
+
+    /**
+     * Filters the query to include only active collections.
+     *
+     * @return CollectionQuery
+     */
+    public function activeOnly(): CollectionQuery
+    {
+        return $this->andWhere(['is_archived' => false]);
+    }
 }

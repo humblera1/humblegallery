@@ -2,17 +2,13 @@
 
 namespace common\modules\user\controllers\frontend;
 
+use common\components\filters\SelfHealingUrlFilter;
 use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
-use common\modules\user\models\enums\ProfileSectionsEnum;
 use common\modules\user\models\forms\EditForm;
-use common\modules\user\models\forms\LoginForm;
-use common\modules\user\models\forms\SignupForm;
-use common\modules\user\models\search\FavoritePaintingSearch;
 use common\modules\user\models\search\UserCollectionSearch;
-//use common\modules\user\models\search\UserFavoritesSearch;
 use Yii;
-use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,23 +59,22 @@ class DefaultController extends Controller
     public function behaviors()
     {
         return [
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'only' => ['personal-area'],
-//                'rules' => [
-//                    [
-//                        'actions' => ['personal-area'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//                'denyCallback' => function ($rule, $action) {
-//                    $cache = Yii::$app->cache;
-//                    $cache->set('needToShowLoginModal', true, 10);
-//
-//                    return $this->redirect('/');
-//                },
-//            ],
+            'selfHealingUrl' => [
+                'class' => SelfHealingUrlFilter::class,
+                'only' => [
+                    'collection-view',
+                ],
+                'modelClass' => Collection::class,
+                'queryConstraints' => function ($query) {
+                    // Только публичные и не архивированные коллекции, если они запрашиваются не владельцем
+                    if ($this->isOwner) {
+                        $query->andWhere([
+                            'is_private' => false,
+                            'is_archived' => false,
+                        ]);
+                    }
+                },
+            ],
         ];
     }
 
@@ -111,14 +106,23 @@ class DefaultController extends Controller
     public function actionFavorites(): string
     {
         return $this->render('favorites', [
-            'user' => $this->currentUser,
+            'provider' => new ActiveDataProvider([
+                'query' => $this->currentUser->getFavoritePaintings(),
+                'pagination' => [
+                    'pageSize' => Yii::$app->params['paintingsPerPage'],
+                ],
+            ]),
         ]);
     }
 
     public function actionCollections(): string
     {
+        $model = new UserCollectionSearch($this->currentUser);
+
         return $this->render('collections', [
             'user' => $this->currentUser,
+            'model' => $model,
+            'provider' => $model->search($this->request->post()),
         ]);
     }
 
@@ -126,6 +130,7 @@ class DefaultController extends Controller
     {
         return $this->render('collection-view', [
             'user' => $this->currentUser,
+            'model' => $this->model,
         ]);
     }
 
@@ -136,9 +141,9 @@ class DefaultController extends Controller
     {
         $user = User::findOne(['username' => $username]);
 
-        if (!$user) {
-            throw new NotFoundHttpException();
-        }
+//        if (!$user) {
+//            throw new NotFoundHttpException();
+//        }
 
         return $user;
     }

@@ -1,12 +1,13 @@
 <?php
 
-use common\modules\user\models\data\User;
+use common\modules\collection\models\data\Collection;
 use yii\web\View;
 
 /**
  * @var $this View
+ * @var $model Collection
  */
 
 ?>
 
-collection view
+collection view: <?= $model->title ?>

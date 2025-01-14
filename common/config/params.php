@@ -12,6 +12,7 @@ return [
 
     'artistsPerPage' => 10,
     'paintingsPerPage' => 15,
+    'collectionsPerPage' => 12,
 
     'bsVersion' => '5.x',
 ];

@@ -17,6 +17,11 @@ use yii\helpers\ArrayHelper;
 
 class CollectionService extends Service
 {
+    public function getCover(): string
+    {
+        return '';
+    }
+
     public function getPreviewImage(): bool|string
     {
         /** @var Painting $lastPainting */

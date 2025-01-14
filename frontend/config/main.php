@@ -123,7 +123,7 @@ return [
                 'users/<username:[a-zA-Z0-9]+>/collections' => 'user/default/collections',
 
                 // show a specific collection of a user
-                'users/<username:[a-zA-Z0-9]+>/collections/<collectionName:[a-zA-Z0-9\-]+>' => 'user/default/collection-view',
+                'users/<username:[a-zA-Z0-9]+>/collections/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'user/default/collection-view',
 
                 // todo: settings tab, only accessible for the logged-in user
                 [

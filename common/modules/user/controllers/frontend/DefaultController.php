@@ -40,10 +40,20 @@ class DefaultController extends Controller
         $username = $this->request->get('username');
 
         if ($username !== null) {
-            $this->currentUser = User::findOne(['username' => $username]);
+            $this->currentUser = User::findOne(['username' => $username, 'is_blocked' => false]);
 
             if ($this->currentUser === null) {
                 throw new NotFoundHttpException('Пользователь не найден');
+            }
+
+            $this->isOwner = Yii::$app->user->identity?->id === $this->currentUser->id;
+
+            if (!$this->isOwner && $this->currentUser->is_closed) {
+                $this->layout = '@frontend/views/layouts/main';
+
+                echo $this->render('profile-closed');
+
+                return false;
             }
         }
 

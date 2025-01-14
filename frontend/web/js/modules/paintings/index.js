@@ -13,10 +13,11 @@ new class PaintingsManager {
     static TOGGLE_PAINTING_URL = '/collections/toggle-painting'
 
     constructor() {
-        this.searchFormData = [];
-        this.filtersFormData = [];
-
-        this.init();
+        if ($('.paintings').length > 0) {
+            this.searchFormData = [];
+            this.filtersFormData = [];
+            this.init();
+        }
     }
 
     init() {
@@ -42,8 +43,9 @@ new class PaintingsManager {
             });
         });
 
+        // todo: создать отдельный виджет под masonry
         // Дожидаемся загрузки контента в Pjax
-        $(document).on('pjax:success', () => {
+        $('.paintings__list').on('pjax:success', () => {
             const masonryContent = $('.paintings__list');
 
             // Дожидаемся загрузки изображений

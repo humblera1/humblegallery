@@ -16,7 +16,22 @@ class UserService extends Service
 {
     public function getName(): string
     {
-        return $this->model->name . ' ' . $this->model->surname;
+        $model = $this->model;
+
+        if ($model->name && $model->surname) {
+            return $model->name . ' ' . $model->surname;
+        }
+
+        if ($model->name) {
+            return $model->name;
+        }
+
+        return $model->username;
+    }
+
+    public function getAvatar(): string
+    {
+        return '/uploads/avatars/' . $this->model->avatar;
     }
 
     /**

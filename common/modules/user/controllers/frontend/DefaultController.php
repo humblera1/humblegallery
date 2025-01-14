@@ -15,10 +15,10 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\ErrorAction;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
-use yii\widgets\ActiveForm;
+use yii\web\UploadedFile;
+
+//use common\modules\user\models\search\UserFavoritesSearch;
 
 class DefaultController extends Controller
 {
@@ -27,10 +27,15 @@ class DefaultController extends Controller
     protected ?User $currentUser = null;
 
     /**
+     * Сигнализирует о том, что профиль просматривается владельцем.
+     */
+    protected bool $isOwner = false;
+
+    /**
      * @throws NotFoundHttpException
      * @throws BadRequestHttpException
      */
-    public function beforeAction($action)
+    public function beforeAction($action): bool
     {
         $username = $this->request->get('username');
 
@@ -38,7 +43,7 @@ class DefaultController extends Controller
             $this->currentUser = User::findOne(['username' => $username]);
 
             if ($this->currentUser === null) {
-                throw new NotFoundHttpException('User not found.');
+                throw new NotFoundHttpException('Пользователь не найден');
             }
         }
 
@@ -68,10 +73,28 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionView(string $username): string
+    /**
+     * @return string
+     */
+    public function actionView(): string
     {
+        $form = new EditForm($this->currentUser);
+
+        $isOwner = Yii::$app->user->identity?->id === $this->currentUser->id;
+
+        if ($isOwner) {
+            if ($form->load($this->request->post())) {
+                $form->file = UploadedFile::getInstance($form, 'file');
+
+                if ($form->validate() && $form->saveChanges()) {
+                    Yii::$app->session->setFlash('success', 'Данные профиля успешно обновлены!');
+                }
+            }
+        }
+
         return $this->render('view', [
             'user' => $this->currentUser,
+            'model' => $form,
         ]);
     }
 

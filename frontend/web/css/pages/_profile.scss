@@ -3,7 +3,7 @@
 
 .profile {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 250px 1fr;
     gap: 60px;
 
     &__aside {
@@ -17,6 +17,7 @@
 
     &__content {
         display: flex;
+        width: 100%;
     }
 
     &__header {
@@ -137,6 +138,152 @@
 
     &__label {
         @include mixins.main-font(500, 18, colors.$text-warm-gray);
+    }
+}
+
+.profile-info {
+    width: 100%;
+
+    &__content {
+        &_owner {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 36px;
+            padding-top: 60px;
+        }
+    }
+
+    &__avatar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    &__image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 250px;
+        border-radius: 24px;
+        overflow: hidden;
+        background-color: colors.$additional-color;
+
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        svg {
+            width: 100px;
+            height: 100px;
+            color: colors.$badge-wheat;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__uploader {
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        height: 70px;
+        text-align: center;
+        border-radius: 16px;
+        border: 2px dashed colors.$text-chocolate;
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+
+    &__action {
+        display: flex;
+        gap: 12px;
+
+        @include mixins.main-font(500, 14, colors.$text-chocolate);
+
+        svg {
+            width: 16px;
+            height: 17px;
+            color: colors.$text-chocolate;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__name {
+        text-align: center;
+
+        @include mixins.main-font(600, 20, colors.$text-chocolate);
+    }
+
+    &__email {
+        text-align: center;
+
+        @include mixins.main-font(500, 14, colors.$text-warm-gray);
+    }
+}
+
+.profile-collections {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 100%;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+        width: 100%;
+    }
+
+    &__controls {
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__filters {
+        position: absolute;
+        right: 0;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 36px;
+        row-gap: 32px;
+    }
+
+    &__title {
+        @include mixins.main-font(600, 24, colors.$text-chocolate);
     }
 }
 

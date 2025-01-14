@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property int $id ID
  * @property string $username Логин
  * @property string|null $email
+ * @property string|null $avatar
  * @property string $password_hash
  * @property string|null $name Имя
  * @property string|null $surname Фамилия

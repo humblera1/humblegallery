@@ -1,4 +1,5 @@
 import '@modules/paintings/index.js';
+import '@modules/collections/index.js';
 import '@styles/frontend.scss';
 
 $(document).ready(() => {
@@ -33,5 +34,13 @@ $(document).ready(() => {
                 new ModalWidget();
             })
             .catch((error) => console.error('Ошибка при загрузке виджета модального окна:', error));
+    }
+
+    if ($('#popup-filter-widget').length > 0) {
+        import(/* webpackChunkName: "popup-filter-widget" */ './widgets/PopupFilterWidget/index.js')
+            .then(({ default: PopupFilterWidget }) => {
+                new PopupFilterWidget();
+            })
+            .catch((error) => console.error('Ошибка при загрузке виджета фильтров:', error));
     }
 });

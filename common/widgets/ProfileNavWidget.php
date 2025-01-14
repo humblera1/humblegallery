@@ -32,11 +32,17 @@ class ProfileNavWidget extends Widget
         ],
     ];
 
-    public function run()
+    /**
+     * @throws InvalidConfigException
+     */
+    public function run(): string
     {
         return Html::tag('ul', $this->renderItems(), ['class' => 'profile-nav']);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     protected function renderItems(): string
     {
         $itemsHtml = '';
@@ -48,6 +54,9 @@ class ProfileNavWidget extends Widget
         return $itemsHtml;
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     protected function renderItem(array $item): string
     {
         $label = $item['label'];
@@ -58,18 +67,31 @@ class ProfileNavWidget extends Widget
         return Html::tag('li', $this->renderItemContent($label, $url), ['class' => "profile-nav__item $isActive"]);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     protected function renderItemContent(string $itemLabel, string $itemUrl): string
     {
-        $itemContent = Html::tag('div', Html::icon($this->getIconName($itemLabel)), ['class' => 'profile-nav__icon']);
+        $itemContent = Html::tag('div',
+            Html::icon($this->getIconName($itemLabel)),
+            ['class' => 'profile-nav__icon']
+        );
         $itemContent .= Html::tag('p', $itemLabel, ['class' => 'profile-nav__label']);
 
-        return Html::a($itemContent, [$itemUrl, 'username' => Yii::$app->user->identity->username], ['class' => 'profile-nav__link']);
+        return Html::a(
+            $itemContent,
+            [
+                $itemUrl,
+                'username' => Yii::$app->request->get('username')
+            ],
+            ['class' => 'profile-nav__link']
+        );
     }
 
     /**
      * @throws InvalidConfigException
      */
-    protected function getIconName($label): string
+    protected function getIconName(string $label): string
     {
         return match ($label) {
             'Профиль' => 'user',
@@ -84,7 +106,7 @@ class ProfileNavWidget extends Widget
     protected function isItemActive(array $item): bool
     {
         $url = Yii::$app->request->url;
-        $routeUrl = Yii::$app->urlManager->createUrl([$item['url'], 'username' => Yii::$app->user->identity->username]);
+        $routeUrl = Yii::$app->urlManager->createUrl([$item['url'], 'username' => Yii::$app->request->get('username')]);
 
         return $url === $routeUrl;
     }

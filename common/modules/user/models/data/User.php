@@ -27,6 +27,7 @@ use yii\web\IdentityInterface;
  * @property string $verification_token Токен для подтверждения почты
  * @property int|null $is_verified Подтверждён
  * @property int|null $is_blocked Заблокирован
+ * @property int $is_closed Закрытый профиль
  * @property int $created_at Создан
  * @property int $updated_at Обновлён
  *

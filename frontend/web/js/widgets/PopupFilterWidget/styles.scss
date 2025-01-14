@@ -1,0 +1,127 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+#popup-filter-widget {
+    .filter-widget {
+        position: relative;
+        display: flex;
+        justify-content: flex-end;
+
+        &__badge {
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 100%;
+            color: colors.$text-chocolate;
+            background-color: colors.$primary-color;
+
+            @include mixins.hover-transition;
+            @include mixins.basic-shadow;
+
+            &:hover {
+                color: colors.$accent-orange;
+            }
+
+            svg {
+                width: 16px;
+                height: 15px;
+            }
+        }
+
+        &__popup {
+            z-index: 11;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 100%;
+            min-width: 250px;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 8px;
+            opacity: 0;
+            visibility: hidden;
+            background-color: colors.$primary-color;
+
+            @include mixins.default-transition;
+            @include mixins.shadow(0, 4, 15, 0, rgba(0, 0, 0, .1));
+
+            &.active {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        &__form {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        &__body {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        &__section {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        &__list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        &__item {
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                .filter-widget__label {
+                    color: colors.$text-accent-orange;
+                }
+            }
+
+            &.active {
+                .filter-widget__check {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+
+        &__input {
+            display: none;
+        }
+
+        &__check {
+            position: absolute;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &__footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        &__title {
+            margin-bottom: 12px;
+
+            @include mixins.main-font(400, 12, colors.$text-warm-gray);
+        }
+
+        &__label {
+            @include mixins.hover-transition;
+            @include mixins.main-font(500, 14, colors.$text-chocolate);
+        }
+    }
+}

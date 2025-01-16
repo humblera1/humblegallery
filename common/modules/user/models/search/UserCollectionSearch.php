@@ -23,12 +23,10 @@ class UserCollectionSearch extends Collection
 
     public function __construct(User $user)
     {
+        parent::__construct();
+
         $this->user = $user;
         $this->isOwner = $this->user->id === Yii::$app->user->id;
-
-        $this->is_archived = false;
-
-        parent::__construct();
     }
 
     /** {@inheritdoc} */
@@ -78,8 +76,15 @@ class UserCollectionSearch extends Collection
 
         $this->load($params);
 
+        $isset = isset($this->is_archived);
+
         if (!$this->validate()) {
             return $dataProvider;
+        }
+
+        // Handle the specific case for 'is_archived'
+        if (!$isset) {
+            $this->is_archived = false;
         }
 
         // Применяем фильтры, после чего клонируем запрос до потенциального объединения с картинами для оптимизации подсчета

@@ -34,7 +34,7 @@ if ($isOwner) {
         ],
         [
             'attribute' => 'is_archived',
-            'selected' => '',
+            'selected' => 0,
             'items' => [
                 '' => 'Все',
                 '0' => 'Только активные',

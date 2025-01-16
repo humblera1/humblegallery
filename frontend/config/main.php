@@ -16,6 +16,8 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
+$rules = require __DIR__ . '/rules.php';
+
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
@@ -102,62 +104,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => true,
-            'rules' => [
-                'paintings' => 'painting/default/index',
-                'paintings/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'painting/default/view',
-
-                'artists' => 'artist/default/index',
-                'artists/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'artist/default/view',
-
-                'auth/<action:(signup|login|logout|request-password-reset|resend-verification-email|captcha)>' => 'auth/<action>',
-                'auth/reset-password/<token:\w+>' => 'auth/reset-password',
-                'auth/verify-email/<token:\w+>' => 'auth/verify-email',
-
-                // default profile information tab
-                'users/<username:[a-zA-Z0-9]+>' => 'user/default/view',
-
-                // favorites tab
-                'users/<username:[a-zA-Z0-9]+>/favorites' => 'user/default/favorites',
-
-                // show all collections of a user
-                'users/<username:[a-zA-Z0-9]+>/collections' => 'user/default/collections',
-
-                // show a specific collection of a user
-                'users/<username:[a-zA-Z0-9]+>/collections/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'user/default/collection-view',
-
-                // todo: settings tab, only accessible for the logged-in user
-                [
-                    'pattern' => 'users/<username:[a-zA-Z0-9]+>/settings',
-                    'route' => 'user/default/settings',
-                    'defaults' => [],
-//                    'conditions' => [
-//                        'username' => function ($username) {
-//                            return Yii::$app->user->identity->username === $username;
-//                        },
-//                    ],
-                ],
-
-                'about' => 'site/about',
-//                'login' => 'site/login',
-//                'signup' => 'site/signup',
-
-
-
-                'paintings/<action>' => 'painting/default/<action>',
-                'collections/<action>' => 'collection/default/<action>',
-
-                '' => 'site/index', //TODO:поправить маршрут
-
-//                'user/<action>' => 'user/default/<action>',
-//                'profile/<section>' => 'user/default/<section>',
-//                [
-//                    'pattern' => 'profile/<section:\w+>',
-//                    'route' => 'user/default/profile',
-//                    'defaults' => [
-//                        'section' => 'info',
-//                    ]
-//                ],
-            ],
+            'rules' => $rules,
         ],
     ],
     'params' => $params,

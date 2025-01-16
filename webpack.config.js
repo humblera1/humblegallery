@@ -60,6 +60,7 @@ module.exports = {
             '@modules': path.resolve(__dirname, 'frontend/web/js/modules/'),
             '@widgets': path.resolve(__dirname, 'frontend/web/js/widgets/'),
             '@utils': path.resolve(__dirname, 'frontend/web/js/utils/'),
+            '@urls': path.resolve(__dirname, 'frontend/web/js/urls/'),
             '@styles': path.resolve(__dirname, 'frontend/web/css'),
             '@fonts': path.resolve(__dirname, 'common/web/fonts')
         },

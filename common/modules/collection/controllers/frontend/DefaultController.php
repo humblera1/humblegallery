@@ -3,6 +3,7 @@
 namespace common\modules\collection\controllers\frontend;
 
 use common\components\FrontendController;
+use common\modules\collection\models\data\Collection;
 use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
 use common\modules\collection\models\form\PaintingCollectionForm;
 use common\modules\collection\models\service\CollectionService;
@@ -10,8 +11,8 @@ use common\modules\painting\models\data\PaintingCollection;
 use Exception;
 use Throwable;
 use Yii;
-use yii\filters\AccessControl;
-use yii\filters\AjaxFilter;
+use yii\db\StaleObjectException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -24,20 +25,20 @@ class DefaultController extends FrontendController
     public function behaviors(): array
     {
         return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['get-form', 'get-list', 'create-and-add', 'toggle-painting'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'ajax' => [
-                'class' => AjaxFilter::class,
-                'only' => ['get-form', 'get-list', 'create-and-add', 'validate-form', 'toggle-painting'],
-            ],
+//            'access' => [
+//                'class' => AccessControl::class,
+//                'only' => ['get-form', 'get-list', 'create-and-add', 'toggle-painting', 'edit-form'],
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
+//            'ajax' => [
+//                'class' => AjaxFilter::class,
+//                'only' => ['get-form', 'get-list', 'create-and-add', 'validate-form', 'toggle-painting'],
+//            ],
         ];
     }
 
@@ -53,6 +54,74 @@ class DefaultController extends FrontendController
             'model' => new AddPaintingToNewCollectionForm(),
             'paintingId' => $paintingId,
         ]);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionEditForm(int $id): string
+    {
+        return $this->renderAjax('includes/_edit-form', [
+            'model' => $this->getCollectionToEdit($id),
+        ]);
+    }
+
+    public function actionValidateEdit(): array
+    {
+        $this->response->format = Response::FORMAT_JSON;
+
+        $model = new Collection();
+        $model->load(Yii::$app->request->post());
+
+        return ActiveForm::validate($model);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
+     */
+    public function actionUpdate(int $id): string
+    {
+        $model = $this->getCollectionToEdit($id);
+
+        if ($model->load($this->request->post()) && $model->save()) {
+            return 'ok';
+        }
+
+        return 'not ok';
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function actionDelete(int $id): string
+    {
+        $model = $this->getCollectionToEdit($id);
+
+        if ($model->softDelete()) {
+            return 'ok';
+        }
+
+        return 'not ok';
+    }
+
+    public function actionRestore(int $id): string
+    {
+        $model = $this->getCollectionToEdit($id);
+
+        if ($model->restore()) {
+            return 'ok';
+        }
+
+        return 'not ok';
     }
 
 
@@ -142,5 +211,25 @@ class DefaultController extends FrontendController
         }
 
         return $this->successResponse($message);
+    }
+
+    /**
+     * @param int $collectionId
+     * @return Collection
+     * @throws NotFoundHttpException
+     */
+    protected function getCollectionToEdit(int $collectionId): Collection
+    {
+        /** @var Collection $collection */
+        $collection = Yii::$app->user->identity
+            ->getCollections()
+            ->where(['id' => $collectionId])
+            ->one();
+
+        if (!$collection) {
+            throw new NotFoundHttpException();
+        }
+
+        return $collection;
     }
 }

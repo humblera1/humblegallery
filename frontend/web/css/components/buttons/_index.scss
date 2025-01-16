@@ -53,6 +53,20 @@
         }
     }
 
+    &_red {
+        background-color: colors.$btn-red;
+
+        @include mixins.main-font(500, 14, colors.$btn-text-white);
+
+        &:hover {
+            background-color: colors.$btn-red--hovered;
+        }
+
+        &:active {
+            background-color: colors.$btn-red--active;
+        }
+    }
+
     &_full {
         width: 100%;
     }

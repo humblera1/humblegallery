@@ -8,6 +8,12 @@ export function showErrorMessage(message) {
     console.log('Error: ' + message);
 }
 
+export function get(url, data = {}) {
+    return $.get({
+        url, data,
+    });
+}
+
 export function post(url, data = {}) {
     data[yii.getCsrfParam()] = yii.getCsrfToken();
 
@@ -16,9 +22,30 @@ export function post(url, data = {}) {
     });
 }
 
-export function get(url, data = {}) {
-    return $.get({
-        url, data,
+export function put(url, data = {}) {
+    data[yii.getCsrfParam()] = yii.getCsrfToken();
+
+    return $.ajax(url, {
+        'method': 'PUT',
+        data,
+    });
+}
+
+export function patch(url, data = {}) {
+    data[yii.getCsrfParam()] = yii.getCsrfToken();
+
+    return $.ajax(url, {
+        'method': 'PATCH',
+        data,
+    });
+}
+
+export function requestDelete(url, data = {}) {
+    data[yii.getCsrfParam()] = yii.getCsrfToken();
+
+    return $.ajax(url, {
+        'method': 'DELETE',
+        data,
     });
 }
 

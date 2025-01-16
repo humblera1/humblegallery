@@ -18,6 +18,6 @@
     </div>
 <?php endif; ?>
 
-<div class="modal" data-toggle-button="<?= htmlspecialchars($toggleButton, ENT_QUOTES, 'UTF-8') ?>">
+<div class="modal" <?= isset($toggleButton) ? 'data-toggle-button="' . $toggleButton . '"' : '' ?>>
     <?= $content ?>
 </div>

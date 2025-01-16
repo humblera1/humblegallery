@@ -11,7 +11,7 @@ class ModalWidget extends Widget
 
     public static bool $overlayRendered = false;
 
-    public string $toggleButton;
+    public ?string $toggleButton = null;
 
     public string $position = 'center';
 

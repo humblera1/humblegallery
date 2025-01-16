@@ -1,63 +1,51 @@
 import * as styles from './styles.scss';
 
-export default class ModalWidget {
-    constructor() {
-        this.overlay = $('.modal__overlay');
-        this.close = $('.modal__close');
+export function init () {
+    const $widget = $('#modal-widget');
 
-        this.baseModal = $('#modal-widget');
-        this.wrapper = $('.modal__wrapper');
+    if ($widget.length === 0) {
+        console.log("Can't find modal widget container");
 
-        this.modals = $('.modal');
-
-        this.init();
+        return;
     }
 
-    init() {
-        this.overlay.on('click', () => closeModal());
+    $('.modal__overlay').on('click', closeModal);
+    $('.modal').each((_idx, modal) => {
+        const toggleButtonSelector = $(modal).data('toggle-button');
 
-        this.modals.each((_idx, modal) => {
-            const toggleButtonSelector = $(modal).data('toggle-button');
-
-            if (!toggleButtonSelector) {
-                console.warn('No toggle-button data attribute found on modal');
-
-                return;
-            }
-
-            const toggleButton = $(toggleButtonSelector);
-
-            if (!toggleButton.length) {
-                console.warn(`No element found for selector: ${toggleButtonSelector}`);
-
-                return;
-            }
-
-            toggleButton.on('click', () => {
-                this.toggleModal(modal);
-            });
-        })
-    }
-
-    toggleModal(modal) {
-        const isModalOpened = this.baseModal.hasClass('active');
-
-        if (isModalOpened) {
-            closeModal();
-        } else {
-            this.openModal(modal);
+        // if the data-attribute is not specified, the window is controlled from js code
+        if (!toggleButtonSelector) {
+            return;
         }
+
+        const $toggleButton = $(toggleButtonSelector);
+
+        if (!$toggleButton.length) {
+            console.warn(`No element found for selector: ${toggleButtonSelector}`);
+
+            return;
+        }
+
+        $toggleButton.on('click', () => {
+            toggleModal(modal);
+        });
+    })
+}
+
+export function openModal(content) {
+    // Если мы получаем чистый контент (функция вызывается откуда-то из js кода),
+    // его необходимо предварительно обернуть в специальный элемент
+    if (!content.hasClass('.modal')) {
+        content = $('<div class="modal"></div>').append(content);
     }
 
-    openModal(modal) {
-        $('body').css('overflow', 'hidden');
+    $('body').css('overflow', 'hidden');
 
-        this.baseModal.addClass('active');
-        this.wrapper.html(modal);
+    $('#modal-widget').addClass('active');
+    $('.modal__wrapper').html(content);
 
-        const event = new CustomEvent('modalOpened', { detail: { modalElement: $(modal).children().first() }})
-        document.dispatchEvent(event);
-    }
+    const event = new CustomEvent('modalOpened', { detail: { modalElement: $(content).children().first() }})
+    document.dispatchEvent(event);
 }
 
 export function closeModal() {
@@ -67,4 +55,12 @@ export function closeModal() {
     $('.modal__wrapper').html('');
 
     document.dispatchEvent(new CustomEvent('modalClosed'));
+}
+
+export function toggleModal(modal) {
+    if ($('#modal-widget').hasClass('active')) {
+        closeModal();
+    } else {
+        openModal(modal);
+    }
 }

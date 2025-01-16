@@ -30,8 +30,8 @@ $(document).ready(() => {
 
     if ($('#modal-widget').length > 0) {
         import(/* webpackChunkName: "modal-widget" */ './widgets/ModalWidget/index.js')
-            .then(({ default: ModalWidget, closeModal }) => {
-                new ModalWidget();
+            .then(({ init: initModalWidget, openModal, closeModal }) => {
+                initModalWidget();
             })
             .catch((error) => console.error('Ошибка при загрузке виджета модального окна:', error));
     }

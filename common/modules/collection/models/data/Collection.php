@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
  *
@@ -60,6 +61,12 @@ class Collection extends ActiveRecord
                 'class' => TimestampBehavior::class,
                 'createdAtAttribute' => false,
             ],
+            'softDelete' => [
+                'class' => SoftDeleteBehavior::class,
+                'softDeleteAttributeValues' => [
+                    'is_archived' => true,
+                ],
+            ],
             'sluggable' => [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
@@ -76,10 +83,7 @@ class Collection extends ActiveRecord
         return [
             [['title'], 'required'],
             [['title'], 'string', 'max' => 32],
-            [['is_private', 'is_archived'], 'boolean'],
-            [['user_id'], 'integer'],
-            [['user_id'], 'exist', 'targetRelation' => 'user'],
-
+            [['is_private'], 'boolean'],
         ];
     }
 

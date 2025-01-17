@@ -40,11 +40,63 @@ new class CollectionsManager {
     openEditForm() {
         get(urls.collections.editForm(this.collectionId))
             .done((response) => {
-                $(this.modal).find('#collections-content').html(response);
+                this.modal.html(response);
+                this.loadPreview();
 
                 openModal(this.modal);
                 this.addFormListeners();
             });
+    }
+
+    loadPreview() {
+        const previewContainer = this.modal.find('#collections-preview');
+        const coverInput = this.modal.find('#cover-input');
+        const previewActions = this.modal.find('#preview-actions');
+
+        const refreshIcon = $('#refresh-action');
+        const deleteIcon = $('#delete-action');
+
+        previewContainer.on('click', function(e) {
+            if (!previewActions.hasClass('.visible')) {
+                coverInput.click();
+            }
+        });
+
+        coverInput.on('change', function() {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    let img = previewContainer.find('img');
+
+                    if (img.length) {
+                        img.attr('src', e.target.result);
+                    } else {
+                        img = $('<img>', {src: e.target.result, alt: 'Cover'});
+                        previewContainer.append(img);
+                    }
+
+                    // previewContainer.html('<img src="' + e.target.result + '" alt="Cover" />');
+                    previewActions.addClass('visible');
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        refreshIcon.on('click', (event) => {
+            coverInput.click();
+        });
+
+        deleteIcon.on('click', function() {
+            $('#cover-delete-input').val(1);
+
+            previewContainer.find('img').remove();
+            coverInput.val(''); // Clear the file input
+            previewActions.removeClass('visible');
+        });
     }
 
     /**
@@ -52,8 +104,6 @@ new class CollectionsManager {
      * Сюда входит отключение стандартного поведения сабмита, отправка формы ajax'ом и закрытие модального окна.
      */
     addFormListeners() {
-        console.log('listeners!!!');
-
         $('#restore-button').on('click', (event) => {
             patch(urls.collections.restore(this.collectionId))
                 .done((response) => {
@@ -76,9 +126,12 @@ new class CollectionsManager {
 
 
         $('#collection-form').on('beforeSubmit', (event) => {
-            const form = $(event.currentTarget);
+            event.preventDefault();
 
-            put(urls.collections.update(this.collectionId), form.serializeArray())
+            const form = $(event.currentTarget)[0]; // Получаем DOM-элемент формы
+            const formData = new FormData(form);
+
+            post(urls.collections.update(this.collectionId), formData)
                 .done((response) => {
                     this.reloadContent();
                     closeModal();

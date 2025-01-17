@@ -28,15 +28,95 @@
         height: 100%;
     }
 
+    &__container {
+        position: relative;
+    }
+
     &__preview {
-        max-width: 180px;
-        height: fit-content;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 180px;
+        height: 120px;
+        border-radius: 24px;
+        overflow: hidden;
+        background-color: colors.$additional-color;
 
         img {
+            position: relative;
+            z-index: 2;
             object-fit: contain;
             width: 100%;
             height: 100%;
             border-radius: 24px;
+        }
+    }
+
+    &__plus {
+        position: absolute;
+        z-index: 1;
+
+        svg {
+            width: 30px;
+            height: 30px;
+            color: colors.$badge-wheat;
+        }
+    }
+
+    &__actions {
+        position: absolute;
+        z-index: 3;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        opacity: 0;
+        visibility: hidden;
+
+        &.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    &__refresh,
+    &__delete {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        color: colors.$text-chocolate;
+        background-color: colors.$primary-color;
+
+        @include mixins.hover-transition;
+        @include mixins.basic-shadow;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    &__refresh {
+        width: 32px;
+        height: 32px;
+
+        svg {
+            width: 14px;
+            height: 13px;
+        }
+    }
+
+    &__delete {
+        width: 24px;
+        height: 24px;
+
+        svg {
+            width: 10px;
+            height: 11px;
         }
     }
 
@@ -52,6 +132,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        gap: 32px;
         height: 100%;
     }
 
@@ -62,13 +143,13 @@
     }
 
     &__footer {
-        position: absolute;
-        left: 0;
-        bottom: 0;
+        //position: absolute;
+        //left: 0;
+        //bottom: 0;
         display: flex;
         justify-content: space-between;
         width: 100%;
-        padding: 36px 32px;
+        //padding: 36px 32px;
     }
 
     .toggle {

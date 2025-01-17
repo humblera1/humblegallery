@@ -15,6 +15,19 @@ export function get(url, data = {}) {
 }
 
 export function post(url, data = {}) {
+    if (data instanceof FormData) {
+        // Append CSRF token to FormData
+        data.append(yii.getCsrfParam(), yii.getCsrfToken());
+
+        return $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            contentType: false, // Important for FormData
+            processData: false, // Important for FormData
+        });
+    }
+
     data[yii.getCsrfParam()] = yii.getCsrfToken();
 
     return $.post({

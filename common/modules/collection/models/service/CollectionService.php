@@ -30,7 +30,7 @@ class CollectionService extends Service
 
     public function getCover(): string
     {
-        return '';
+        return Yii::$app->params['collectionsUrl'] . $this->model->cover;
     }
 
     public function getPreviewImage(): bool|string

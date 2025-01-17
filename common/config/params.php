@@ -15,6 +15,7 @@ return [
     'collectionsPerPage' => 12,
 
     'collectionsPath' => '@common/uploads/collections/',
+    'collectionsUrl' => '/uploads/collections/',
 
     'bsVersion' => '5.x',
 ];

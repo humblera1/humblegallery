@@ -11,8 +11,8 @@ use yii\widgets\ActiveForm;
  */
 
 $title = $model->isNewRecord ? 'Создание коллекции' : 'Редактирование коллекции';
+$hasCover = $model->cover;
 $toggleName = "{$model->formName()}[is_private]";
-$removeCover = "{$model->formName()}[remove_cover]"
 
 ?>
 
@@ -37,12 +37,12 @@ $removeCover = "{$model->formName()}[remove_cover]"
             <div class="modal-collections__plus">
                 <?= Html::icon('plus') ?>
             </div>
-            <?php if ($model->cover): ?>
-                <img src="<?= $model->cover ?>" alt="Cover">
+            <?php if ($hasCover): ?>
+                <img src="<?= $model->service->getCover(); ?>" alt="Cover">
             <?php endif; ?>
         </div>
 
-        <div id="preview-actions" class="modal-collections__actions">
+        <div id="preview-actions" class="modal-collections__actions <?= $hasCover ? 'visible' : '' ?>">
             <span id="refresh-action" class="modal-collections__refresh">
                 <?= Html::icon('refresh'); ?>
             </span>

@@ -53,8 +53,8 @@ new class CollectionsManager {
         const coverInput = this.modal.find('#cover-input');
         const previewActions = this.modal.find('#preview-actions');
 
-        const refreshIcon = $('#refresh-action');
-        const deleteIcon = $('#delete-action');
+        const refreshIcon = this.modal.find('#refresh-action');
+        const deleteIcon = this.modal.find('#delete-action');
 
         previewContainer.on('click', function(e) {
             if (!previewActions.hasClass('.visible')) {

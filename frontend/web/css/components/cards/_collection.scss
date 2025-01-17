@@ -20,6 +20,16 @@
         height: 135px;
         border-radius: 16px;
         overflow: hidden;
+
+        @include mixins.basic-shadow;
+    }
+
+    &__cover {
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     &__preview {

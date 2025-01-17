@@ -21,7 +21,7 @@ return [
     'POST collections/validate-form' => 'collection/default/validate-form',
 
     'POST collections' => 'collection/default/create',
-    'PUT,PATCH collections/<id:\d+>' => 'collection/default/update',
+    'POST collections/<id:\d+>/update' => 'collection/default/update',
     'PATCH collections/<id:\d+>/restore' => 'collection/default/restore',
     'DELETE collections/<id:\d+>' => 'collection/default/delete',
 

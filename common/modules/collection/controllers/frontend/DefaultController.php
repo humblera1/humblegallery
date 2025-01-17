@@ -80,19 +80,19 @@ class DefaultController extends FrontendController
 
     /**
      * @param int $id
-     * @return string
+     * @return array
      * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
      */
-    public function actionUpdate(int $id): string
+    public function actionUpdate(int $id): array
     {
         $model = $this->getCollectionToEdit($id);
+        $model->loadWithFile($this->request->post());
 
-        if ($model->load($this->request->post()) && $model->save()) {
-            return 'ok';
+        if ($model->validate() && $model->service->saveCollectionWithFile()) {
+            return $this->successResponse('Коллекция успешно обновлена!');
         }
 
-        return 'not ok';
+        return $this->errorResponse('Не удалось обновить коллекцию');
     }
 
     /**

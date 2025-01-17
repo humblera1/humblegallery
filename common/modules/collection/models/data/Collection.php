@@ -2,18 +2,21 @@
 
 namespace common\modules\collection\models\data;
 
+use common\components\behaviors\FileSaveBehavior;
 use common\components\behaviors\SelfHealingUrlBehavior;
 use common\modules\collection\models\query\CollectionQuery;
 use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
 use common\modules\user\models\data\User;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\web\UploadedFile;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
@@ -33,11 +36,17 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property Painting[] $firstPaintingsWithLimit Первые картины, сохраненные в коллекции.
  *
  * @method SelfHealingUrlBehavior getSelfHealingUrl Generate a self-healing URL for the collection
+ * @method FileSaveBehavior saveFile Save the cover file
+ * @method FileSaveBehavior loadWithFile(array $dataToLoad)
  */
 
 class Collection extends ActiveRecord
 {
     public ?CollectionService $service = null;
+
+    public UploadedFile|string|null $file = null;
+
+    public ?bool $remove_cover = false;
 
     public int $contains_painting = 0;
 
@@ -74,6 +83,12 @@ class Collection extends ActiveRecord
             'selfHealingUrl' => [
                 'class' => SelfHealingUrlBehavior::class,
             ],
+            'fileSave' => [
+                'class' => FileSaveBehavior::class,
+                'fileNameAttribute' => 'cover',
+                'directoryPath' => Yii::$app->params['collectionsPath'],
+                'removeOldFile' => 'remove_cover',
+            ],
         ];
     }
 
@@ -83,7 +98,9 @@ class Collection extends ActiveRecord
         return [
             [['title'], 'required'],
             [['title'], 'string', 'max' => 32],
-            [['is_private'], 'boolean'],
+            [['is_private', 'remove_cover'], 'boolean'],
+            [['remove_cover'], 'default', 'value' => false],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif', 'maxSize' => 1024 * 1024 * 2], // 2MB limit
         ];
     }
 

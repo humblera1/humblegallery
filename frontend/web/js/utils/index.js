@@ -1,5 +1,13 @@
 const LOGIN_URL = '/site/login'
 
+export function onResponse(response) {
+    if (response.success) {
+        showSuccessMessage(response.message);
+    } else {
+        showErrorMessage(response.message);
+    }
+}
+
 export function showSuccessMessage(message) {
     console.log('Success: ' + message);
 }

@@ -2,14 +2,16 @@
 
 namespace common\modules\collection\models\service;
 
+use common\components\interfaces\RepositoryInterface;
 use common\components\Service;
 use common\modules\collection\models\data\Collection;
 use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
+use common\modules\collection\models\repository\CollectionRepository;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
 use Exception;
 use Yii;
-use yii\helpers\ArrayHelper;
+use yii\db\ActiveRecord;
 
 /**
  * @property Collection $model
@@ -17,6 +19,15 @@ use yii\helpers\ArrayHelper;
 
 class CollectionService extends Service
 {
+    protected RepositoryInterface $repository;
+
+    public function __construct(ActiveRecord $model)
+    {
+        $this->repository = new CollectionRepository();
+
+        parent::__construct($model);
+    }
+
     public function getCover(): string
     {
         return '';
@@ -36,6 +47,11 @@ class CollectionService extends Service
         }
 
         return false;
+    }
+
+    public function saveCollectionWithFile(): bool
+    {
+        return $this->repository->saveWithFile($this->model);
     }
 
     public function performCreateAndAdd(array $params): bool

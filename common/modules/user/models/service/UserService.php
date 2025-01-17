@@ -132,7 +132,14 @@ class UserService extends Service
        return $this->model->getCollections()->exists();
     }
 
-    public function getCollectionsContainingPainting(int $paintingId): array
+    /**
+     * Возвращает набор всех коллекций пользователя, дополнительно помечая те коллекции,
+     * которые содержат переданную картину.
+     *
+     * @param int $paintingId
+     * @return array
+     */
+    public function getMarkedCollections(int $paintingId): array
     {
         return $this->model->getCollections()
             ->alias('c')

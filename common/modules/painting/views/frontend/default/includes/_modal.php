@@ -9,9 +9,7 @@ use yii\web\View;
 
 ?>
 
-<?php ModalWidget::begin([
-    'toggleButton' => '.painting-card__wrapper_collect',
-]); ?>
+<?php ModalWidget::begin(); ?>
     <div id="modal-collections" class="modal-collections">
         <div class="modal-collections__header">
             <h3 class="modal-collections__title">Добавление в коллекцию</h3>

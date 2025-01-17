@@ -5,7 +5,6 @@ namespace common\modules\collection\models\service;
 use common\components\interfaces\RepositoryInterface;
 use common\components\Service;
 use common\modules\collection\models\data\Collection;
-use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
 use common\modules\collection\models\repository\CollectionRepository;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
@@ -54,40 +53,49 @@ class CollectionService extends Service
         return $this->repository->saveWithFile($this->model);
     }
 
-    public function performCreateAndAdd(array $params): bool
+    /**
+     * @param int $paintingId
+     * @return bool
+     */
+    public function createCollectionWithPainting(int $paintingId): bool
     {
+        $painting = Painting::findOne($paintingId);
+        $this->model->user_id = Yii::$app->user->id;
+
+        if ($painting) {
+            return $this->repository->createWithPainting($this->model, $painting);
+        }
+
+        return false;
+    }
+
+    public function togglePainting(int $paintingId): bool
+    {
+        $model = $this->model;
+        $existingRecord = PaintingCollection::findOne([
+            'painting_id' => $paintingId,
+            'collection_id' => $model->id,
+        ]);
+
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            $form = new AddPaintingToNewCollectionForm();
-            $form->load($params);
+            if ($existingRecord) {
+                if (!$existingRecord->delete()) {
+                    throw new Exception();
+                }
+            } else {
+                $paintingCollection = new PaintingCollection();
 
-            if (!$form->validate()) {
-                return false;
+                $paintingCollection->collection_id = $model->id;
+                $paintingCollection->painting_id = $paintingId;
+
+                if (!$paintingCollection->save()) {
+                    throw new Exception();
+                }
             }
-
-            $collection = new Collection();
-
-            $collection->title = $form->title;
-            $collection->is_private = $form->is_private;
-            $collection->user_id = Yii::$app->user->id;
-
-            if (!$collection->save()) {
-                throw new Exception();
-            }
-
-            $paintingCollection = new PaintingCollection();
-
-            $paintingCollection->collection_id = $collection->id;
-            $paintingCollection->painting_id = $form->painting_id;
-
-            if (!$paintingCollection->save()) {
-                throw new Exception();
-            }
-        } catch (Exception $e) {
+        } catch (\Throwable $t) {
             $transaction->rollBack();
-
-            Yii::error($e->getMessage());
 
             return false;
         }
@@ -96,34 +104,4 @@ class CollectionService extends Service
 
         return true;
     }
-
-//    public function togglePainting(array $params): bool
-//    {
-//        $paintingCollection = new PaintingCollection();
-//        $paintingCollection->load([
-//            'collection_id' => $params['collectionId'],
-//            'painting_id' => $params['paintingId'],
-//        ], '');
-//
-//        if (!$paintingCollection->validate()) {
-//            return false;
-//        }
-//
-//        $existingRecord = PaintingCollection::findOne([
-//            'painting_id' => $paintingCollection->painting_id,
-//            'collection_id' => $paintingCollection->collection_id,
-//        ]);
-//
-//        try {
-//            if ($existingRecord) {
-//                $success = $existingRecord->delete();
-//            } else {
-//                $success = $paintingCollection->save();
-//            }
-//        } catch (\Throwable) {
-//            return false;
-//        }
-//
-//        return $success;
-//    }
 }

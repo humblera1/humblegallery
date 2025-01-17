@@ -1,15 +1,17 @@
 <?php
 
 use common\helpers\Html;
-use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
+use common\modules\collection\models\data\Collection;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /**
  * @var View $this
- * @var AddPaintingToNewCollectionForm $model
+ * @var Collection $model
  * @var int $paintingId
  */
+
+$isPrivate = "{$model->formName()}[is_private]";
 
 ?>
 
@@ -18,7 +20,7 @@ use yii\widgets\ActiveForm;
     'validationStateOn' => ActiveForm::VALIDATION_STATE_ON_INPUT,
     'enableAjaxValidation' => true,
     'validationUrl' => '/collections/validate-form',
-    'action' => '/collections/create-and-add',
+    'action' => '/collections/create-with-painting',
     'options' => [
         'class' => 'modal-collections__form',
     ],
@@ -32,12 +34,12 @@ use yii\widgets\ActiveForm;
     ])->textInput(['maxlength' => true]) ?>
 
     <div class="toggle">
-        <input id="toggle-is-private" class="toggle__input" type="checkbox" name="AddPaintingToNewCollectionForm[is_private]" value="1" <?= $model->is_private ? 'checked' : '' ?>>
+        <input id="toggle-is-private" class="toggle__input" type="checkbox" name="<?= $isPrivate ?>" value="1" <?= $model->is_private ? 'checked' : '' ?>>
         <label for="toggle-is-private" class="toggle__switch"></label>
         <span class="toggle__label">Сделать секретной</span>
     </div>
 
-    <?= $form->field($model, 'painting_id')->hiddenInput(['value' => $paintingId])->label(false) ?>
+    <?= Html::hiddenInput('painting_id', $paintingId, ['value' => $paintingId]) ?>
 </div>
 
 <div class="modal-collections__footer">

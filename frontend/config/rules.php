@@ -4,6 +4,7 @@ return [
     // Картины
     'paintings' => 'painting/default/index',
     'paintings/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'painting/default/view',
+    'PATCH paintings/<id:\d+>/toggle-like' => 'painting/default/toggle-like',
 
     // Художники
     'artists' => 'artist/default/index',
@@ -12,21 +13,18 @@ return [
     // Коллекции
     'GET collections/create-form' => 'collection/default/create-form',
     'GET collections/<id:\d+>/edit-form' => 'collection/default/edit-form',
-//    'GET collections/edit-form/<id:\d+>' => 'collection/default/edit-form',
-
+    'GET collections/with-painting-form/<paintingId:\d+>' => 'collection/default/with-painting-form',
+    'GET collections/available-collections/<paintingId:\d+>' => 'collection/default/available-collections',
 
     // Routes for AJAX form data validation
-    'POST collections/validate-create' => 'collection/default/validate-create',
-//    'POST collections/validate-edit' => 'collection/default/validate-edit',
     'POST collections/validate-form' => 'collection/default/validate-form',
 
     'POST collections' => 'collection/default/create',
+    'POST collections/create-with-painting' => 'collection/default/create-with-painting',
     'POST collections/<id:\d+>/update' => 'collection/default/update',
+    'POST collections/<id:\d+>/toggle-painting/<paintingId:\d+>' => 'collection/default/toggle-painting',
     'PATCH collections/<id:\d+>/restore' => 'collection/default/restore',
     'DELETE collections/<id:\d+>' => 'collection/default/delete',
-
-    // Route for handling simultaneous creation of a new collection and adding a painting
-    'POST collections/create-with-painting' => 'collection/default/create-with-painting',
 
     // Аутентификация
     'auth/<action:(signup|login|logout|request-password-reset|resend-verification-email|captcha)>' => 'auth/<action>',

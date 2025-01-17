@@ -4,14 +4,11 @@ namespace common\modules\collection\controllers\frontend;
 
 use common\components\FrontendController;
 use common\modules\collection\models\data\Collection;
-use common\modules\collection\models\form\AddPaintingToNewCollectionForm;
-use common\modules\collection\models\form\PaintingCollectionForm;
-use common\modules\collection\models\service\CollectionService;
-use common\modules\painting\models\data\PaintingCollection;
 use Exception;
-use Throwable;
 use Yii;
-use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
+use yii\filters\AjaxFilter;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -25,57 +22,99 @@ class DefaultController extends FrontendController
     public function behaviors(): array
     {
         return [
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'only' => ['get-form', 'get-list', 'create-and-add', 'toggle-painting', 'edit-form'],
-//                'rules' => [
-//                    [
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'ajax' => [
-//                'class' => AjaxFilter::class,
-//                'only' => ['get-form', 'get-list', 'create-and-add', 'validate-form', 'toggle-painting'],
-//            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'ajax' => [
+                'class' => AjaxFilter::class,
+                'only' => [
+                    'create-form',
+                    'edit-form',
+                    'with-painting-form',
+                    'available-collections',
+                    'validate-form',
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'create-form' => ['GET'],
+                    'edit-form' => ['GET'],
+                    'with-painting-form' => ['GET'],
+                    'available-collections' => ['GET'],
+                    'validate-form' => ['POST'],
+                    'create' => ['POST'],
+                    'create-with-painting' => ['POST'],
+                    'update' => ['POST'],
+                    'toggle-painting' => ['POST'],
+                    'restore' => ['PATCH'],
+                    'delete' => ['DELETE'],
+                ],
+            ],
         ];
     }
 
     /**
      * Возвращает форму создания коллекции.
      *
-     * @param int $paintingId
-     * @return string
-     */
-    public function actionGetForm(int $paintingId): string
-    {
-        return $this->renderAjax('includes/_collections-form', [
-            'model' => new AddPaintingToNewCollectionForm(),
-            'paintingId' => $paintingId,
-        ]);
-    }
-
-    /**
      * @return string
      */
     public function actionCreateForm(): string
     {
-        return $this->renderAjax('includes/_edit-form', [
+        return $this->renderAjax('includes/_form', [
             'model' => new Collection(),
         ]);
     }
 
     /**
+     * Возвращает форму редактирования коллекции.
+     *
      * @param int $id
      * @return string
      * @throws NotFoundHttpException
      */
     public function actionEditForm(int $id): string
     {
-        return $this->renderAjax('includes/_edit-form', [
+        return $this->renderAjax('includes/_form', [
             'model' => $this->getCollectionToEdit($id),
         ]);
+    }
+
+    /**
+     * Возвращает форму создания коллекции с выбранной картиной.
+     *
+     * @param int $paintingId
+     * @return string
+     */
+    public function actionWithPaintingForm(int $paintingId): string
+    {
+        return $this->renderAjax('includes/_with-painting-form', [
+            'model' => new Collection(),
+            'paintingId' => $paintingId,
+        ]);
+    }
+
+    /**
+     * @param int $paintingId
+     * @return string
+     */
+    public function actionAvailableCollections(int $paintingId): string
+    {
+        $collections = Yii::$app->user->identity->service->getMarkedCollections($paintingId);
+
+        if ($collections) {
+            return $this->renderPartial('includes/_collections-list', [
+                'collections' => $collections,
+            ]);
+        }
+
+        return $this->actionWithPaintingForm($paintingId);
     }
 
     /**
@@ -93,6 +132,9 @@ class DefaultController extends FrontendController
         return ActiveForm::validate($model);
     }
 
+    /**
+     * @return array
+     */
     public function actionCreate(): array
     {
         $model = new Collection();
@@ -124,52 +166,34 @@ class DefaultController extends FrontendController
 
     /**
      * @param int $id
-     * @return string
+     * @return array
      * @throws NotFoundHttpException
-     * @throws StaleObjectException
-     * @throws Throwable
      */
-    public function actionDelete(int $id): string
+    public function actionDelete(int $id): array
     {
         $model = $this->getCollectionToEdit($id);
 
         if ($model->softDelete()) {
-            return 'ok';
+            return $this->successResponse('Коллекция помещена в архив');
         }
 
-        return 'not ok';
+        return $this->errorResponse('Не удалось удалить коллекцию');
     }
 
-    public function actionRestore(int $id): string
+    /**
+     * @param int $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionRestore(int $id): array
     {
         $model = $this->getCollectionToEdit($id);
 
         if ($model->restore()) {
-            return 'ok';
+            return $this->successResponse('Коллекция восстановлена из архива!');
         }
 
-        return 'not ok';
-    }
-
-
-    /**
-     * Возвращает набор коллекций пользователя или форму для создания коллекции, если у пользователя их нет.
-     * Данный контент отображается в модальном окне при попытке добавить картину в коллекцию.
-     *
-     * @param int $paintingId
-     * @return string
-     */
-    public function actionGetList(int $paintingId): string
-    {
-        $collections = Yii::$app->user->identity->service->getCollectionsContainingPainting($paintingId);
-
-        if ($collections) {
-            return $this->renderPartial('includes/_collections-list', [
-                'collections' => $collections,
-            ]);
-        }
-
-        return $this->actionGetForm($paintingId);
+        return $this->errorResponse('Не удалось восстановить коллекцию из архива');
     }
 
     /**
@@ -177,67 +201,31 @@ class DefaultController extends FrontendController
      *
      * @throws Exception
      */
-    public function actionCreateAndAdd(): array
+    public function actionCreateWithPainting(): array
     {
-        $success = Yii::$container->get(CollectionService::class)->performCreateAndAdd($this->request->post());
+        $collection = new Collection();
+        $collection->load($this->request->post());
 
-        if (!$success) {
-            return $this->errorResponse('Не удалось создать коллекцию');
+        if ($collection->validate() && $collection->service->createCollectionWithPainting($this->request->post('painting_id'))) {
+            return $this->successResponse('Картина успешно добавлена в новую коллекцию!');
         }
 
-        return $this->successResponse('Картина успешно добавлена в новую коллекцию!');
+        return $this->errorResponse('Не удалось создать коллекцию');
     }
-
-//    /**
-//     * Обеспечивает AJAX-валидацию формы.
-//     *
-//     * @return array
-//     */
-//    public function actionValidateForm(): array
-//    {
-//        $this->response->format = Response::FORMAT_JSON;
-//
-//        $model = new AddPaintingToNewCollectionForm();
-//        $model->load(Yii::$app->request->post());
-//
-//        return ActiveForm::validate($model);
-//    }
 
     /**
      * Обрабатывает добавление или удаление картины из существующей коллекции.
-     *
-     * @return array
+     * @throws NotFoundHttpException
      */
-    public function actionTogglePainting(): array
+    public function actionTogglePainting(int $id, int $paintingId): array
     {
-        $paintingCollection = new PaintingCollectionForm();
-        $paintingCollection->load([
-            'collection_id' => $this->request->post('collectionId'),
-            'painting_id' => $this->request->post('paintingId'),
-        ], '');
+        $collection = $this->getCollectionToEdit($id);
 
-        if (!$paintingCollection->validate()) {
-            return $this->errorResponse(implode(', ', $paintingCollection->getFirstErrors()));
+        if ($collection->service->togglePainting($paintingId)) {
+            return $this->successResponse('Коллекция успешно обновлена!');
         }
 
-        $existingRecord = PaintingCollection::findOne([
-            'painting_id' => $paintingCollection->painting_id,
-            'collection_id' => $paintingCollection->collection_id,
-        ]);
-
-        try {
-            if ($existingRecord) {
-                $existingRecord->delete();
-                $message = 'Картина успешно удалена из коллекции';
-            } else {
-                $paintingCollection->save();
-                $message = 'Картина успешно добавлена в коллекцию';
-            }
-        } catch (Throwable $exception) {
-            return $this->errorResponse($exception->getMessage());
-        }
-
-        return $this->successResponse($message);
+        return $this->errorResponse('Не удалось обновить коллекцию');
     }
 
     /**

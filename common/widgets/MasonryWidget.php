@@ -9,11 +9,11 @@ class MasonryWidget extends BaseWidget
 {
     public ActiveDataProvider $provider;
 
-    public string $containerClass = 'paintings__masonry';
+    public string $containerClass = 'masonry';
 
-    public string $itemView = '@common/views/_painting-card';
+    public string $itemView = 'includes/_card';
 
-    public string $pjaxId = 'paintings-pjax-container';
+    public string $pjaxId = 'masonry-pjax';
 
     public function run()
     {

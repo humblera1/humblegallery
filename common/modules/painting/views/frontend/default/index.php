@@ -6,10 +6,10 @@ use common\modules\painting\models\search\PaintingSearch;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
 use common\widgets\FilterWidget;
+use common\widgets\MasonryWidget;
 use common\widgets\SearchWidget;
 use yii\data\ActiveDataProvider;
 use yii\web\View;
-use yii\widgets\Pjax;
 
 /**
  * @var $this View
@@ -36,11 +36,7 @@ use yii\widgets\Pjax;
                 'field' => 'title',
             ]) ?>
         </header>
-        <main class="paintings__list">
-            <?php Pjax::begin(['id' => 'paintings-pjax-container', 'enablePushState' => false]) ?>
-                <?= $this->render('includes/_content', ['provider' => $dataProvider]) ?>
-            <?php Pjax::end() ?>
-        </main>
+        <?= MasonryWidget::widget(['provider' => $dataProvider]); ?>
     </div>
 </div>
 

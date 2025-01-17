@@ -17,7 +17,7 @@ return [
 
     // Routes for AJAX form data validation
     'POST collections/validate-create' => 'collection/default/validate-create',
-    'POST collections/validate-edit' => 'collection/default/validate-edit',
+//    'POST collections/validate-edit' => 'collection/default/validate-edit',
     'POST collections/validate-form' => 'collection/default/validate-form',
 
     'POST collections' => 'collection/default/create',

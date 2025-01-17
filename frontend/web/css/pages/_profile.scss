@@ -270,9 +270,35 @@
         justify-content: center;
     }
 
-    &__filters {
+    &__badges {
         position: absolute;
         right: 0;
+        display: flex;
+        gap: 8px;
+    }
+
+    &__new {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+        color: colors.$text-chocolate;
+        background-color: colors.$primary-color;
+
+        @include mixins.hover-transition;
+        @include mixins.basic-shadow;
+
+        &:hover {
+            color: colors.$accent-orange;
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
     }
 
     &__list {

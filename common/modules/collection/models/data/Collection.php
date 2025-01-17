@@ -11,6 +11,7 @@ use common\modules\painting\models\data\PaintingCollection;
 use common\modules\user\models\data\User;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -75,6 +76,11 @@ class Collection extends ActiveRecord
                 'softDeleteAttributeValues' => [
                     'is_archived' => true,
                 ],
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::class,
+                'createdByAttribute' => 'user_id',
+                'updatedByAttribute' => false,
             ],
             'sluggable' => [
                 'class' => SluggableBehavior::class,

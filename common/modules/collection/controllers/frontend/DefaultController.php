@@ -57,6 +57,16 @@ class DefaultController extends FrontendController
     }
 
     /**
+     * @return string
+     */
+    public function actionCreateForm(): string
+    {
+        return $this->renderAjax('includes/_edit-form', [
+            'model' => new Collection(),
+        ]);
+    }
+
+    /**
      * @param int $id
      * @return string
      * @throws NotFoundHttpException
@@ -68,7 +78,12 @@ class DefaultController extends FrontendController
         ]);
     }
 
-    public function actionValidateEdit(): array
+    /**
+     * Обеспечивает AJAX-валидацию формы.
+     *
+     * @return array
+     */
+    public function actionValidateForm(): array
     {
         $this->response->format = Response::FORMAT_JSON;
 
@@ -76,6 +91,18 @@ class DefaultController extends FrontendController
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);
+    }
+
+    public function actionCreate(): array
+    {
+        $model = new Collection();
+        $model->loadWithFile($this->request->post());
+
+        if ($model->validate() && $model->service->saveCollectionWithFile()) {
+            return $this->successResponse('Коллекция успешно создана!');
+        }
+
+        return $this->errorResponse('Не удалось создать коллекцию');
     }
 
     /**
@@ -161,20 +188,20 @@ class DefaultController extends FrontendController
         return $this->successResponse('Картина успешно добавлена в новую коллекцию!');
     }
 
-    /**
-     * Обеспечивает AJAX-валидацию формы.
-     *
-     * @return array
-     */
-    public function actionValidateForm(): array
-    {
-        $this->response->format = Response::FORMAT_JSON;
-
-        $model = new AddPaintingToNewCollectionForm();
-        $model->load(Yii::$app->request->post());
-
-        return ActiveForm::validate($model);
-    }
+//    /**
+//     * Обеспечивает AJAX-валидацию формы.
+//     *
+//     * @return array
+//     */
+//    public function actionValidateForm(): array
+//    {
+//        $this->response->format = Response::FORMAT_JSON;
+//
+//        $model = new AddPaintingToNewCollectionForm();
+//        $model->load(Yii::$app->request->post());
+//
+//        return ActiveForm::validate($model);
+//    }
 
     /**
      * Обрабатывает добавление или удаление картины из существующей коллекции.

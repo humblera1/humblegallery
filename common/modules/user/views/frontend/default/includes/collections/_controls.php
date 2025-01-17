@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\Html;
 use common\modules\user\models\search\UserCollectionSearch;
 use common\widgets\PopupFilterWidget;
 use common\widgets\SearchWidget;
@@ -53,7 +54,10 @@ if ($isOwner) {
             'field' => 'title',
         ]) ?>
     </div>
-    <div class="profile-collections__filters">
+    <div class="profile-collections__badges">
+        <div id="new-collection" class="profile-collections__new" title="Новая коллекция">
+            <?= Html::icon('plus') ?>
+        </div>
         <?= PopupFilterWidget::widget([
             'searchModel' => $model,
             'sections' => $sections,

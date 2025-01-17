@@ -6,6 +6,9 @@ import {closeModal, openModal} from "@widgets/ModalWidget";
 import urls from "@urls";
 
 new class CollectionsManager {
+    static SUBMIT_TYPE_CREATE = 'create';
+    static SUBMIT_TYPE_UPDATE = 'update';
+
     constructor() {
         if ($('.profile-collections').length > 0) {
             this.modal = $('#modal-collections');
@@ -20,6 +23,13 @@ new class CollectionsManager {
     init() {
         this.initFiltersLogic();
         this.initEditLogic();
+        this.initCreationLogic();
+    }
+
+    initCreationLogic() {
+        $('#new-collection').on('click', (event) => {
+            this.openCreationForm();
+        });
     }
 
     initEditLogic() {
@@ -33,6 +43,17 @@ new class CollectionsManager {
         })
     }
 
+    openCreationForm() {
+        get(urls.collections.createForm)
+            .done((response) => {
+                this.modal.html(response);
+                this.loadPreview();
+
+                openModal(this.modal);
+                this.addFormListeners(CollectionsManager.SUBMIT_TYPE_CREATE);
+            });
+    }
+
     /**
      * Запрашивает форму для редактирования коллекции с сервера.
      * Открывает модальное окно, предварительно загрузив туда форму.
@@ -44,7 +65,7 @@ new class CollectionsManager {
                 this.loadPreview();
 
                 openModal(this.modal);
-                this.addFormListeners();
+                this.addFormListeners(CollectionsManager.SUBMIT_TYPE_UPDATE);
             });
     }
 
@@ -103,45 +124,58 @@ new class CollectionsManager {
      * Навешивает обработчики на форму редактирования.
      * Сюда входит отключение стандартного поведения сабмита, отправка формы ajax'ом и закрытие модального окна.
      */
-    addFormListeners() {
-        $('#restore-button').on('click', (event) => {
-            patch(urls.collections.restore(this.collectionId))
-                .done((response) => {
-                    this.reloadContent();
-                    closeModal();
+    addFormListeners(type) {
+        if (type === CollectionsManager.SUBMIT_TYPE_UPDATE) {
+            $('#restore-button').on('click', this.restoreCollection);
+            $('#delete-button').on('click', this.deleteCollection);
+        }
 
-                    this.onResponse(response);
-                });
-        });
+        $('#collection-form').on('beforeSubmit', (event) => this.submitForm(type, event));
+    }
 
-        $('#delete-button').on('click', (event) => {
-            requestDelete(urls.collections.delete(this.collectionId))
-                .done((response) => {
-                    this.reloadContent();
-                    closeModal();
+    submitForm(type, event) {
+        event.preventDefault();
 
-                    this.onResponse(response);
-                });
-        });
+        const url = type === CollectionsManager.SUBMIT_TYPE_CREATE
+            ? urls.collections.create
+            : urls.collections.update(this.collectionId);
+        const message = type === CollectionsManager.SUBMIT_TYPE_CREATE
+            ? 'Не удалось создать коллекцию'
+            : 'Не удалось обновить коллекцию';
 
+        const form = $(event.currentTarget)[0];
+        const formData = new FormData(form);
 
-        $('#collection-form').on('beforeSubmit', (event) => {
-            event.preventDefault();
+        post(url, formData)
+            .done((response) => {
+                this.reloadContent();
+                closeModal();
+            })
+            .fail(() => {
+                showErrorMessage(message);
+            });
 
-            const form = $(event.currentTarget)[0]; // Получаем DOM-элемент формы
-            const formData = new FormData(form);
+        return false;
+    }
 
-            post(urls.collections.update(this.collectionId), formData)
-                .done((response) => {
-                    this.reloadContent();
-                    closeModal();
-                })
-                .fail(() => {
-                    showErrorMessage('Не удалось обновить коллекцию');
-                });
+    deleteCollection() {
+        requestDelete(urls.collections.delete(this.collectionId))
+            .done((response) => {
+                this.reloadContent();
+                closeModal();
 
-            return false;
-        });
+                this.onResponse(response);
+            });
+    }
+
+    restoreCollection() {
+        patch(urls.collections.restore(this.collectionId))
+            .done((response) => {
+                this.reloadContent();
+                closeModal();
+
+                this.onResponse(response);
+            });
     }
 
     /**

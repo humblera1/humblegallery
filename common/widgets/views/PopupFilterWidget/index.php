@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div id="popup-filter-widget">
+<div id="popup-filter-widget" title="Фильтры">
     <div class="filter-widget">
         <div class="filter-widget__badge">
             <?= Html::icon('controls'); ?>

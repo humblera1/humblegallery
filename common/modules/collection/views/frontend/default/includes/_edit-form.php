@@ -10,8 +10,10 @@ use yii\widgets\ActiveForm;
  * @var Collection $model
  */
 
-$title = $model->isNewRecord ? 'Создание коллекции' : 'Редактирование коллекции';
+$isNewRecord = $model->isNewRecord;
 $hasCover = $model->cover;
+
+$title = $isNewRecord ? 'Создание коллекции' : 'Редактирование коллекции';
 $toggleName = "{$model->formName()}[is_private]";
 
 ?>
@@ -20,7 +22,7 @@ $toggleName = "{$model->formName()}[is_private]";
     'id' => 'collection-form',
     'validationStateOn' => ActiveForm::VALIDATION_STATE_ON_INPUT,
     'enableAjaxValidation' => true,
-    'validationUrl' => '/collections/validate-edit',
+    'validationUrl' => '/collections/validate-form',
     'method' => 'post',
     'options' => [
         'class' => 'modal-collections__form',
@@ -75,17 +77,19 @@ $toggleName = "{$model->formName()}[is_private]";
         </div>
     </div>
 </div>
-<div class="modal-collections__footer">
-    <?php if ($model->is_archived): ?>
-        <?= Html::button('Восстановить', [
-            'id' => 'restore-button',
-            'class' => 'btn btn_brown',
-        ]) ?>
-    <?php else: ?>
-        <?= Html::button('Удалить', [
-            'id' => 'delete-button',
-            'class' => 'btn btn_red',
-        ]) ?>
+<div class="modal-collections__footer <?= $isNewRecord ? 'modal-collections__footer_new' : '' ?>">
+    <?php if (!$isNewRecord): ?>
+        <?php if ($model->is_archived): ?>
+            <?= Html::button('Восстановить', [
+                'id' => 'restore-button',
+                'class' => 'btn btn_brown',
+            ]) ?>
+        <?php else: ?>
+            <?= Html::button('Удалить', [
+                'id' => 'delete-button',
+                'class' => 'btn btn_red',
+            ]) ?>
+        <?php endif; ?>
     <?php endif; ?>
     <?= Html::submitButton('Сохранить', ['class' => 'btn btn_orange']) ?>
 </div>

@@ -67,12 +67,13 @@ class FileSaveBehavior extends Behavior
         $model = $this->owner;
         $file = UploadedFile::getInstance($model, $this->fileAttribute);
 
-        if ($file) {
+        $isLoaded = $model->load($dataToLoad);
+
+        if ($isLoaded && $file) {
             $model->{$this->fileAttribute} = $file;
         }
 
-        return $model->load($dataToLoad);
-
+        return $isLoaded;
     }
 
     /**

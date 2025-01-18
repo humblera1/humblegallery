@@ -4,6 +4,7 @@ namespace common\modules\collection\models\data;
 
 use common\components\behaviors\FileSaveBehavior;
 use common\components\behaviors\SelfHealingUrlBehavior;
+use common\modules\artist\models\data\Artist;
 use common\modules\collection\models\query\CollectionQuery;
 use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
@@ -136,6 +137,12 @@ class Collection extends ActiveRecord
     {
         return $this->hasMany(Painting::class, ['id' => 'painting_id'])
             ->viaTable('{{%painting_collection}}', ['collection_id' => 'id']);
+    }
+
+    public function getArtists(): ActiveQuery
+    {
+        return $this->hasMany(Artist::class, ['id' => 'artist_id'])
+            ->via('paintings');
     }
 
     /**

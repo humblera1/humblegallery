@@ -13,7 +13,9 @@ use yii\web\View;
 
 $isActive = false;
 
-$name = "{$searchModel->formName()}[$section->attribute]";
+$baseName = "{$searchModel->formName()}[$section->attribute]";
+
+$name = $section->multiple ? $baseName . '[]' : $baseName;
 $type = $section->multiple ? 'checkbox' : 'radio';
 
 $isActive = function(mixed $value) use ($searchModel, $section): bool {

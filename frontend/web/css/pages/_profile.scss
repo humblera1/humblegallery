@@ -313,6 +313,73 @@
     }
 }
 
+.profile-collection {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    width: 100%;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    &__statistics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    &__statistic {
+        cursor: pointer;
+        display: flex;
+        gap: 16px;
+        width: 150px;
+        height: 80px;
+        padding: 16px 12px;
+        border-radius: 24px;
+        background-color: colors.$primary-color;
+
+        @include mixins.basic-shadow;
+    }
+
+    &__badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        background-color: colors.$badge-wheat;
+
+        svg {
+            color: colors.$accent-brown;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        width: 100%;
+    }
+
+    &__label {
+        @include mixins.main-font(600, 20, colors.$text-chocolate);
+    }
+
+    &__text {
+        @include mixins.main-font(400, 12, colors.$text-warm-gray);
+    }
+}
+
 .profile-favorites {
     display: flex;
     flex-direction: column;

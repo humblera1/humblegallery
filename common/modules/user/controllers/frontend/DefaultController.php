@@ -5,6 +5,7 @@ namespace common\modules\user\controllers\frontend;
 use common\components\filters\SelfHealingUrlFilter;
 use common\components\FrontendController;
 use common\modules\collection\models\data\Collection;
+use common\modules\collection\models\form\CollectionPaintingSearch;
 use common\modules\user\models\data\User;
 use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\SettingsForm;
@@ -69,7 +70,7 @@ class DefaultController extends FrontendController
                 'modelClass' => Collection::class,
                 'queryConstraints' => function ($query) {
                     // Только публичные и не архивированные коллекции, если они запрашиваются не владельцем
-                    if ($this->isOwner) {
+                    if (!$this->isOwner) {
                         $query->andWhere([
                             'is_private' => false,
                             'is_archived' => false,
@@ -118,9 +119,12 @@ class DefaultController extends FrontendController
 
     public function actionCollectionView(): string
     {
+        $model = new CollectionPaintingSearch($this->model);
+
         return $this->render('collection-view', [
             'user' => $this->currentUser,
-            'model' => $this->model,
+            'model' => $model,
+            'provider' => $model->search($this->request->post()),
         ]);
     }
     public function actionFavorites(): string

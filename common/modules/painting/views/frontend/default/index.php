@@ -39,7 +39,3 @@ use yii\web\View;
         <?= MasonryWidget::widget(['provider' => $dataProvider]); ?>
     </div>
 </div>
-
-<?php if (!Yii::$app->user->isGuest): ?>
-    <?= $this->render('includes/_modal') ?>
-<?php endif; ?>

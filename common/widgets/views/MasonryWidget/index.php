@@ -32,3 +32,7 @@ use yii\widgets\Pjax;
     <?php Pjax::end() ?>
 </section>
 
+<?php if (!Yii::$app->user->isGuest): ?>
+    <?= $this->render('includes/_modal') ?>
+<?php endif; ?>
+

@@ -9,6 +9,8 @@ use common\modules\collection\models\query\CollectionQuery;
 use common\modules\collection\models\service\CollectionService;
 use common\modules\painting\models\data\Painting;
 use common\modules\painting\models\data\PaintingCollection;
+use common\modules\subject\models\data\Subject;
+use common\modules\subject\models\data\SubjectPainting;
 use common\modules\user\models\data\User;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -139,10 +141,22 @@ class Collection extends ActiveRecord
             ->viaTable('{{%painting_collection}}', ['collection_id' => 'id']);
     }
 
+    public function getSubjectPaintings(): ActiveQuery
+    {
+        return $this->hasMany(SubjectPainting::class, ['painting_id' => 'id'])
+            ->via('paintings');
+    }
+
     public function getArtists(): ActiveQuery
     {
         return $this->hasMany(Artist::class, ['id' => 'artist_id'])
             ->via('paintings');
+    }
+
+    public function getSubjects(): ActiveQuery
+    {
+        return $this->hasMany(Subject::class, ['id' => 'subject_id'])
+            ->via('subjectPaintings');
     }
 
     /**

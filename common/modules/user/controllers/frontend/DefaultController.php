@@ -121,7 +121,7 @@ class DefaultController extends FrontendController
     {
         $model = new CollectionPaintingSearch($this->model);
 
-        return $this->render('collection-view', [
+        return $this->render('collection', [
             'user' => $this->currentUser,
             'model' => $model,
             'provider' => $model->search($this->request->post()),

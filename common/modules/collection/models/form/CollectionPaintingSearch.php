@@ -17,6 +17,8 @@ class CollectionPaintingSearch extends Collection
 
     public string|array $artistIds = '';
 
+    public string|array $subjectIds = '';
+
     public ?string $paintingsTitle = '';
 
     protected ?Collection $collection = null;
@@ -26,7 +28,7 @@ class CollectionPaintingSearch extends Collection
         $this->collection = $collection;
 
         $this->setAttributes($collection->getAttributes(), false);
-        $this->loadRelations('artists');
+        $this->loadRelations(['artists', 'subjects']);
 
         parent::__construct($config);
     }
@@ -36,7 +38,7 @@ class CollectionPaintingSearch extends Collection
     {
         return [
             [['paintingsTitle'], 'string', 'max' => 255],
-            [['artistIds'], 'each', 'rule' => ['integer']],
+            [['artistIds', 'subjectIds'], 'each', 'rule' => ['integer']],
             [['sort'], 'in', 'range' => [self::SORT_BY_TITLE, self::SORT_BY_LAST_SAVE]],
             [['sort'], 'in', 'range' => [self::SORT_BY_TITLE, self::SORT_BY_LAST_SAVE]],
         ];
@@ -46,6 +48,7 @@ class CollectionPaintingSearch extends Collection
     {
         return [
             'sort' => 'Сортировка',
+            'subjectIds' => 'Жанры',
             'artistIds' => 'Художники',
         ];
     }
@@ -69,16 +72,25 @@ class CollectionPaintingSearch extends Collection
         }
 
         $query->andFilterWhere(['like', 'title', $this->paintingsTitle]);
+        $this->applySubjectFilters($query);
         $this->applyArtistFilters($query);
         $this->applySorting($query);
 
         return $dataProvider;
     }
 
+    public function applySubjectFilters(PaintingQuery $query): void
+    {
+        if ($this->subjectIds) {
+            $query->joinWith('subjects s')
+                ->andFilterWhere(['s.id' => $this->subjectIds]);
+        }
+    }
+
     public function applyArtistFilters(PaintingQuery $query): void
     {
         if ($this->artistIds) {
-            $query->andFilterWhere(['in', 'artist_id', $this->artistIds]);
+            $query->andFilterWhere(['artist_id' => $this->artistIds]);
         }
     }
 

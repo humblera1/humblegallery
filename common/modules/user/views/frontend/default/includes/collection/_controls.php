@@ -21,6 +21,11 @@ $sections = [
         ],
     ],
     [
+        'attribute' => 'subjectIds',
+        'multiple' => true,
+        'items' => ArrayHelper::map($model->subjects, 'id', 'name'),
+    ],
+    [
         'attribute' => 'artistIds',
         'multiple' => true,
         'items' => ArrayHelper::map($model->artists, 'id', 'name'),

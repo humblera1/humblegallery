@@ -30,8 +30,8 @@ $isOwner = true;
                     <?= Html::icon('art'); ?>
                 </div>
                 <div class="profile-collection__info">
-                    <p class="profile-collection__label">167</p>
-                    <p class="profile-collection__text">картин</p>
+                    <p class="profile-collection__label"><?= $provider->getCount() ?></p>
+                    <p class="profile-collection__text">картины</p>
                 </div>
             </div>
             <div class="profile-collection__statistic">
@@ -39,8 +39,8 @@ $isOwner = true;
                     <?= Html::icon('brush'); ?>
                 </div>
                 <div class="profile-collection__info">
-                    <p class="profile-collection__label">3</p>
-                    <p class="profile-collection__text">жанра</p>
+                    <p class="profile-collection__label"><?= count($model->subjects) ?></p>
+                    <p class="profile-collection__text">жанры</p>
                 </div>
             </div>
             <div class="profile-collection__statistic">
@@ -48,8 +48,8 @@ $isOwner = true;
                     <?= Html::icon('user'); ?>
                 </div>
                 <div class="profile-collection__info">
-                    <p class="profile-collection__label">12</p>
-                    <p class="profile-collection__text">авторов</p>
+                    <p class="profile-collection__label"><?= count($model->artists) ?></p>
+                    <p class="profile-collection__text">авторы</p>
                 </div>
             </div>
         </div>

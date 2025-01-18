@@ -28,7 +28,6 @@ class CollectionPaintingSearch extends Collection
         $this->collection = $collection;
 
         $this->setAttributes($collection->getAttributes(), false);
-        $this->loadRelations(['artists', 'subjects']);
 
         parent::__construct($config);
     }

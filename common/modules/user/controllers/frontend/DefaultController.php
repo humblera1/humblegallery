@@ -127,6 +127,7 @@ class DefaultController extends FrontendController
             'provider' => $model->search($this->request->post()),
         ]);
     }
+
     public function actionFavorites(): string
     {
         return $this->render('favorites', [

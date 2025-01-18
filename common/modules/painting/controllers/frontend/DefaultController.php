@@ -35,7 +35,7 @@ class DefaultController extends FrontendController
                 'class' => AjaxFilter::class,
                 'only' => ['toggle-like'],
             ],
-            'selfHealingUtl' => [
+            'selfHealingUrl' => [
                 'class' => SelfHealingUrlFilter::class,
                 'only' => [
                     'view',
@@ -67,13 +67,12 @@ class DefaultController extends FrontendController
      *
      * @throws Exception if the request is not an AJAX request.
      */
-    public function actionToggleLike(): array
+    public function actionToggleLike(int $id): array
     {
-        $paintingId = $this->request->post('paintingId');
-        $painting = Painting::findOne($paintingId);
+        $painting = Painting::findOne($id);
 
         if (!$painting) {
-            throw new NotFoundHttpException("Painting with ID $paintingId not found.");
+            throw new NotFoundHttpException("Painting with ID $id not found.");
         }
 
         $success = $painting->service->toggleLike();

@@ -30,7 +30,7 @@ $isOwner = true;
                     <?= Html::icon('art'); ?>
                 </div>
                 <div class="profile-collection__info">
-                    <p class="profile-collection__label"><?= $provider->getCount() ?></p>
+                    <p class="profile-collection__label"><?= $provider->count ?></p>
                     <p class="profile-collection__text">картины</p>
                 </div>
             </div>

@@ -6,9 +6,12 @@ use common\helpers\Html;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
+use yii\helpers\ArrayHelper;
 
 class ProfileNavWidget extends Widget
 {
+    protected bool $isOwner = false;
+
     public array $items = [
         [
             'label' => 'Профиль',
@@ -25,19 +28,44 @@ class ProfileNavWidget extends Widget
         [
             'label' => 'Настройки',
             'url' => '/user/default/settings',
+            'onlyByOwner' => true,
         ],
         [
             'label' => 'Выход',
             'url' => 'auth/logout',
+            'onlyByOwner' => true,
         ],
     ];
+
+    public function init(): void
+    {
+        $this->inspectCurrentUser();
+
+        parent::init();
+    }
 
     /**
      * @throws InvalidConfigException
      */
     public function run(): string
     {
-        return Html::tag('ul', $this->renderItems(), ['class' => 'profile-nav']);
+        $class = $this->isOwner ? 'profile-nav profile-nav_owner' : 'profile-nav';
+
+        return Html::tag('ul', $this->renderItems(), ['class' => $class]);
+    }
+
+    /**
+     * Since the url always contains the username, which is unique, we find out if the profile is viewed by the owner by simple comparison...
+     *
+     * @return void
+     */
+    protected function inspectCurrentUser(): void
+    {
+        if (!($authUser = Yii::$app->user->identity)) {
+            return;
+        }
+
+        $this->isOwner = $authUser->username === Yii::$app->request->get('username');
     }
 
     /**
@@ -59,6 +87,10 @@ class ProfileNavWidget extends Widget
      */
     protected function renderItem(array $item): string
     {
+        if (ArrayHelper::getValue($item, 'onlyByOwner', false) && !$this->isOwner) {
+            return '';
+        }
+
         $label = $item['label'];
         $url = $item['url'];
 
@@ -105,9 +137,9 @@ class ProfileNavWidget extends Widget
 
     protected function isItemActive(array $item): bool
     {
-        $url = Yii::$app->request->url;
-        $routeUrl = Yii::$app->urlManager->createUrl([$item['url'], 'username' => Yii::$app->request->get('username')]);
+        $currentUrl = Yii::$app->request->url;
+        $itemUrl = Yii::$app->urlManager->createUrl([$item['url'], 'username' => Yii::$app->request->get('username')]);
 
-        return $url === $routeUrl;
+        return $currentUrl === $itemUrl || (str_contains($currentUrl, 'collections') && str_contains($itemUrl, 'collections'));
     }
 }

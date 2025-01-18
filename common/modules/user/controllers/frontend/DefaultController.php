@@ -3,20 +3,22 @@
 namespace common\modules\user\controllers\frontend;
 
 use common\components\filters\SelfHealingUrlFilter;
+use common\components\FrontendController;
 use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
 use common\modules\user\models\forms\EditForm;
+use common\modules\user\models\forms\SettingsForm;
 use common\modules\user\models\search\UserCollectionSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
+use yii\widgets\ActiveForm;
 
-//use common\modules\user\models\search\UserFavoritesSearch;
-
-class DefaultController extends Controller
+class DefaultController extends FrontendController
 {
     public $layout = 'profile';
 
@@ -131,6 +133,38 @@ class DefaultController extends Controller
                 ],
             ]),
         ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function actionSettings(): string|array
+    {
+        $form = new SettingsForm();
+
+        if ($this->request->isPost) {
+            $form->load($this->request->post());
+
+            if ($form->validate() && $form->saveChanges()) {
+                return $this->successResponse('Настройки профиля успешно обновлены!');
+            }
+
+            return $this->errorResponse('Не удалось обновить настройки профиля');
+        }
+
+        return $this->render('settings', [
+            'model' => $form
+        ]);
+    }
+
+    public function actionValidateSettings(): array
+    {
+        $this->response->format = Response::FORMAT_JSON;
+
+        $model = new SettingsForm();
+        $model->load(Yii::$app->request->post());
+
+        return ActiveForm::validate($model);
     }
 
     /**

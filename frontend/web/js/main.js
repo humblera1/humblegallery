@@ -1,5 +1,6 @@
 import '@modules/paintings/index.js';
 import '@modules/collections/index.js';
+import '@modules/profile/settings.js';
 import '@widgets/MasonryWidget/index.js';
 import '@styles/frontend.scss';
 

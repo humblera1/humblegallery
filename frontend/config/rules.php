@@ -36,6 +36,7 @@ return [
     'users/<username:[a-zA-Z0-9]+>/favorites' => 'user/default/favorites',
     'users/<username:[a-zA-Z0-9]+>/collections' => 'user/default/collections',
     'users/<username:[a-zA-Z0-9]+>/collections/<slugHash:[a-zA-Z0-9\-]+-[a-zA-Z0-9]+>' => 'user/default/collection-view',
+    'users/validate-settings' => 'user/default/validate-settings',
     [
         'pattern' => 'users/<username:[a-zA-Z0-9]+>/settings',
         'route' => 'user/default/settings',

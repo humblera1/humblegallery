@@ -323,3 +323,14 @@
         width: 100%;
     }
 }
+
+.profile-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 100%;
+
+    &__content {
+        width: 100%;
+    }
+}

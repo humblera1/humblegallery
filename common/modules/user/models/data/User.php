@@ -2,15 +2,18 @@
 
 namespace common\modules\user\models\data;
 
+use common\components\behaviors\FileSaveBehavior;
 use common\modules\collection\models\data\Collection;
 use common\modules\painting\models\data\Painting;
 use common\modules\user\components\traits\IdentityTrait;
 use common\modules\user\models\query\UserQuery;
 use common\modules\user\models\service\UserService;
+use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "user".
@@ -33,12 +36,21 @@ use yii\web\IdentityInterface;
  *
  * @property-read Collection[] $collections Коллекции пользователя
  * @property-read Painting[] $likedPaintings Понравившиеся картины
+ *
+ * @method FileSaveBehavior saveFile Save the cover file
+ * @method FileSaveBehavior loadWithFile(array $dataToLoad)
  */
+
+// todo: добавить атрибут is_blocked для сценария редактирования из админки
 class User extends ActiveRecord implements IdentityInterface
 {
     use IdentityTrait;
 
     public ?UserService $service = null;
+
+    public bool $remove_avatar = false;
+
+    public UploadedFile|string|null $file = null;
 
     public function init(): void
     {
@@ -52,21 +64,68 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /** {@inheritdoc} */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'timestamp' => [
                 'class' => TimestampBehavior::class,
-            ]
+            ],
+            'fileSave' => [
+                'class' => FileSaveBehavior::class,
+                'fileNameAttribute' => 'avatar',
+                'fileName' => '{username}-{timestamp}.{extension}',
+                'directoryPath' => Yii::$app->params['avatarsPath'],
+                'removeOldFile' => 'remove_avatar',
+            ],
         ];
     }
 
     public function rules(): array
     {
         return [
-            [['username', 'password_hash'], 'required'],
-            [['is_verified', 'is_blocked', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'email', 'password_hash', 'name', 'surname'], 'string', 'max' => 255],
+            [
+                [
+                    'name',
+                    'surname',
+                    'username',
+                    'email',
+                ],
+                'trim',
+            ],
+            [
+                [
+                    'username',
+                    'email',
+                ],
+                'required'
+            ],
+            [
+                'username',
+                'unique',
+                'targetClass' => User::class,
+                'filter' => function ($query) {
+                    $query->andWhere(['not', ['id' => $this->id]]);
+                },
+            ],
+            [
+                'username',
+                'string',
+                'min' => 2,
+                'max' => 255
+            ],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            [
+                'email',
+                'unique',
+                'targetClass' => User::class,
+                'filter' => function ($query) {
+                    $query->andWhere(['not', ['id' => $this->id]]);
+                },
+            ],
+            [['remove_avatar'], 'boolean'],
+            [['remove_avatar'], 'default', 'value' => false],
+            [['file'], 'file', 'maxSize' => 2 * 1024 * 1024, 'extensions' => 'png, jpg'],
         ];
     }
 

@@ -1,5 +1,3 @@
-import {onResponse, post, showErrorMessage} from "@utils";
-
 new class ProfileCollectionManager {
     constructor() {
         if ($('.profile-collection').length > 0) {

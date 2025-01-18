@@ -2,11 +2,14 @@
 
 namespace common\modules\user\models\service;
 
+use common\components\interfaces\RepositoryInterface;
 use common\components\Service;
 use common\modules\collection\models\data\Collection;
 use common\modules\user\models\data\User;
+use common\modules\user\models\repository\UserRepository;
 use Yii;
 use yii\base\Exception;
+use yii\db\ActiveRecord;
 
 /**
  * @property User $model
@@ -14,6 +17,15 @@ use yii\base\Exception;
 
 class UserService extends Service
 {
+    protected RepositoryInterface $repository;
+
+    public function __construct(ActiveRecord $model)
+    {
+        $this->repository = new UserRepository();
+
+        parent::__construct($model);
+    }
+
     public function getName(): string
     {
         $model = $this->model;
@@ -31,7 +43,7 @@ class UserService extends Service
 
     public function getAvatar(): string
     {
-        return '/uploads/avatars/' . $this->model->avatar;
+        return Yii::$app->params['avatarsUrl'] . $this->model->avatar;
     }
 
     /**
@@ -159,5 +171,10 @@ class UserService extends Service
         return $this->model
             ->getLikedPaintings()
             ->all();
+    }
+
+    public function saveUserWithFile(): bool
+    {
+        return $this->repository->saveWithFile($this->model);
     }
 }

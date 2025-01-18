@@ -7,7 +7,6 @@ use common\components\FrontendController;
 use common\modules\collection\models\data\Collection;
 use common\modules\collection\models\form\CollectionPaintingSearch;
 use common\modules\user\models\data\User;
-use common\modules\user\models\forms\EditForm;
 use common\modules\user\models\forms\SettingsForm;
 use common\modules\user\models\search\UserCollectionSearch;
 use Yii;
@@ -82,27 +81,22 @@ class DefaultController extends FrontendController
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    public function actionView(): string
+    public function actionView(): string|array
     {
-        $form = new EditForm($this->currentUser);
+        if ($this->isOwner && $this->request->isPost) {
+            $this->currentUser->loadWithFile($this->request->post());
 
-        $isOwner = Yii::$app->user->identity?->id === $this->currentUser->id;
-
-        if ($isOwner) {
-            if ($form->load($this->request->post())) {
-                $form->file = UploadedFile::getInstance($form, 'file');
-
-                if ($form->validate() && $form->saveChanges()) {
-                    Yii::$app->session->setFlash('success', 'Данные профиля успешно обновлены!');
-                }
+            if ($this->currentUser->validate() && $this->currentUser->service->saveUserWithFile()) {
+                return $this->successResponse('Данные профиля успешно обновлены!');
             }
+
+            return $this->errorResponse('Не удалось обновить данные профиля');
         }
 
         return $this->render('view', [
             'user' => $this->currentUser,
-            'model' => $form,
         ]);
     }
 

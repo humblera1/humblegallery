@@ -2,6 +2,7 @@ import '@modules/paintings/index.js';
 import '@modules/collections/index.js';
 import '@modules/profile/settings.js';
 import '@modules/profile/collection.js';
+import '@modules/profile/view.js';
 import '@widgets/MasonryWidget/index.js';
 import '@styles/frontend.scss';
 

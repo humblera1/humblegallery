@@ -14,6 +14,8 @@ return [
     'paintingsPerPage' => 15,
     'collectionsPerPage' => 12,
 
+    'avatarsPath' => '@common/uploads/avatars/',
+    'avatarsUrl' => '/uploads/avatars/',
     'collectionsPath' => '@common/uploads/collections/',
     'collectionsUrl' => '/uploads/collections/',
 

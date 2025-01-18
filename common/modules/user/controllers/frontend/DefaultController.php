@@ -103,18 +103,6 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionFavorites(): string
-    {
-        return $this->render('favorites', [
-            'provider' => new ActiveDataProvider([
-                'query' => $this->currentUser->getFavoritePaintings(),
-                'pagination' => [
-                    'pageSize' => Yii::$app->params['paintingsPerPage'],
-                ],
-            ]),
-        ]);
-    }
-
     public function actionCollections(): string
     {
         $model = new UserCollectionSearch($this->currentUser);
@@ -131,6 +119,17 @@ class DefaultController extends Controller
         return $this->render('collection-view', [
             'user' => $this->currentUser,
             'model' => $this->model,
+        ]);
+    }
+    public function actionFavorites(): string
+    {
+        return $this->render('favorites', [
+            'provider' => new ActiveDataProvider([
+                'query' => $this->currentUser->getFavoritePaintings(),
+                'pagination' => [
+                    'pageSize' => Yii::$app->params['paintingsPerPage'],
+                ],
+            ]),
         ]);
     }
 

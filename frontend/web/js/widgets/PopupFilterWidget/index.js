@@ -2,18 +2,23 @@ import * as styles from './styles.scss';
 
 export default class PopupFilterWidget {
     constructor() {
-        this.trigger = $('.filter-widget__badge');
         this.popup = $('.filter-widget__popup');
-        this.form = $('#filter-widget-form');
-        this.inputs = $('.filter-widget__input');
 
-        this.init();
+        if (this.popup.length > 0) {
+            this.trigger = $('.filter-widget__badge');
+            this.form = $('#filter-widget-form');
+            this.inputs = $('.filter-widget__input');
+            this.actions = $('.filter-widget__expand');
+
+            this.init();
+        }
     }
 
     init() {
         this.initPopup();
         this.initInputs();
         this.initSubmit();
+        this.initActions();
     }
 
     initPopup() {
@@ -36,6 +41,22 @@ export default class PopupFilterWidget {
 
     initSubmit() {
         this.form.off('submit').on('submit', (event) => this.handleFilterApplying(event));
+    }
+
+    initActions() {
+        this.actions.on('click', (event) => {
+            const $item = $(event.currentTarget);
+            const $list = $item.closest('.filter-widget__section').find('.filter-widget__list');
+
+            $list.toggleClass('opened');
+
+            if ($list.hasClass('opened')) {
+                $item.text('скрыть');
+            } else {
+                $list.scrollTop(0);
+                $item.text('ещё...');
+            }
+        })
     }
 
     /**

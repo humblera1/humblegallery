@@ -18,6 +18,8 @@ $baseName = "{$searchModel->formName()}[$section->attribute]";
 $name = $section->multiple ? $baseName . '[]' : $baseName;
 $type = $section->multiple ? 'checkbox' : 'radio';
 
+$expandable = count($section->items) > 3;
+
 $isActive = function(mixed $value) use ($searchModel, $section): bool {
     if (isset($section->selected)) {
         return $section->selected === $value;
@@ -42,4 +44,9 @@ $isActive = function(mixed $value) use ($searchModel, $section): bool {
             </label>
         <?php endforeach; ?>
     </div>
+    <?php if($expandable): ?>
+        <section class="filter-widget__action">
+            <span class="filter-widget__expand">ещё...</span>
+        </section>
+    <?php endif; ?>
 </fieldset>

@@ -77,6 +77,13 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            max-height: 65px;
+            overflow: hidden;
+
+            &.opened {
+                max-height: 120px;
+                overflow: scroll;
+            }
         }
 
         &__item {
@@ -94,6 +101,20 @@
                     opacity: 1;
                     visibility: visible;
                 }
+            }
+        }
+
+        &__action {
+            cursor: pointer;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+
+            @include mixins.hover-transition;
+            @include mixins.main-font(400, 12, colors.$text-accent-brown);
+
+            &:hover {
+                color: colors.$accent-orange;
             }
         }
 

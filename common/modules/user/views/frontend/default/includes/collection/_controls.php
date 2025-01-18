@@ -9,7 +9,6 @@ use yii\web\View;
 /**
  * @var View $this
  * @var UserCollectionSearch $model
- * @var bool $isOwner
  */
 
 $sections = [

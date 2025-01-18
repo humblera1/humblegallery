@@ -17,9 +17,6 @@ use yii\widgets\Pjax;
 
 $isOwner = Yii::$app->user->identity?->id === $user->id;
 
-// todo: вернуть после тестов
-$isOwner = true;
-
 ?>
 
 <div class="profile-collections">

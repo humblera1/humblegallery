@@ -55,9 +55,12 @@ if ($isOwner) {
         ]) ?>
     </div>
     <div class="profile-collections__badges">
-        <div id="new-collection" class="profile-collections__new" title="Новая коллекция">
-            <?= Html::icon('plus') ?>
-        </div>
+        <?php if ($isOwner): ?>
+            <div id="new-collection" class="profile-collections__new" title="Новая коллекция">
+                <?= Html::icon('plus') ?>
+            </div>
+        <?php endif; ?>
+
         <?= PopupFilterWidget::widget([
             'searchModel' => $model,
             'sections' => $sections,

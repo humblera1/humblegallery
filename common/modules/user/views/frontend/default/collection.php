@@ -14,11 +14,6 @@ use yii\web\View;
  * @var $user User
  */
 
-$isOwner = Yii::$app->user->identity?->id === $user->id;
-
-// todo: вернуть после тестов
-$isOwner = true;
-
 ?>
 
 <div class="profile-collection">
@@ -56,7 +51,7 @@ $isOwner = true;
     </header>
     <div class="profile-collection__body">
 
-        <?= $this->render('includes/collection/_controls', compact('isOwner', 'model')); ?>
+        <?= $this->render('includes/collection/_controls', compact('model')); ?>
 
         <main class="profile-collection__content">
             <?= MasonryWidget::widget(['provider' => $provider]) ?>

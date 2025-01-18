@@ -12,10 +12,11 @@ use common\modules\user\models\search\UserCollectionSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
+use yii\filters\AccessControl;
+use yii\filters\AjaxFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
 class DefaultController extends FrontendController
@@ -58,9 +59,32 @@ class DefaultController extends FrontendController
         return parent::beforeAction($action);
     }
 
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [
+                    'settings',
+                    'validate-setting',
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            // Allow access only if the current user is the owner of the profile
+                            return $this->isOwner;
+                        },
+                    ],
+                ],
+            ],
+            'ajax' => [
+                'class' => AjaxFilter::class,
+                'only' => [
+                    'validate-setting',
+                ],
+            ],
             'selfHealingUrl' => [
                 'class' => SelfHealingUrlFilter::class,
                 'only' => [
@@ -165,91 +189,4 @@ class DefaultController extends FrontendController
 
         return ActiveForm::validate($model);
     }
-
-    /**
-     * @throws NotFoundHttpException
-     */
-    protected function findUser(string $username): User
-    {
-        $user = User::findOne(['username' => $username]);
-
-//        if (!$user) {
-//            throw new NotFoundHttpException();
-//        }
-
-        return $user;
-    }
-
-
-//    /**
-//     * @throws NotFoundHttpException
-//     */
-//    public function actionProfile($section): string
-//    {
-//        if (!in_array($section, ProfileSectionsEnum::getLabels())) {
-//            throw new NotFoundHttpException();
-//        }
-//
-//        if ($this->request->isAjax) {
-//            return match ($section)  {
-//                'info' => $this->getInfo(),
-//                'collections' => $this->getCollections(),
-//                'courses' => $this->getCourses(),
-//                'favorites' => $this->getFavorites(),
-//                'settings' => $this->getSettings(),
-//                default => throw new NotFoundHttpException('Not found section ' . $section),
-//
-//            };
-//        }
-//
-//        return $this->render('sections/info');
-//    }
-//
-//    protected function getInfo(): string
-//    {
-//        return $this->renderPartial('sections/info');
-//    }
-//
-//    public function getCollections(): string
-//    {
-//        $model = new Collection();
-//
-//        if ($model->load($this->request->post())) {
-//            $model->user_id = Yii::$app->user->id;
-//
-//            $model->save();
-//        }
-//
-//        $searchModel = new UserCollectionSearch();
-//
-//        $dataProvider = $searchModel->search($this->request->post());
-//
-//        return $this->renderAjax('sections/collections', [
-//            'model' => $model,
-//            'searchModel' => $searchModel,
-//            'provider' => $dataProvider,
-//        ]);
-//    }
-//
-//    protected function getCourses()
-//    {
-//        return $this->renderPartial('sections/courses');
-//    }
-//
-//
-//    protected function getFavorites(): string
-//    {
-//        $searchModel = new FavoritePaintingSearch();
-//        $dataProvider = $searchModel->search($this->request->post());
-//
-//        return $this->renderAjax('sections/favorites', [
-//            'model' => $searchModel,
-//            'provider' => $dataProvider,
-//        ]);
-//    }
-//
-//    protected function getSettings()
-//    {
-//        return $this->renderPartial('sections/settings');
-//    }
 }

@@ -63,6 +63,11 @@ class PaintingService extends Service
         return rtrim($list, ', ');
     }
 
+    public function getSubjectNames($limit = 3): string
+    {
+        return join(', ', $this->model->getSubjects()->select('name')->limit($limit)->column());
+    }
+
     /**
      * Returns the start (if it exists) and end date of the painting as a string
      */

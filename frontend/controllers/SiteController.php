@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\modules\artist\models\data\Artist;
+use common\modules\painting\models\data\Painting;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\ErrorAction;
@@ -32,6 +33,7 @@ class SiteController extends Controller
         return $this->render('index', [
             'statistics' => $this->getStatistics(),
             'artistsDataProvider' => $this->getArtistsDataProvider(),
+            'paintingsDataProvider' => $this->getPaintingsDataProvider(),
         ]);
     }
 
@@ -75,6 +77,14 @@ class SiteController extends Controller
     {
         return new ActiveDataProvider([
             'query' => Artist::find()->with('paintings.movements')->limit($limit),
+            'pagination' => false,
+        ]);
+    }
+
+    private function getPaintingsDataProvider(int $limit = 15): ActiveDataProvider
+    {
+        return new ActiveDataProvider([
+            'query' => Painting::find()->limit($limit),
             'pagination' => false,
         ]);
     }

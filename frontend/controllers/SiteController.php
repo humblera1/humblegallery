@@ -27,7 +27,9 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'statistics' => $this->getStatistics(),
+        ]);
     }
 
     /**
@@ -38,5 +40,31 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    private function getStatistics(): array
+    {
+        return [
+            [
+                'title' => '167',
+                'subtitle' => 'картин',
+                'icon' => 'art',
+            ],
+            [
+                'title' => '167',
+                'subtitle' => 'картин',
+                'icon' => 'art',
+            ],
+            [
+                'title' => '167',
+                'subtitle' => 'картин',
+                'icon' => 'art',
+            ],
+            [
+                'title' => '167',
+                'subtitle' => 'картин',
+                'icon' => 'art',
+            ],
+        ];
     }
 }

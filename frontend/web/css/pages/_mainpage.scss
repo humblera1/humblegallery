@@ -179,4 +179,60 @@
             @include mixins.main-font(400, 14, colors.$text-warm-gray);
         }
     }
+
+    &-statistics {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+
+        &__container {
+            position: relative;
+            height: 210px;
+        }
+
+        &__content {
+            position: absolute;
+            transform: translateX(-50%);
+            left: 50%;
+            right: 50%;
+            display: flex;
+            justify-content: center;
+            width: 100vw;
+            height: 100%;
+            background-color: colors.$additional-color;
+        }
+
+        &__items {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            max-width: 2048px;
+        }
+
+        &__item {
+            display: flex;
+            align-items: center;
+            gap: 21px;
+        }
+
+        &__icon {
+            width: 32px;
+
+            svg {
+                object-fit: contain;
+                width: 100%;
+                height: auto;
+                color: colors.$text-chocolate;
+            }
+        }
+
+        &__title {
+            @include mixins.main-font(600, 32, colors.$text-chocolate);
+        }
+
+        &__subtitle {
+            @include mixins.main-font(400, 20, colors.$text-warm-gray);
+        }
+    }
 }

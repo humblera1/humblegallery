@@ -4,6 +4,7 @@ use yii\web\View;
 
 /**
  * @var View $this
+ * @var array $statistics
  */
 
 $this->title = Yii::$app->name;
@@ -15,7 +16,7 @@ $this->title = Yii::$app->name;
 
     <?= $this->render('includes/_benefits'); ?>
 
-    <?= $this->render('includes/_statistics'); ?>
+    <?= $this->render('includes/_statistics', ['statistics' => $statistics]); ?>
 
     <?= $this->render('includes/_artists'); ?>
 

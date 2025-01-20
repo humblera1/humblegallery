@@ -1,10 +1,12 @@
 <?php
 
+use yii\data\ActiveDataProvider;
 use yii\web\View;
 
 /**
  * @var View $this
  * @var array $statistics
+ * @var ActiveDataProvider $artistsDataProvider
  */
 
 $this->title = Yii::$app->name;
@@ -18,7 +20,7 @@ $this->title = Yii::$app->name;
 
     <?= $this->render('includes/_statistics', ['statistics' => $statistics]); ?>
 
-    <?= $this->render('includes/_artists'); ?>
+    <?= $this->render('includes/_artists', ['provider' => $artistsDataProvider]); ?>
 
     <?= $this->render('includes/_gallery'); ?>
 

@@ -235,4 +235,52 @@
             @include mixins.main-font(400, 20, colors.$text-warm-gray);
         }
     }
+
+    &-artists {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 72px;
+
+        &__list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 900px;
+
+            .artist-card {
+                padding: 42px 120px 42px 60px;
+
+                &__container {
+                    width: 300px;
+                    min-width: 300px;
+                }
+
+                &__circle {
+                    top: -10px;
+                    right: 0;
+                    min-width: 200px;
+                    min-height: 200px;
+                }
+
+                &__image {
+                    position: relative;
+
+                    img {
+                        position: absolute;
+                        bottom: -25px;
+                        width: 300px;
+                        height: 300px;
+                    }
+                }
+            }
+
+            div:nth-child(2n) {
+                .artist-card {
+                    flex-direction: row-reverse;
+                    padding: 42px 60px 42px 120px;
+                }
+            }
+        }
+    }
 }

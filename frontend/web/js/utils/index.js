@@ -1,19 +1,23 @@
-const LOGIN_URL = '/site/login'
+import Toast from '@widgets/ToastWidget/index';
+
+const LOGIN_URL = '/site/login';
 
 export function onResponse(response) {
-    if (response.success) {
-        showSuccessMessage(response.message);
-    } else {
-        showErrorMessage(response.message);
+    if (response.message) {
+        response.success ? showSuccessMessage(response.message) : showErrorMessage(response.message);
     }
 }
 
+export function onErrorResponse() {
+    Toast.showErrorToast('Не удалось выполнить запрос');
+}
+
 export function showSuccessMessage(message) {
-    console.log('Success: ' + message);
+    Toast.showSuccessfulToast(message);
 }
 
 export function showErrorMessage(message) {
-    console.log('Error: ' + message);
+    Toast.showErrorToast(message);
 }
 
 export function get(url, data = {}) {

@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var $searchModel ActiveRecord
  * @var $field string
+ * @var $placeholder string
  */
 
 $inputName = "{$searchModel->formName()}[$field]";
@@ -26,7 +27,7 @@ $inputName = "{$searchModel->formName()}[$field]";
             <button type="submit" class="search__badge">
                 <?= Html::icon('loup'); ?>
             </button>
-            <input name="<?= $inputName ?>" type="text" class="search__input" placeholder="Поиск..." />
+            <input name="<?= $inputName ?>" type="text" class="search__input" placeholder="<?= $placeholder ?>" />
         </div>
     <?php ActiveForm::end(); ?>
 </div>

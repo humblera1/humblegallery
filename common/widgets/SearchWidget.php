@@ -14,6 +14,8 @@ class SearchWidget extends Widget
 
     public string $field;
 
+    public string $placeholder = 'Поиск...';
+
     public function init()
     {
         parent::init();
@@ -24,6 +26,7 @@ class SearchWidget extends Widget
         return $this->render('index', [
             'searchModel' => $this->searchModel,
             'field' => $this->field,
+            'placeholder' => $this->placeholder,
         ]);
     }
 }

@@ -12,6 +12,16 @@ new class PaintingsManager {
 
     init() {
         this.initFiltersLogic();
+
+        // Осуществлен переход с главной страницы
+        const searchData = JSON.parse(localStorage.getItem('searchData'));
+        localStorage.setItem('searchData', null);
+
+        if (searchData !== null) {
+            $(document).on('DOMContentLoaded', () => {
+                $(document).trigger('search:applied', [searchData]);
+            });
+        }
     }
 
     /**

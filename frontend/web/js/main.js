@@ -1,3 +1,4 @@
+import '@modules/main-page/index.js';
 import '@modules/paintings/index.js';
 import '@modules/collections/index.js';
 import '@modules/profile/settings.js';

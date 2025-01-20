@@ -1,0 +1,95 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+.main {
+    &-preview {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+
+        &__info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        &__title {
+            text-align: center;
+            text-transform: uppercase;
+
+            @include mixins.main-font(600, 48, colors.$text-chocolate);
+
+            span:last-child {
+                color: colors.$text-accent-orange;
+            }
+        }
+
+        &__subtitle {
+            text-align: center;
+            max-width: 720px;
+
+            @include mixins.main-font(500, 20, colors.$text-warm-gray);
+        }
+
+        &__image {
+            position: relative;
+            border-radius: 48px;
+            overflow: hidden;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+            }
+        }
+
+        &__section {
+            position: absolute;
+            right: 100px;
+            bottom: 100px;
+            display: flex;
+            gap: 12px;
+            padding: 32px 36px;
+            border-radius: 24px;
+            background-color: rgba(#FFFAF5, 0.75);
+
+        }
+
+        &__block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 320px;
+            height: 100px;
+            border-radius: 20px;
+            padding: 16px 24px;
+            background-color: colors.$primary-color;
+
+            &_gallery {
+                cursor: pointer;
+                justify-content: center;
+                align-items: center;
+                width: 120px;
+                color: colors.$text-accent-white;
+                background-color: colors.$accent-brown;
+
+                svg {
+                    width: 32px;
+                    height: 28px;
+                }
+            }
+
+            &:active {
+                color: colors.$text-accent-white;
+            }
+        }
+
+        &__label {
+            @include mixins.main-font(500, 16, colors.$text-accent-brown);
+
+            &_gallery {
+                color: colors.$text-accent-white;
+            }
+        }
+    }
+}

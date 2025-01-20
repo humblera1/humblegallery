@@ -6,19 +6,20 @@ use yii\web\View;
  * @var View $this
  */
 
-$cache = Yii::$app->cache;
-
-$this->registerJsVar('needToShowLoginModal', $cache->get('needToShowLoginModal'));
-$cache->delete('needToShowLoginModal');
-
-$this->title = 'My Yii Application';
-
-$js = <<<JS
-    if (needToShowLoginModal) {
-        showLoginModal();
-    }
-JS;
-
-$this->registerJs($js);
+$this->title = Yii::$app->name;
 
 ?>
+
+<div class="main">
+    <?= $this->render('includes/_preview'); ?>
+
+    <?= $this->render('includes/_benefits'); ?>
+
+    <?= $this->render('includes/_statistics'); ?>
+
+    <?= $this->render('includes/_artists'); ?>
+
+    <?= $this->render('includes/_gallery'); ?>
+
+    <?= $this->render('includes/_cta'); ?>
+</div>

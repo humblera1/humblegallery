@@ -35,7 +35,9 @@ $profileUrl = Yii::$app->urlManager->createUrl(['/user/default/view', 'username'
     <div class="page__content">
         <header class="header">
             <nav class="navigation">
-                <div class="navigation__item navigation__item_logo">лого!!!</div>
+                <a class="navigation__item navigation__item_logo" href="<?= Yii::$app->getHomeUrl() ?>">
+                    лого!!!
+                </a>
                 <a class="navigation__item" href="/about">О нас</a>
                 <a class="navigation__item" href="/artists">Художники</a>
                 <a class="navigation__item" href="/paintings">Картины</a>

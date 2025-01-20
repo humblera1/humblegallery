@@ -289,4 +289,31 @@
         flex-direction: column;
         gap: 48px;
     }
+
+    &-cta {
+        display: flex;
+        justify-content: center;
+
+        &__banner {
+            display: flex;
+            gap: 72px;
+            width: 860px;
+            height: 250px;
+            padding: 42px 60px;
+            border-radius: 48px;
+            background-color: colors.$additional-color;
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 48px;
+        }
+
+        &__buttons {
+            display: flex;
+            gap: 8px;
+        }
+    }
 }

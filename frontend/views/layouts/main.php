@@ -5,15 +5,18 @@
  * @var string $content
  */
 
+use common\helpers\Html;
 use common\widgets\FlashWidget;
 use common\widgets\ToastWidget;
 use frontend\assets\FrontendAsset;
-use yii\bootstrap5\Html;
+
 use yii\web\View;
 
 FrontendAsset::register($this);
 
 $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
+
+$profileUrl = Yii::$app->urlManager->createUrl(['/user/default/view', 'username' => Yii::$app->user->identity->username]);
 
 ?>
 <?php $this->beginPage() ?>
@@ -48,16 +51,20 @@ $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
                         </a>
                     </div>
                 <?php else: ?>
-                    <?= Html::a(
-                        'Профиль',
-                        [
-                            '/user/default/view',
-                            'username' => Yii::$app->user->identity->username
-                        ],
-                        [
-                            'class' => 'nav-item'
-                        ]
-                    ); ?>
+                    <a class="navigation__item navigation__item_avatar" href="<?= $profileUrl ?>">
+                        <span class="navigation__avatar">
+                            <?php if (Yii::$app->user->identity->avatar): ?>
+                                <img src="<?= Yii::$app->user->identity->service->getAvatar() ?>" alt="avatar">
+                            <?php else: ?>
+                                <span class="navigation__preview">
+                                    <?= Html::icon('avatar-placeholder'); ?>
+                                </span>
+                            <?php endif; ?>
+                        </span>
+                        <span class="navigation__username">
+                            <?= Yii::$app->user->identity->username ?>
+                        </span>
+                    </a>
                 <?php endif; ?>
             </div>
         </header>

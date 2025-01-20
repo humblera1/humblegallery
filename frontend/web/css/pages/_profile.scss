@@ -40,12 +40,15 @@
         background-color: colors.$badge-wheat;
 
         img {
-            object-fit: contain;
+            z-index: 2;
+            object-fit: cover;
             width: 100%;
             height: 100%;
         }
 
         svg {
+            z-index: 1;
+            position: absolute;
             color: colors.$accent-brown;
         }
     }

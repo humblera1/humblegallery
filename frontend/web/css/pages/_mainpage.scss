@@ -82,6 +82,12 @@
                 color: colors.$text-accent-white;
                 background-color: colors.$accent-brown;
 
+                @include mixins.hover-transition;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+
                 svg {
                     width: 32px;
                     height: 28px;
@@ -136,7 +142,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 28px;
             padding: 24px 24px 42px;
             border-radius: 32px;
             overflow: hidden;
@@ -162,7 +168,7 @@
         &__info {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
         &__collection {
@@ -172,11 +178,11 @@
         }
 
         &__subtitle {
-            @include mixins.main-font(500, 16, colors.$text-chocolate);
+            @include mixins.main-font(500, 20, colors.$text-chocolate);
         }
 
         &__text {
-            @include mixins.main-font(400, 14, colors.$text-warm-gray);
+            @include mixins.main-font(400, 16, colors.$text-warm-gray);
         }
     }
 

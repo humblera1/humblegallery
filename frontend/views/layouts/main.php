@@ -5,7 +5,8 @@
  * @var string $content
  */
 
-use common\widgets\Alert;
+use common\widgets\FlashWidget;
+use common\widgets\ToastWidget;
 use frontend\assets\FrontendAsset;
 use yii\bootstrap5\Html;
 use yii\web\View;
@@ -62,8 +63,8 @@ $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
         </header>
         <div class="page-container">
             <?= $content ?>
-
-        <?= Alert::widget() ?>
+            <?= FlashWidget::widget(); ?>
+            <?= ToastWidget::widget(); ?>
         </div>
     </div>
 </div>

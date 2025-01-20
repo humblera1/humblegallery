@@ -1,0 +1,149 @@
+@use "@styles/colors" as colors;
+@use "@styles/mixins" as mixins;
+
+#flash-message {
+    .flash-message {
+        z-index: 1000;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+
+        &.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            visibility: visible;
+            transition: all 250ms ease;
+
+            .flash-message__overlay {
+                opacity: 0.75;
+                visibility: visible;
+            }
+        }
+
+        &_success {
+            .flash-message__footer {
+                background-color: colors.$success;
+            }
+
+            .flash-message__badge_success {
+                display: flex;
+            }
+        }
+
+        &_error {
+            .flash-message__footer {
+                background-color: colors.$error;
+            }
+
+            .flash-message__badge_error {
+                display: flex;
+            }
+        }
+
+        &__overlay {
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        &__wrapper {
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+        }
+
+        &__badge {
+            display: none;
+            position: absolute;
+            top: -37px;
+            left: 50%;
+            transform: translateX(-50%);
+            justify-content: center;
+            align-items: center;
+            width: 75px;
+            height: 75px;
+            border-radius: 100%;
+
+            svg {
+                object-fit: contain;
+                width: 35%;
+                height: 35%;
+                color: colors.$text-accent-white;
+            }
+
+            &_success {
+                background-color: colors.$success;
+            }
+
+            &_error {
+                background-color: colors.$error;
+            }
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 36px;
+            width: 400px;
+            padding: 80px 60px 36px 60px;
+            border-radius: 36px;
+            background-color: colors.$primary-color;
+        }
+
+        &__info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        &__footer {
+            width: 80px;
+            height: 4px;
+            border-radius: 100px;
+        }
+
+        &__close {
+            cursor: pointer;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 12px;
+            height: 12px;
+            color: colors.$primary-color;
+            opacity: .5;
+
+            @include mixins.hover-transition;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            svg {
+                object-fit: contain;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &__title {
+            text-align: center;
+            @include mixins.main-font(500, 24, colors.$text-chocolate);
+        }
+
+        &__message {
+            text-align: center;
+            @include mixins.main-font(400, 16, colors.$text-warm-gray);
+        }
+    }
+}

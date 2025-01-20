@@ -3,7 +3,11 @@ import '@modules/collections/index.js';
 import '@modules/profile/settings.js';
 import '@modules/profile/collection.js';
 import '@modules/profile/view.js';
+
 import '@widgets/MasonryWidget/index.js';
+import '@widgets/FlashWidget/index.js';
+import '@widgets/ToastWidget/index.js';
+
 import '@styles/frontend.scss';
 
 $(document).ready(() => {

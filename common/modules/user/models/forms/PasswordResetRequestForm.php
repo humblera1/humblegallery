@@ -49,10 +49,7 @@ class PasswordResetRequestForm extends Model
                 ->mailer
                 ->compose(
                     ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
-                    [
-                        'resetLink' => $resetLink,
-                        'username' => $user->username,
-                    ]
+                    ['resetLink' => $resetLink]
                 )
                 ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
                 ->setTo($this->email)

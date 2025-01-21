@@ -30,15 +30,27 @@ class AuthController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'login', 'signup'],
+                'only' => [
+                    'logout',
+                    'login',
+                    'signup',
+                    'request-password-reset',
+                    'reset-password',
+                    'verify-email',
+                ],
                 'rules' => [
                     [
-                        'actions' => ['login', 'signup'],
+                        'actions' => [
+                            'login',
+                            'signup',
+                            'request-password-reset',
+                            'reset-password',
+                        ],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'verify-email'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -213,7 +225,7 @@ class AuthController extends Controller
                 return $this->goHome();
             }
 
-            Yii::$app->session->setFlash('error', 'Не удалось письмо для подтверждения почты. Пожалуйста, повторите попытку позднее.');
+            Yii::$app->session->setFlash('error', 'Не удалось отправить письмо для подтверждения почты. Пожалуйста, повторите попытку позднее.');
         }
 
         return $this->render('resendVerificationEmail', [

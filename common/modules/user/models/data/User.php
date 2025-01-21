@@ -9,6 +9,7 @@ use common\modules\user\components\traits\IdentityTrait;
 use common\modules\user\models\query\UserQuery;
 use common\modules\user\models\service\UserService;
 use Yii;
+use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -76,6 +77,15 @@ class User extends ActiveRecord implements IdentityInterface
                 'fileName' => '{username}-{timestamp}.{extension}',
                 'directoryPath' => Yii::$app->params['avatarsPath'],
                 'removeOldFile' => 'remove_avatar',
+            ],
+            'emailVerification' => [
+                'class' => AttributeBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'is_verified',
+                ],
+                'value' => function ($event) {
+                    return $this->isAttributeChanged('email') ? false : $this->is_verified;
+                },
             ],
         ];
     }

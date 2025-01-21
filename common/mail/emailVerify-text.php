@@ -1,12 +1,15 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var common\models\User $user */
+use common\helpers\Html;
+use yii\web\View;
 
-$verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'token' => $user->verification_token]);
+/**
+ * @var View $this
+ * @var string $verifyLink
+ */
+
 ?>
-Hello <?= $user->username ?>,
 
-Follow the link below to verify your email:
+Для подтверждения почты необходимо перейти по ссылке:
 
-<?= $verifyLink ?>
+<?= Html::a(Html::encode($verifyLink), $verifyLink) ?>

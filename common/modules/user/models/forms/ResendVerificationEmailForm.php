@@ -29,6 +29,15 @@ class ResendVerificationEmailForm extends Model
         ];
     }
 
+    public function __construct($config = [])
+    {
+        if (($user = Yii::$app->user->identity)) {
+            $this->email = $user->email;
+        }
+
+        parent::__construct($config);
+    }
+
     /**
      * Sends confirmation email to user
      *
@@ -46,10 +55,7 @@ class ResendVerificationEmailForm extends Model
                 ->mailer
                 ->compose(
                     ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                    [
-                        'verifyLink' => $verifyLink,
-                        'username' => $user->username,
-                    ]
+                    ['verifyLink' => $verifyLink]
                 )
                 ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
                 ->setTo($this->email)

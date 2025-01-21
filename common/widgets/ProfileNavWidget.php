@@ -32,7 +32,7 @@ class ProfileNavWidget extends Widget
         ],
         [
             'label' => 'Выход',
-            'url' => 'auth/logout',
+            'url' => '/auth/logout',
             'onlyByOwner' => true,
         ],
     ];

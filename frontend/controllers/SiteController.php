@@ -3,8 +3,12 @@
 namespace frontend\controllers;
 
 use common\modules\artist\models\data\Artist;
+use common\modules\movement\models\data\Movement;
 use common\modules\painting\models\data\Painting;
+use common\modules\subject\models\data\Subject;
+use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\ErrorAction;
 
@@ -49,34 +53,53 @@ class SiteController extends Controller
 
     private function getStatistics(): array
     {
-        return [
-            [
-                'title' => '167',
-                'subtitle' => 'картин',
-                'icon' => 'art',
-            ],
-            [
-                'title' => '167',
-                'subtitle' => 'картин',
-                'icon' => 'art',
-            ],
-            [
-                'title' => '167',
-                'subtitle' => 'картин',
-                'icon' => 'art',
-            ],
-            [
-                'title' => '167',
-                'subtitle' => 'картин',
-                'icon' => 'art',
-            ],
-        ];
+        $cache = Yii::$app->cache;
+        $cacheKey = 'appStatistics';
+
+        $statistics = $cache->get($cacheKey);
+
+        if ($statistics === false) {
+            $paintingsAmount = Painting::find()->count();
+            $artistsAmount = Artist::find()->count();
+            $subjectsAmount = Subject::find()->count();
+            $movementsAmount = Movement::find()->count();
+
+            $statistics = [
+                [
+                    'title' => $this->formatNumber($paintingsAmount),
+                    'subtitle' => 'картин',
+                    'icon' => 'art',
+                ],
+                [
+                    'title' => $this->formatNumber($artistsAmount),
+                    'subtitle' => 'художников',
+                    'icon' => 'art',
+                ],
+                [
+                    'title' => $this->formatNumber($subjectsAmount),
+                    'subtitle' => 'жанров',
+                    'icon' => 'art',
+                ],
+                [
+                    'title' => $this->formatNumber($movementsAmount),
+                    'subtitle' => 'направлений',
+                    'icon' => 'art',
+                ],
+            ];
+
+            $cache->set($cacheKey, $statistics, 24 * 60 * 60);
+        }
+
+        return $statistics;
     }
 
     private function getArtistsDataProvider(int $limit = 3): ActiveDataProvider
     {
         return new ActiveDataProvider([
-            'query' => Artist::find()->with('paintings.movements')->limit($limit),
+            'query' => Artist::find()
+                ->with('paintings.movements')
+                ->orderBy(new Expression('RAND()'))
+                ->limit($limit),
             'pagination' => false,
         ]);
     }
@@ -84,8 +107,22 @@ class SiteController extends Controller
     private function getPaintingsDataProvider(int $limit = 15): ActiveDataProvider
     {
         return new ActiveDataProvider([
-            'query' => Painting::find()->limit($limit),
+            'query' => Painting::find()
+                ->orderBy(new Expression('RAND()'))
+                ->limit($limit),
             'pagination' => false,
         ]);
+    }
+
+    private function formatNumber(int $number): string
+    {
+        if ($number < 10) {
+            return '10+';
+        }
+
+        $magnitude = pow(10, floor(log10($number)));
+        $rounded = floor($number / $magnitude) * $magnitude;
+
+        return $rounded . '+';
     }
 }

@@ -75,6 +75,10 @@ $profileUrl = Yii::$app->urlManager->createUrl(['/user/default/view', 'username'
             <?= FlashWidget::widget(); ?>
             <?= ToastWidget::widget(); ?>
         </div>
+        <footer class="footer">
+            <p class="footer__humblerat">humblerat</p>
+            <p class="footer__date"><?= date('Y') ?></p>
+        </footer>
     </div>
 </div>
 

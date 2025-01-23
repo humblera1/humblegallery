@@ -20,9 +20,7 @@ class PaintingService extends Service
      */
     public function getImage(): string
     {
-        $model = $this->model;
-
-        return '/uploads/images/paintings/' . $model->artist->name . '/' . $model->image_name;
+        return Yii::$app->params['paintingsUrl'] . $this->model->image_name;
     }
 
     /**
@@ -30,9 +28,7 @@ class PaintingService extends Service
      */
     public function getThumbnail(): string
     {
-        $model = $this->model;
-
-        return '/uploads/thumbnails/paintings/' . $model->artist->name . '/' . $model->image_name;
+        return Yii::$app->params['paintingsThumbnailUrl'] . $this->model->image_name;
     }
 
     /**

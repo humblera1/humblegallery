@@ -1,3 +1,5 @@
+@import '../colors';
+
 thead > tr > th {
   text-align: center;
   padding-top: 3rem !important;
@@ -14,6 +16,7 @@ thead > tr > td {
 
 tbody > tr > td {
   padding: 1.5rem 2rem !important;
+  color: $text-chocolate;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

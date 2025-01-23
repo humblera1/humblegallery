@@ -131,7 +131,7 @@ class SignupForm extends Model
      */
     protected function sendEmail(User $user): bool
     {
-        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['auth/verify-email', 'token' => $user->verification_token]);
+        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['auth/verify-email/', 'token' => $user->verification_token]);
 
         return Yii::$app
             ->mailer

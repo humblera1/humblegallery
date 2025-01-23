@@ -7,10 +7,10 @@
 
 .humble-control-label {
   position: relative;
-  color: #a2a2a2;
+  color: $text-warm-gray;
   top: 10px;
   left: 25px;
-  background-color: #FEF1DF;
+  background-color: $primary-color;
   padding: 0 3px;
   font-size: 14px;
 }
@@ -18,6 +18,11 @@
 .datepicker-container .humble-control-label {
   left: 75px;
   z-index: 10;
+}
+
+.input-group-text {
+  color: $brown;
+  background-color: $wheat;
 }
 
 .form-group {

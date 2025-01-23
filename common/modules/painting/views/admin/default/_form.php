@@ -34,7 +34,23 @@ $this->registerCss(<<<CSS
     }
 CSS);
 
-Yii::$app->session->getFlash('error');
+$this->registerJs(<<<JS
+    $('#image-input').on('change', function () {
+        const file = this.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $('#image-preview').attr('src', e.target.result)
+            };
+            
+            reader.readAsDataURL(file)
+        }        
+    });
+JS);
+
+$imageSrc = $model->isNewRecord ? '' : $model->service->getImage();
 
 ?>
 
@@ -100,12 +116,10 @@ Yii::$app->session->getFlash('error');
     </div>
 
     <div class="col-md-6 mt-5 d-flex align-items-center flex-column">
-        <?php if (!$model->isNewRecord): ?>
         <div class="image-container--form">
-            <?= Html::img($model->service->getImage(), ['class' => 'image--form']); ?>
+            <?= Html::img($imageSrc, ['class' => 'image--form img-fluid', 'id' => 'image-preview']); ?>
         </div>
-        <?php endif; ?>
-        <?= $form->field($model, 'image')->fileInput() ?>
+        <?= $form->field($model, 'image')->fileInput(['id' => 'image-input']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

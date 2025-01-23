@@ -40,8 +40,6 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
  * @property Painting[] $firstPaintingsWithLimit Первые картины, сохраненные в коллекции.
  *
  * @method SelfHealingUrlBehavior getSelfHealingUrl Generate a self-healing URL for the collection
- * @method FileSaveBehavior saveFile Save the cover file
- * @method FileSaveBehavior loadWithFile(array $dataToLoad)
  */
 
 class Collection extends ActiveRecord
@@ -96,7 +94,8 @@ class Collection extends ActiveRecord
                 'class' => FileSaveBehavior::class,
                 'fileNameAttribute' => 'cover',
                 'directoryPath' => Yii::$app->params['collectionsPath'],
-                'removeOldFile' => 'remove_cover',
+                'updateWhen' => ['title'],
+                'removeWhen' => 'remove_cover',
             ],
         ];
     }

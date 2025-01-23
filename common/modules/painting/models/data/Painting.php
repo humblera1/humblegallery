@@ -2,15 +2,16 @@
 
 namespace common\modules\painting\models\data;
 
+use common\components\behaviors\FileSaveBehavior;
 use common\components\behaviors\SelfHealingUrlBehavior;
 use common\modules\artist\models\data\Artist;
 use common\modules\collection\models\data\Collection;
 use common\modules\movement\models\data\Movement;
-use common\modules\painting\components\behaviors\PaintingBehavior;
 use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
+use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -46,7 +47,6 @@ use yii2tech\ar\linkmany\LinkManyBehavior;
  */
 class Painting extends ActiveRecord
 {
-    const SCENARIO_CREATE = 'create';
 
     public UploadedFile|string|null $image = null;
 
@@ -83,15 +83,25 @@ class Painting extends ActiveRecord
                 'relation' => 'subjects',
                 'relationReferenceAttribute' => 'subjectIds',
             ],
-            'mainBehavior' => [
-                'class' => PaintingBehavior::class,
-            ],
             'sluggable' => [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
             ],
             'selfHealingUrl' => [
                 'class' => SelfHealingUrlBehavior::class,
+            ],
+            'fileSave' => [
+                'class' => FileSaveBehavior::class,
+                'withThumbnail' => true,
+                'fileName' => '{slug}-{id}{timestamp}.{extension}',
+                'fileAttribute' => 'image',
+                'fileNameAttribute' => 'image_name',
+                'directoryPath' => Yii::$app->params['paintingsPath'],
+                'thumbnailDirectoryPath' => Yii::$app->params['paintingsThumbnailPath'],
+                'targetExtension' => 'webp',
+                'targetSize' => 100 * 1024,
+                'targetThumbnailSize' => 30 * 1024,
+                'updateWhen' => ['slug'],
             ],
         ];
     }
@@ -117,7 +127,7 @@ class Painting extends ActiveRecord
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],
             [['technique_id'], 'integer'],
             [['technique_id'], 'exist', 'targetRelation' => 'technique'],
-            [['image'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['title'], 'validateImageRequired'],
             [
                 ['image'],
                 'image',
@@ -129,6 +139,16 @@ class Painting extends ActiveRecord
             [['artist_id'], 'filter', 'filter' => 'intval'],
             [['movementIds', 'subjectIds'], 'safe'],
         ];
+    }
+
+    /**
+     * Custom validation method to check if the image is required.
+     */
+    public function validateImageRequired(): void
+    {
+        if ($this->isNewRecord && empty($this->image)) {
+            $this->addError('image', 'Image is required for new records.');
+        }
     }
 
     /** {@inheritdoc} */

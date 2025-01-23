@@ -19,5 +19,15 @@ return [
     'collectionsPath' => '@common/uploads/collections/',
     'collectionsUrl' => '/uploads/collections/',
 
+    'artistsPath' => '@common/uploads/artists/',
+    'artistsThumbnailPath' => '@common/uploads/thumbnails/artists/',
+    'artistsUrl' => '/uploads/artists/',
+    'artistsThumbnailUrl' => '/uploads/thumbnails/artists/',
+
+    'paintingsPath' => '@common/uploads/paintings/',
+    'paintingsThumbnailPath' => '@common/uploads/thumbnails/paintings/',
+    'paintingsUrl' => '/uploads/paintings/',
+    'paintingsThumbnailUrl' => '/uploads/thumbnails/paintings/',
+
     'bsVersion' => '5.x',
 ];

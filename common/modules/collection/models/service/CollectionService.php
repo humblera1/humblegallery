@@ -48,11 +48,6 @@ class CollectionService extends Service
         return false;
     }
 
-    public function saveCollectionWithFile(): bool
-    {
-        return $this->repository->saveWithFile($this->model);
-    }
-
     /**
      * @param int $paintingId
      * @return bool

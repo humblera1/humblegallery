@@ -172,9 +172,4 @@ class UserService extends Service
             ->getLikedPaintings()
             ->all();
     }
-
-    public function saveUserWithFile(): bool
-    {
-        return $this->repository->saveWithFile($this->model);
-    }
 }

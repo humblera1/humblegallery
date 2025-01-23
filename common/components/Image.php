@@ -2,8 +2,9 @@
 
 namespace common\components;
 
-use Exception;
 use GdImage;
+use InvalidArgumentException;
+use RuntimeException;
 
 class Image
 {
@@ -12,63 +13,58 @@ class Image
     const IMAGE_PNG = 3;
     const IMAGE_WEBP = 18;
 
-    const INITIAL_IMAGE_QUALITY = 90;
+    const INITIAL_IMAGE_QUALITY = 100;
+
+    const QUALITY_REDUCING_STEP = 5;
+
+    public ?int $size = null;
 
     public ?int $type = null;
 
     public ?GdImage $img = null;
 
-    public function __construct(public string $filename)
+    public function __construct(public string $sourcePath)
     {
-        if (!isset($this->filename)) {
-            throw new Exception('Необходимо указать корректное имя файла');
+        if (!isset($this->sourcePath)) {
+            throw new InvalidArgumentException('Необходимо указать корректное имя файла');
         }
 
-        if (!file_exists($this->filename)) {
-            throw new Exception(sprintf('Файл %s не найден', $this->filename));
+        if (!file_exists($this->sourcePath)) {
+            throw new InvalidArgumentException(sprintf('Файл %s не найден', $this->sourcePath));
         }
 
-        $this->type = getimagesize($this->filename)[2];
+        $imageInfo = getimagesize($this->sourcePath);
+
+        if ($imageInfo === false) {
+            throw new RuntimeException('Не удалось получить информацию о файле');
+        }
+
+        $this->size = filesize($this->sourcePath);
+        $this->type = $imageInfo[2];
 
         $this->img = match($this->type) {
-            self::IMAGE_GIF => imageCreateFromGif($this->filename),
-            self::IMAGE_JPEG => imageCreateFromJpeg($this->filename),
-            self::IMAGE_PNG => imageCreateFromPng($this->filename),
-            self::IMAGE_WEBP => imageCreatefromWebp($this->filename),
-            default => throw new Exception('Неподдерживаемый формат изображения'),
+            self::IMAGE_GIF => imagecreatefromgif($this->sourcePath),
+            self::IMAGE_JPEG => imagecreatefromjpeg($this->sourcePath),
+            self::IMAGE_PNG => imagecreatefrompng($this->sourcePath),
+            self::IMAGE_WEBP => imagecreatefromwebp($this->sourcePath),
+
+            default => throw new InvalidArgumentException('Неподдерживаемый формат изображения'),
         };
     }
 
-    public function saveWebp(string $filename, ?int $targetFileSize = null): bool
+    public function saveWebp(string $destinationPath, ?int $targetFileSize = null): bool
     {
-        if (!$targetFileSize) {
-            return imageWebp($this->img, $filename, 100);
-        }
-
-        $initialQuality = self::INITIAL_IMAGE_QUALITY;
-
-        while ($initialQuality > 10) {
-            ob_start();
-            imagewebp($this->img, null, $initialQuality);
-
-            if ($targetFileSize >= strlen(ob_get_clean())) {
-                break;
-            }
-
-            $initialQuality -= 5;
-        }
-
-        return imageWebp($this->img, $filename, $initialQuality);
+        return $this->saveWithQualityAdjustment($destinationPath, $targetFileSize, 'imagewebp');
     }
 
-    public function savePng(string $fileName): bool
+    public function savePng(string $destinationPath, ?int $targetFileSize = null): bool
     {
-        return imagepng($this->img, $fileName);
+        return $this->saveWithQualityAdjustment($destinationPath, $targetFileSize, 'imagepng');
     }
 
-    public function saveJpeg(string $fileName): bool
+    public function saveJpeg(string $destinationPath, ?int $targetFileSize = null): bool
     {
-        return imagejpeg($this->img, $fileName);
+        return $this->saveWithQualityAdjustment($destinationPath, $targetFileSize, 'imagejpeg');
     }
 
     public function saveGif(string $filename): bool
@@ -76,6 +72,7 @@ class Image
         return imagegif($this->img, $filename);
     }
 
+    // todo: deprecated
     public function saveImage(string $fileName): bool
     {
         return match ($this->type) {
@@ -89,5 +86,41 @@ class Image
     public function getExtensionAsString(): string
     {
         return image_type_to_extension($this->type);
+    }
+
+    public function saveAs(string $destinationPath, string $extension, ?int $targetFileSize = null): bool
+    {
+        return match($extension) {
+            'webp' => $this->saveWebp($destinationPath, $targetFileSize),
+            'jpg', 'jpeg' => $this->saveJpeg($destinationPath, $targetFileSize),
+            'png' => $this->savePng($destinationPath, $targetFileSize),
+
+            default => false,
+        };
+    }
+
+    private function saveWithQualityAdjustment(string $destinationPath, ?int $targetFileSize, callable $saveFunction): bool
+    {
+        if (!$targetFileSize || $targetFileSize > $this->size) {
+            return $saveFunction($this->img, $destinationPath, self::INITIAL_IMAGE_QUALITY);
+        }
+
+        $initialQuality = self::INITIAL_IMAGE_QUALITY;
+        $step = self::QUALITY_REDUCING_STEP;
+
+        while ($initialQuality > 10) {
+            ob_start();
+
+            $saveFunction($this->img, null, $initialQuality);
+            $imageData = ob_get_clean();
+
+            if ($targetFileSize >= strlen($imageData)) {
+                break;
+            }
+
+            $initialQuality -= $step;
+        }
+
+        return $saveFunction($this->img, $destinationPath, $initialQuality);
     }
 }

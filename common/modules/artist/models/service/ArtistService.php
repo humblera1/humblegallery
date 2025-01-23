@@ -5,6 +5,7 @@ namespace common\modules\artist\models\service;
 use common\components\Service;
 use common\modules\artist\models\data\Artist;
 use DateTime;
+use Yii;
 
 /**
  * @property Artist $model
@@ -12,11 +13,19 @@ use DateTime;
 class ArtistService extends Service
 {
     /**
-     * Retrieves the main image path for the painting
+     * Retrieves the main image path for the painting.
      */
     public function getImage(): string
     {
-        return '/uploads/images/artists/' . $this->model->image_name;
+        return Yii::$app->params['artistsUrl'] . $this->model->image_name;
+    }
+
+    /**
+     * Retrieves the thumbnail image path for the painting.
+     */
+    public function getThumbnail(): string
+    {
+        return Yii::$app->params['artistsThumbnailUrl'] . $this->model->image_name;
     }
 
     public function getYears(): string

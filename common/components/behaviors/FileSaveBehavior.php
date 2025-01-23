@@ -3,9 +3,11 @@
 namespace common\components\behaviors;
 
 use common\components\helpers\FileHelper;
+use common\components\Image;
 use Yii;
 use yii\base\Behavior;
 use yii\base\Model;
+use yii\db\BaseActiveRecord;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -44,9 +46,19 @@ class FileSaveBehavior extends Behavior
     public string $fileNameAttribute = 'filename';
 
     /**
+     * @var bool $withThumbnail Whether to generate a thumbnail for the uploaded file.
+     */
+    public bool $withThumbnail = false;
+
+    /**
      * @var string $directoryPath The directory path where the file will be saved.
      */
     public string $directoryPath = '@app/uploads/';
+
+    /**
+     * @var string $thumbnailDirectoryPath The directory path where the thumbnail will be saved.
+     */
+    public string $thumbnailDirectoryPath = '@app/uploads/thumbnails/';
 
     /**
      * @var string|callable $fileName The pattern or callback for the file name.
@@ -54,87 +66,154 @@ class FileSaveBehavior extends Behavior
     public $fileName = '{slug}-{timestamp}.{extension}';
 
     /**
-     * @var string|callable $removeOldFile Атрибут, сигнализирующий о необходимости удаления старого файла.
+     * @var string[]|callable $watch Атрибуты или колбэк, сигнализирующий о необходимости переименования файла.
      */
-    public $removeOldFile;
+    public $updateWhen;
 
     /**
-     * Handles the file upload process by assigning the uploaded file to the model attribute.
+     * @var string|callable $removeOldFile Атрибут или колбэк, сигнализирующий о необходимости удаления старого файла.
      */
-    public function loadWithFile(array $dataToLoad): bool
+    public $removeWhen;
+
+    public bool $removeOldFile = true;
+
+    public ?string $targetExtension = null;
+
+    public ?int $targetSize = null;
+
+    public ?int $targetThumbnailSize = null;
+
+    private $tempFilePath;
+
+//    protected $image;
+
+    public function events(): array
+    {
+        return [
+            Model::EVENT_BEFORE_VALIDATE => 'handleFileUpload',
+
+            BaseActiveRecord::EVENT_BEFORE_INSERT => 'beforeSave',
+            BaseActiveRecord::EVENT_BEFORE_UPDATE => 'beforeSave',
+
+            BaseActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
+            BaseActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+
+            BaseActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
+        ];
+    }
+
+    public function handleFileUpload(): void
     {
         /** @var Model $model */
         $model = $this->owner;
         $file = UploadedFile::getInstance($model, $this->fileAttribute);
 
-        $isLoaded = $model->load($dataToLoad);
-
-        if ($isLoaded && $file) {
+        if ($file) {
             $model->{$this->fileAttribute} = $file;
-        }
 
-        return $isLoaded;
+            if (!isset($this->targetExtension)) {
+                $this->targetExtension = $file->extension;
+            }
+        }
     }
 
-    /**
-     * Saves the uploaded file to the specified directory and updates the model's file name attribute.
-     *
-     * @return bool Whether the file was successfully saved.
-     */
-    public function saveFile(): bool
+    public function beforeSave(): bool
     {
-        /** @var Model $model */
         $model = $this->owner;
         $file = $model->{$this->fileAttribute};
 
-        // Check if the old file should be removed
-        if (($file || $this->shouldRemoveOldFile()) && !$this->removeCover()) {
+        // If no new file is uploaded, return result of removing/renaming the existing file
+        if (!$file) {
+            return $this->runWatchers();
+        }
+
+        if (!$this->checkDir()) {
+            $model->addError($this->fileAttribute, 'Provided directory is not writable: ' . $this->directoryPath);
+
             return false;
         }
 
-        // If no new file is uploaded, return true after removing the old file
-        if (!$file) {
-            return true;
+        if ($this->withThumbnail && !$this->checkThumbnailDir()) {
+            $model->addError($this->fileAttribute, 'Provided directory for thumbnails is not writable: ' . $this->thumbnailDirectoryPath);
+
+            return false;
         }
 
-        $fileName = $this->generateFileName($model, $file);
+        // remove old file
+        if ($this->removeOldFile && !$this->removeFile()) {
+            $model->addError($this->fileAttribute, 'Failed to remove old file.');
 
-        $path = Url::to(Yii::getAlias($this->directoryPath));
+            return false;
+        }
 
-        try {
-            FileHelper::createDirectory($path);
+        $this->tempFilePath = $this->saveTempFile($file);
 
-            if ($file->saveAs($path . $fileName)) {
-                $model->{$this->fileNameAttribute} = $fileName;
+        if (!$this->tempFilePath) {
+            $model->addError($this->fileAttribute, 'Failed to save file temporarily.');
 
-                // temp file $file->tempName no longer exists, it may cause the validation error
-                $model->{$this->fileAttribute} = null;
-                
-                return true;
+            return false;
+        }
+
+        return true;
+    }
+
+    public function afterSave(): void
+    {
+        $model = $this->owner;
+        $file = $model->{$this->fileAttribute};
+
+        if ($file && $this->tempFilePath) {
+            $image = new Image($this->tempFilePath);
+
+            $fileName = $this->generateFileName();
+            $path = Url::to(Yii::getAlias($this->directoryPath));
+
+            try {
+                if (!$image->saveAs($path . $fileName, 'webp', $this->targetSize)) {
+                    throw new \Exception('Failed to save image to the specified location.');
+                }
+
+                if ($this->withThumbnail) {
+                    $thumbnailPath = Url::to(Yii::getAlias($this->thumbnailDirectoryPath));
+
+                    if (!$image->saveAs($thumbnailPath . $fileName, 'webp', $this->targetThumbnailSize)) {
+                        throw new \Exception('Failed to save thumbnail image to the specified location.');
+                    }
+                }
+
+                if (file_exists($this->tempFilePath)) {
+                    unlink($this->tempFilePath);
+                }
+
+                $model->updateAttributes([$this->fileNameAttribute => $fileName]);
+            } catch (\Exception $e) {
+                Yii::error($e->getMessage());
             }
-        } catch (\Exception $e) {
-            Yii::error($e->getMessage());
         }
+    }
 
-        return false;
+    public function afterDelete(): void
+    {
+        $this->removeFile();
     }
 
     /**
      * Generates a file name based on the specified pattern or callback.
      *
-     * @param Model $model The model instance.
-     * @param UploadedFile $file The uploaded file instance.
      * @return string The generated file name.
      */
-    protected function generateFileName(Model $model, UploadedFile $file): string
+    protected function generateFileName(?string $extension = null): string
     {
+        $model = $this->owner;
+        $file = $model->{$this->fileAttribute};
+
         if (is_callable($this->fileName)) {
             return call_user_func($this->fileName, $model, $file);
         }
 
         $replacements = [
             '{timestamp}' => time(),
-            '{extension}' => $file->extension,
+            '{extension}' => $extension ?? $this->targetExtension,
         ];
 
         // Dynamically replace attribute placeholders with model attribute values
@@ -147,40 +226,145 @@ class FileSaveBehavior extends Behavior
     }
 
     /**
-     * Determines whether the old file should be removed.
+     * Removes the old file from the directory.
      *
-     * @return bool Whether the old file should be removed.
+     * @return bool Whether the old file was successfully removed.
      */
-    protected function shouldRemoveOldFile(): bool
+    protected function removeFile(): bool
     {
-        if (is_callable($this->removeOldFile)) {
-            return call_user_func($this->removeOldFile, $this->owner);
+        $name = $this->owner->{$this->fileNameAttribute};
+
+        if (!$name) {
+            return true;
         }
 
-        if (is_string($this->removeOldFile)) {
-            return (bool)$this->owner->{$this->removeOldFile};
+        $fileToDelete = Url::to(Yii::getAlias($this->directoryPath)) . $name;
+        $thumbnailToDelete = Url::to(Yii::getAlias($this->thumbnailDirectoryPath)) . $name;
+
+        if (FileHelper::unlinkIfExist($fileToDelete) && FileHelper::unlinkIfExist($thumbnailToDelete)) {
+            $this->owner->{$this->fileNameAttribute} = null;
+
+            return true;
         }
 
         return false;
     }
 
-    /**
-     * Removes the old file from the directory.
-     *
-     * @return bool Whether the old file was successfully removed.
-     */
-    protected function removeCover(): bool
+    protected function checkDir(): bool
     {
-        $coverName = $this->owner->{$this->fileNameAttribute};
+        $path = Yii::getAlias($this->directoryPath);
 
-        if (!$coverName) {
+        if (!is_dir($path)) {
+            try {
+                FileHelper::createDirectory($path);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return is_writable($path);
+    }
+
+    protected function checkThumbnailDir(): bool
+    {
+        $path = Yii::getAlias($this->thumbnailDirectoryPath);
+
+        if (!is_dir($path)) {
+            try {
+                FileHelper::createDirectory($path);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return is_writable($path);
+    }
+
+    protected function saveTempFile(UploadedFile $file): ?string
+    {
+        $tempDir = sys_get_temp_dir();
+        $tempFilePath = tempnam($tempDir, 'upload_') . '.' . $file->extension;
+
+        if ($file->saveAs($tempFilePath)) {
+            return $tempFilePath;
+        }
+
+        return null;
+    }
+
+    protected function runWatchers(): bool
+    {
+        $model = $this->owner;
+
+        if ($this->needToRemove() && !$this->removeFile()) {
+            $model->addError($this->fileAttribute, 'Failed to delete old file.');
+
+            return false;
+        }
+
+        if ($this->needToUpdate() && !$this->updateFile()) {
+            $model->addError($this->fileAttribute, 'Failed to save new file name.');
+
+            return false;
+        }
+
+        return false;
+    }
+
+    protected function needToRemove(): bool
+    {
+        if (is_callable($this->removeWhen)) {
+            return call_user_func($this->removeWhen, $this->owner);
+        }
+
+        if (is_string($this->removeWhen) || is_array($this->removeWhen)) {
+            return (bool)$this->owner->{$this->removeWhen};
+        }
+
+        return false;
+    }
+
+    protected function needToUpdate(): bool
+    {
+        if (is_callable($this->updateWhen)) {
+            return call_user_func($this->updateWhen, $this->owner);
+        }
+
+        if (is_string($this->updateWhen)) {
+            $this->updateWhen = [$this->updateWhen];
+        }
+
+        if (is_array($this->updateWhen)) {
+            foreach ($this->updateWhen as $attribute) {
+                if ($this->owner->isAttributeChanged($attribute)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected function updateFile(): bool
+    {
+        $model = $this->owner;
+        $oldFileName = $model->getOldAttribute($this->fileNameAttribute);
+
+        $path = Yii::getAlias($this->directoryPath);
+        $thumbnailPath = Yii::getAlias($this->thumbnailDirectoryPath);
+
+        if (!$oldFileName || !file_exists($path . $oldFileName)) {
             return true;
         }
 
-        $fileToDelete = Url::to(Yii::getAlias($this->directoryPath)) . $coverName;
+        $newFileName = $this->generateFileName(pathinfo($oldFileName)['extension']);
 
-        if (FileHelper::unlinkIfExist($fileToDelete)) {
-            $this->owner->{$this->fileNameAttribute} = null;
+        if (rename($path . $oldFileName, $path . $newFileName)) {
+            if ($this->withThumbnail && !rename($thumbnailPath . $oldFileName, $thumbnailPath . $newFileName)) {
+                return false;
+            }
+
+            $model->updateAttributes([$this->fileNameAttribute => $newFileName]);
 
             return true;
         }

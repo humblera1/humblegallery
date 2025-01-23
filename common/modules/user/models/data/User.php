@@ -37,9 +37,6 @@ use yii\web\UploadedFile;
  *
  * @property-read Collection[] $collections Коллекции пользователя
  * @property-read Painting[] $likedPaintings Понравившиеся картины
- *
- * @method FileSaveBehavior saveFile Save the cover file
- * @method FileSaveBehavior loadWithFile(array $dataToLoad)
  */
 
 // todo: добавить атрибут is_blocked для сценария редактирования из админки
@@ -76,7 +73,8 @@ class User extends ActiveRecord implements IdentityInterface
                 'fileNameAttribute' => 'avatar',
                 'fileName' => '{username}-{timestamp}.{extension}',
                 'directoryPath' => Yii::$app->params['avatarsPath'],
-                'removeOldFile' => 'remove_avatar',
+                'updateWhen' => ['username'],
+                'removeWhen' => 'remove_avatar',
             ],
             'emailVerification' => [
                 'class' => AttributeBehavior::class,
@@ -135,7 +133,7 @@ class User extends ActiveRecord implements IdentityInterface
             ],
             [['remove_avatar'], 'boolean'],
             [['remove_avatar'], 'default', 'value' => false],
-            [['file'], 'file', 'maxSize' => 2 * 1024 * 1024, 'extensions' => 'png, jpg'],
+            [['file'], 'file', 'maxSize' => 1024 * 1024, 'extensions' => 'png, jpg'],
         ];
     }
 

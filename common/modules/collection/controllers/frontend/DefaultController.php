@@ -138,9 +138,9 @@ class DefaultController extends FrontendController
     public function actionCreate(): array
     {
         $model = new Collection();
-        $model->loadWithFile($this->request->post());
+        $model->load($this->request->post());
 
-        if ($model->validate() && $model->service->saveCollectionWithFile()) {
+        if ($model->validate() && $model->save()) {
             return $this->successResponse('Коллекция успешно создана!');
         }
 
@@ -155,9 +155,9 @@ class DefaultController extends FrontendController
     public function actionUpdate(int $id): array
     {
         $model = $this->getCollectionToEdit($id);
-        $model->loadWithFile($this->request->post());
+        $model->load($this->request->post());
 
-        if ($model->validate() && $model->service->saveCollectionWithFile()) {
+        if ($model->validate() && $model->save()) {
             return $this->successResponse('Коллекция успешно обновлена!');
         }
 

@@ -107,16 +107,18 @@ class DefaultController extends FrontendController
     /**
      * @return string|array
      */
-    public function actionView(): string|array
+    public function actionView(): string|array|Response
     {
         if ($this->isOwner && $this->request->isPost) {
-            $this->currentUser->loadWithFile($this->request->post());
+            $this->currentUser->load($this->request->post());
 
-            if ($this->currentUser->validate() && $this->currentUser->service->saveUserWithFile()) {
-                return $this->successResponse('Данные профиля успешно обновлены!');
+            if ($this->currentUser->validate() && $this->currentUser->save()) {
+                Yii::$app->session->setFlash('success', 'Данные профиля успешно обновлены!');
+
+                return $this->redirect($this->currentUser->username);
+            } else {
+                return $this->errorResponse('Не удалось обновить данные профиля');
             }
-
-            return $this->errorResponse('Не удалось обновить данные профиля');
         }
 
         return $this->render('view', [

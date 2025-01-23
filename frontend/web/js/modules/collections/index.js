@@ -1,7 +1,7 @@
 /**
  * Логика страницы с коллекциями в профиле пользователя.
  */
-import {get, patch, post, put, requestDelete, showErrorMessage, showSuccessMessage} from "@utils";
+import {get, onResponse, patch, post, requestDelete, showErrorMessage} from "@utils";
 import {closeModal, openModal} from "@widgets/ModalWidget";
 import urls from "@urls";
 
@@ -150,6 +150,8 @@ new class CollectionsManager {
             .done((response) => {
                 this.reloadContent();
                 closeModal();
+
+                onResponse(response);
             })
             .fail(() => {
                 showErrorMessage(message);
@@ -164,7 +166,7 @@ new class CollectionsManager {
                 this.reloadContent();
                 closeModal();
 
-                this.onResponse(response);
+                onResponse(response);
             });
     }
 
@@ -174,7 +176,7 @@ new class CollectionsManager {
                 this.reloadContent();
                 closeModal();
 
-                this.onResponse(response);
+                onResponse(response);
             });
     }
 
@@ -213,13 +215,5 @@ new class CollectionsManager {
      */
     getCombinedData() {
         return [...this.filtersFormData, ...this.searchFormData];
-    }
-
-    onResponse(response) {
-        if (response.success) {
-            showSuccessMessage(response.message);
-        } else {
-            showErrorMessage(response.message);
-        }
     }
 }();

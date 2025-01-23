@@ -16,7 +16,7 @@ FrontendAsset::register($this);
 
 $this->registerJsVar('isGuest', Yii::$app->user->isGuest);
 
-$profileUrl = Yii::$app->urlManager->createUrl(['/user/default/view', 'username' => Yii::$app->user->identity->username]);
+$profileUrl = Yii::$app->urlManager->createUrl(['/user/default/view', 'username' => Yii::$app->user->identity?->username]);
 
 ?>
 <?php $this->beginPage() ?>

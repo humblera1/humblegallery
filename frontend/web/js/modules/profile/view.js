@@ -31,9 +31,6 @@ new class ProfileViewManager {
             post($(form).attr('action'), formData)
                 .done((response) => {
                     onResponse(response);
-                })
-                .fail(() => {
-                    showErrorMessage('Не удалось выполнить запрос');
                 });
 
             return false;

@@ -27,7 +27,13 @@ class UserSearch extends User
                 ],
                 'string',
             ],
-            [['created_at'],  'filter', 'filter' => 'strtotime'],
+            [
+                ['created_at'],
+                'filter',
+                'filter' => function ($value) {
+                    return $value !== null ? strtotime($value) : null;
+                },
+            ],
         ];
     }
 

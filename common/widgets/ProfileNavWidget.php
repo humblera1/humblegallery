@@ -30,11 +30,6 @@ class ProfileNavWidget extends Widget
             'url' => '/user/default/settings',
             'onlyByOwner' => true,
         ],
-        [
-            'label' => 'Выход',
-            'url' => '/auth/logout',
-            'onlyByOwner' => true,
-        ],
     ];
 
     public function init(): void
@@ -79,7 +74,28 @@ class ProfileNavWidget extends Widget
             $itemsHtml .= $this->renderItem($item);
         }
 
-        return $itemsHtml;
+        return $itemsHtml . $this->renderLogoutItem();
+    }
+
+    public function renderLogoutItem(): string
+    {
+        if (!$this->isOwner) {
+            return '';
+        }
+
+        $url = '/auth/logout';
+
+        $itemContent = Html::tag('div',
+            Html::icon($this->getIconName('Выход')),
+            ['class' => 'profile-nav__icon']
+        );
+
+        $itemContent .= Html::tag('p', 'Выход', ['class' => 'profile-nav__label']);
+
+       $button = Html::submitButton($itemContent, ['class' => "profile-nav__link"]);
+
+
+        return Html::beginForm([$url], options: ['class' => 'profile-nav__item']) . $button . Html::endForm();
     }
 
     /**

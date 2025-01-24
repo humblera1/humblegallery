@@ -9,12 +9,18 @@ use yii\web\View;
  * @var Collection $collection
  */
 
+$cover = $collection->cover ? $collection->service->getCover() : $collection->service->getPreviewImage();
+
 ?>
 
 <div class="collection-preview" data-collection-id="<?= $collection->id ?>">
     <div class="collection-preview__content">
         <div class="collection-preview__preview">
-            <img src="<?= $collection->service->getPreviewImage() ?>" alt="Collection Preview">
+            <?php if ($cover): ?>
+                <img src="<?= $cover ?>" alt="Collection Preview">
+            <?php else: ?>
+                <?= Html::icon('mountains'); ?>
+            <?php endif; ?>
         </div>
         <p class="collection-preview__title">
             <?= $collection->title ?>

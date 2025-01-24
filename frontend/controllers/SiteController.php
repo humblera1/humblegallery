@@ -73,17 +73,17 @@ class SiteController extends Controller
                 [
                     'title' => $this->formatNumber($artistsAmount),
                     'subtitle' => 'художников',
-                    'icon' => 'art',
+                    'icon' => 'palette',
                 ],
                 [
                     'title' => $this->formatNumber($subjectsAmount),
                     'subtitle' => 'жанров',
-                    'icon' => 'art',
+                    'icon' => 'mountains',
                 ],
                 [
                     'title' => $this->formatNumber($movementsAmount),
                     'subtitle' => 'направлений',
-                    'icon' => 'art',
+                    'icon' => 'monument',
                 ],
             ];
 

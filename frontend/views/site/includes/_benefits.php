@@ -18,7 +18,7 @@ use yii\web\View;
         <div class="main-benefits__cards">
             <div class="main-benefits__card">
                 <div class="main-benefits__badge">
-                    <?= Html::icon('brush'); ?>
+                    <?= Html::icon('palette'); ?>
                 </div>
                 <div class="main-benefits__info">
                     <h3 class="main-benefits__subtitle">
@@ -31,7 +31,7 @@ use yii\web\View;
             </div>
             <div class="main-benefits__card">
                 <div class="main-benefits__badge">
-                    <?= Html::icon('brush'); ?>
+                    <?= Html::icon('mountains'); ?>
                 </div>
                 <div class="main-benefits__info">
                     <h3 class="main-benefits__subtitle">
@@ -44,7 +44,7 @@ use yii\web\View;
             </div>
             <div class="main-benefits__card">
                 <div class="main-benefits__badge">
-                    <?= Html::icon('brush'); ?>
+                    <?= Html::icon('grid-plus'); ?>
                 </div>
                 <div class="main-benefits__info">
                     <h3 class="main-benefits__subtitle">

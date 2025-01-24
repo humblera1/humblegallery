@@ -24,10 +24,5 @@ use yii\helpers\ArrayHelper;
             </div>
         </div>
     </div>
-    <div class="filter-section__list">
-        <?= $this->render('_list', ['searchModel' => $searchModel, 'model' => $model]); ?>
-    </div>
-    <div class="filter-section__basement">
-        <span id="open-filter"> ещё... </span>
-    </div>
+    <?= $this->render('_list', ['searchModel' => $searchModel, 'model' => $model]); ?>
 </div>

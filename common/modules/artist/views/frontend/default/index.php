@@ -36,18 +36,12 @@ $this->registerJs(<<<JS
 
     $(document).on('search:applied', function (event, formData) {
         searchFormData = formData;
-        reloadContent()
-            .done(() => {
-                console.log('[ДАННЫЕ ОБНОВЛЕНЫ]');
-            });
+        reloadContent();
     });
 
     $(document).on('filters:applied', function (event, formData) {
         filtersFormData = formData;
-        reloadContent()
-            .done(() => {
-                console.log('[ДАННЫЕ ОБНОВЛЕНЫ]');
-            });
+        reloadContent();
     });
 JS);
 

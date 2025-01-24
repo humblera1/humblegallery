@@ -22,7 +22,7 @@ $this->params['image'] = 'login.png';
 
         <?= $form->field($model, 'password')->passwordInput() ?>
 
-        <a href="/auth/reset-password" class="login__forgot-password">
+        <a href="/auth/request-password-reset" class="login__forgot-password">
             Забыли пароль?
         </a>
     </section>

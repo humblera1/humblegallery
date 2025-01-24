@@ -67,13 +67,6 @@
         @include mixins.main-font(400, 16, colors.$text-accent-cinereous);
     }
 
-    &__body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 36px;
-    }
-
     &__title {
         @include mixins.main-font(500, 24, colors.$text-chocolate);
     }

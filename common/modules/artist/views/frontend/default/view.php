@@ -34,12 +34,4 @@ use common\widgets\SwiperWidget;
             ]) ?>
         </section>
     </div>
-    <div class="artist__body">
-        <h2 class="artist__title">
-            О художнике
-        </h2>
-        <p class="artist__about">
-            <?= $model->description ?>
-        </p>
-    </div>
 </div>

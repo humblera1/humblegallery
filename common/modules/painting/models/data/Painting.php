@@ -11,6 +11,7 @@ use common\modules\painting\models\query\PaintingQuery;
 use common\modules\painting\models\service\PaintingService;
 use common\modules\subject\models\data\Subject;
 use common\modules\technique\models\data\Technique;
+use Exception;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -171,6 +172,18 @@ class Painting extends ActiveRecord
         ];
     }
 
+    public function beforeSave($insert): bool
+    {
+        try {
+            $this->saveNewMovements();
+            $this->saveNewSubjects();
+        } catch (Exception) {
+            return false;
+        }
+
+        return parent::beforeSave($insert);
+    }
+
     public function getTechnique(): ActiveQuery
     {
         return $this->hasOne(Technique::class, ['id' => 'technique_id']);
@@ -213,5 +226,63 @@ class Painting extends ActiveRecord
     public static function find(): PaintingQuery
     {
         return new PaintingQuery(get_called_class());
+    }
+
+    /**
+     * Saves the new movements associated with the painting model
+     *
+     * @throws Exception if there is an error saving new Movement model
+     */
+    protected function saveNewMovements(): void
+    {
+        $newIds = [];
+
+        foreach ($this->movementIds as $movementToSave) {
+            if (!Movement::findOne($movementToSave)) {
+                $movement = new Movement();
+                $movement->name = $movementToSave;
+
+                if ($movement->save()) {
+                    $newIds[] = $movement->id;
+
+                    continue;
+                }
+
+                throw new Exception('Ошибка при сохранении направления');
+            }
+
+            $newIds[] = $movementToSave;
+        }
+
+        $this->movementIds = $newIds;
+    }
+
+    /**
+     * Saves the new subjects associated with the painting model
+     *
+     * @throws Exception if there is an error saving new Subject model
+     */
+    protected function saveNewSubjects(): void
+    {
+        $newIds = [];
+
+        foreach ($this->subjectIds as $subjectToSave) {
+            if (!Subject::findOne($subjectToSave)) {
+                $subject = new Subject();
+                $subject->name = $subjectToSave;
+
+                if ($subject->save()) {
+                    $newIds[] = $subject->id;
+
+                    continue;
+                }
+
+                throw new Exception('Ошибка при сохранении жанра');
+            }
+
+            $newIds[] = $subjectToSave;
+        }
+
+        $this->subjectIds = $newIds;
     }
 }

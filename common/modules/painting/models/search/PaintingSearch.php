@@ -42,7 +42,7 @@ class PaintingSearch extends Painting
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = Painting::find();
+        $query = Painting::find()->distinct();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

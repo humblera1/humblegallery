@@ -55,7 +55,7 @@ class CollectionPaintingSearch extends Collection
     public function search(array $params): ActiveDataProvider
     {
         /** @var PaintingQuery $query */
-        $query = $this->collection->getPaintings();
+        $query = $this->collection->getPaintings()->distinct();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

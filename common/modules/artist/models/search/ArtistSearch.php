@@ -44,7 +44,7 @@ class ArtistSearch extends Artist
      */
     public function search(array $params, $loadRelations = false): ActiveDataProvider
     {
-        $query = Artist::find();
+        $query = Artist::find()->distinct();
 
         if ($loadRelations) {
             $query->with(['paintings.movements']);

@@ -4,11 +4,13 @@ use common\helpers\Html;
 use common\modules\user\models\search\UserCollectionSearch;
 use common\widgets\PopupFilterWidget;
 use common\widgets\SearchWidget;
+use yii\data\ActiveDataProvider;
 use yii\web\View;
 
 /**
  * @var View $this
  * @var UserCollectionSearch $model
+ * @var ActiveDataProvider $provider
  * @var bool $isOwner
  */
 
@@ -61,9 +63,11 @@ if ($isOwner) {
             </div>
         <?php endif; ?>
 
-        <?= PopupFilterWidget::widget([
-            'searchModel' => $model,
-            'sections' => $sections,
-        ]) ?>
+        <?php if ($provider->getTotalCount() > 0): ?>
+            <?= PopupFilterWidget::widget([
+                'searchModel' => $model,
+                'sections' => $sections,
+            ]) ?>
+        <?php endif; ?>
     </div>
 </section>

@@ -24,7 +24,7 @@ $isOwner = Yii::$app->user->identity?->id === $user->id;
         <h1 class="profile-collections__title">Коллекции</h1>
     </header>
     <div class="profile-collections__body">
-        <?= $this->render('includes/collections/_controls', compact('isOwner', 'model')); ?>
+        <?= $this->render('includes/collections/_controls', compact('isOwner', 'model', 'provider')); ?>
 
         <div class="profile-collections__content">
             <?php Pjax::begin(['id' => 'collections-pjax-container', 'enablePushState' => false]) ?>

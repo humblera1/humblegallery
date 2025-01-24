@@ -3,15 +3,17 @@
 use common\modules\user\models\search\UserCollectionSearch;
 use common\widgets\PopupFilterWidget;
 use common\widgets\SearchWidget;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
 
 /**
  * @var View $this
  * @var UserCollectionSearch $model
+ * @var ActiveDataProvider $provider
  */
 
-$sections = [
+$sections = $provider->getTotalCount() === 0 ? [] : [
     [
         'attribute' => 'sort',
         'items' => [
@@ -41,9 +43,11 @@ $sections = [
         ]) ?>
     </div>
     <div class="profile-collections__badges">
-        <?= PopupFilterWidget::widget([
-            'searchModel' => $model,
-            'sections' => $sections,
-        ]) ?>
+        <?php if ($provider->getTotalCount() > 0): ?>
+            <?= PopupFilterWidget::widget([
+                'searchModel' => $model,
+                'sections' => $sections,
+            ]) ?>
+        <?php endif; ?>
     </div>
 </section>

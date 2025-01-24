@@ -51,7 +51,7 @@ use yii\web\View;
     </header>
     <div class="profile-collection__body">
 
-        <?= $this->render('includes/collection/_controls', compact('model')); ?>
+        <?= $this->render('includes/collection/_controls', compact('model', 'provider')); ?>
 
         <main class="profile-collection__content">
             <?= MasonryWidget::widget(['provider' => $provider]) ?>

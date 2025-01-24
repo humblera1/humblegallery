@@ -20,7 +20,7 @@ use yii\widgets\Pjax;
     <?php Pjax::begin(['id' => $pjaxId, 'enablePushState' => false]) ?>
     <?= ListView::widget([
         'dataProvider' => $provider,
-        'layout' => "{items}\n{pager}",
+        'layout' => "<div id='masonry-container'>{items}</div>\n{pager}",
         'itemView' => $itemView,
         'options' => [
             'class' => 'masonry__content',

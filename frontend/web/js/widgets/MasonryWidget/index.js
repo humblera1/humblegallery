@@ -41,6 +41,8 @@ export default new class MasonryWidget {
                 transitionDuration: '1s',
                 percentPosition: true
             });
+
+            this.updateContainerHeight();
         });
 
         // Дожидаемся загрузки контента в Pjax
@@ -50,8 +52,14 @@ export default new class MasonryWidget {
             imagesLoaded(this.widget[0], () => {
                 this.widget.masonry('reloadItems');
                 this.widget.masonry();
+
+                this.updateContainerHeight();
             });
         });
+    }
+
+    updateContainerHeight() {
+        $('#masonry-container').css('height', this.widget.height());
     }
 
     /**

@@ -31,6 +31,13 @@
                 gap: 12px;
                 text-transform: unset;
             }
+
+            &_logo {
+                svg {
+                    width: 37px;
+                    height: 38px;
+                }
+            }
         }
 
         &__avatar {

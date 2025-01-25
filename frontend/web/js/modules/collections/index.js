@@ -126,8 +126,8 @@ new class CollectionsManager {
      */
     addFormListeners(type) {
         if (type === CollectionsManager.SUBMIT_TYPE_UPDATE) {
-            $('#restore-button').on('click', this.restoreCollection);
-            $('#delete-button').on('click', this.deleteCollection);
+            $('#restore-button').on('click', () => this.restoreCollection());
+            $('#delete-button').on('click', () => this.deleteCollection());
         }
 
         $('#collection-form').on('beforeSubmit', (event) => this.submitForm(type, event));

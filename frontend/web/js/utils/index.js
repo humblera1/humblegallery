@@ -1,4 +1,5 @@
 import Toast from '@widgets/ToastWidget/index';
+import urls from "@urls";
 
 const LOGIN_URL = '/site/login';
 
@@ -75,5 +76,5 @@ export function requestDelete(url, data = {}) {
 }
 
 export function redirectToLoginPage() {
-    window.location.href = LOGIN_URL;
+    window.location.href = urls.auth.login;
 }

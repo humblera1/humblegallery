@@ -1,7 +1,12 @@
+const BASE_AUTH_URL = '/auth';
 const BASE_PAINTINGS_URL = '/paintings';
 const BASE_COLLECTION_URL = '/collections';
 
 const urls = {
+    auth: {
+        login: `${BASE_AUTH_URL}/login`,
+    },
+
     paintings: {
         toggleLike: (id) => `${BASE_PAINTINGS_URL}/${id}/toggle-like`
     },

@@ -194,6 +194,9 @@ th:last-child {
 .form-group {
   padding-bottom: 1.25rem;
 }
+.form-group textarea {
+  min-height: 180px;
+}
 
 .form-group.required label:after {
   content: " *";

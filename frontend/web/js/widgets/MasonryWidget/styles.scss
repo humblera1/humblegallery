@@ -99,6 +99,7 @@
         }
 
         &__title {
+            @include mixins.lineclamp(2);
             @include mixins.main-font(500, 16, colors.$text-chocolate);
         }
 

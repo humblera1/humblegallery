@@ -14,10 +14,10 @@ use yii\widgets\ListView;
 
 <?= ListView::widget([
     'dataProvider' => $provider,
-    'layout' => "{items}\n{pager}",
+    'layout' => "<div class='artists__list'>{items}</div>\n{pager}",
     'itemView' => '@common/views/_artist-card',
     'options' => [
-        'class' => 'artists__list',
+        'class' => 'artists__container',
     ],
     'pager' => [
         'class' => LinkPager::class,

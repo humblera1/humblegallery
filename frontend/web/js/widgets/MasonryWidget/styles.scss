@@ -2,8 +2,14 @@
 @use "@styles/mixins" as mixins;
 
 #masonry-widget {
+    min-height: 75vh;
+
     .masonry {
-        margin-top: -10px;
+        &__content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
     }
 
     .card {

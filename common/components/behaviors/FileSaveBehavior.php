@@ -242,7 +242,7 @@ class FileSaveBehavior extends Behavior
         $thumbnailToDelete = Url::to(Yii::getAlias($this->thumbnailDirectoryPath)) . $name;
 
         if (FileHelper::unlinkIfExist($fileToDelete) && FileHelper::unlinkIfExist($thumbnailToDelete)) {
-            $this->owner->{$this->fileNameAttribute} = null;
+            $this->owner->updateAttributes([$this->fileNameAttribute => null]);
 
             return true;
         }

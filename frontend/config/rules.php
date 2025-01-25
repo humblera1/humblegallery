@@ -28,8 +28,8 @@ return [
 
     // Аутентификация
     'auth/<action:(signup|login|logout|request-password-reset|resend-verification-email|captcha)>' => 'auth/<action>',
-    'auth/reset-password/<token:\w+>' => 'auth/reset-password',
-    'auth/verify-email/<token:\w+>' => 'auth/verify-email',
+    'auth/reset-password/<token:[\w\-]+>' => 'auth/reset-password',
+    'auth/verify-email/<token:[\w\-]+>' => 'auth/verify-email',
 
     // Профиль пользователя
     'users/<username:[a-zA-Z0-9]+>' => 'user/default/view',

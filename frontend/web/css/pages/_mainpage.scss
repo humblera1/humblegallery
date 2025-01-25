@@ -299,6 +299,10 @@
         display: flex;
         flex-direction: column;
         gap: 48px;
+
+        #masonry-widget {
+            min-height: unset;
+        }
     }
 
     &-cta {
@@ -325,6 +329,16 @@
         &__buttons {
             display: flex;
             gap: 8px;
+        }
+
+        &__image {
+            width: 200px;
+
+            img {
+                object-fit: contain;
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 }

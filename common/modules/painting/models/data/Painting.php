@@ -123,6 +123,7 @@ class Painting extends ActiveRecord
                 'required'
             ],
             [['title'], 'string', 'max' => 255],
+            [['description'], 'string', 'max' => 500],
             [['start_date', 'end_date'], 'date', 'format' => 'php:Y'],
             [['artist_id'], 'integer'],
             [['artist_id'], 'exist', 'targetRelation' => 'artist'],

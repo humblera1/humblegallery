@@ -90,7 +90,8 @@ class Artist extends ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name', 'born', 'died', 'description', 'image_name'], 'string', 'max' => 255],
+            [['name', 'born', 'died', 'image_name'], 'string', 'max' => 255],
+            [['description'], 'string', 'max' => 500],
             [
                 ['image'],
                 'image',

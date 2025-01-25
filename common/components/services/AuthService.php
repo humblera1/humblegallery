@@ -47,6 +47,7 @@ class AuthService
     {
         if ($token && ($user = self::findUserByVerificationToken($token))) {
             $user->is_verified = true;
+            $user->verification_token = null;
 
             return $user->save(false);
         }

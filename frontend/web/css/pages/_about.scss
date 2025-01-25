@@ -4,13 +4,31 @@
 .about {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 24px;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 36px;
+    }
+
+    &__image {
+        max-width: 250px;
+
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+    }
 
     &__content {
         display: flex;
         flex-direction: column;
-        gap: 42px;
-        max-width: 720px;
+        gap: 32px;
+        max-width: 580px;
     }
 
     &__text {
@@ -26,12 +44,12 @@
     }
 
     &__credit {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        row-gap: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
 
         .about__paragraph {
-            grid-column: 1 / 3;
+            display: none;
         }
     }
 
@@ -75,6 +93,51 @@
         user-select: none;
     }
 
+    &__preview {
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: auto repeat(2, 1fr);
+
+        &:hover {
+            .about__icon {
+                color: colors.$accent-orange;
+            }
+        }
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        transform-origin: center;
+        margin-right: 24px;
+        color: colors.$text-chocolate;
+        transition: transform 0.3s;
+
+        &.rotate {
+            transform: rotate(90deg);
+        }
+    }
+
+    &__container {
+        position: relative;
+        height: 60px;
+    }
+
+    &__subtitle {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 60px;
+        background-color: colors.$additional-color;
+        transform: translateX(-50%);
+
+        @include mixins.main-font(400, 20, colors.$text-chocolate, 21);
+    }
+
     &__post {
         @include mixins.main-font(400, 20, colors.$text-chocolate, 21);
     }
@@ -86,7 +149,7 @@
     }
 
     &__paragraph {
-        @include mixins.main-font(400, 16, colors.$text-warm-gray, 21);
+        @include mixins.main-font(400, 16, colors.$text-warm-gray, 28);
     }
 }
 

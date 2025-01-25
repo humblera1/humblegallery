@@ -3,7 +3,7 @@
 
         const credit = $('#qa-credit');
 
-        const threshold = 100;
+        const threshold = 150;
         let devtoolsOpen = false;
 
         const detectDevTools = () => {
@@ -36,5 +36,12 @@
 
         window.addEventListener('resize', detectDevTools);
         detectDevTools();
+
+        $(document).ready(function() {
+            $('.about__preview').click(function() {
+                $(this).next('.about__paragraph').slideToggle();
+                $(this).find('.about__icon').toggleClass('rotate');
+            });
+        });
     }
 })();

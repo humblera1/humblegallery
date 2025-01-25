@@ -63,7 +63,7 @@ if ($isOwner) {
             </div>
         <?php endif; ?>
 
-        <?php if ($provider->getTotalCount() > 0): ?>
+        <?php if ($isOwner || $provider->getTotalCount() > 0): ?>
             <?= PopupFilterWidget::widget([
                 'searchModel' => $model,
                 'sections' => $sections,

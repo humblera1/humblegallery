@@ -9,6 +9,8 @@ use yii\web\View;
  * @var Painting $model
  */
 
+$this->title = $model->title;
+
 ?>
 
 <div class="painting">

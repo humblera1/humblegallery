@@ -16,6 +16,8 @@ use yii\widgets\Pjax;
  * @var $dataProvider ActiveDataProvider
  */
 
+$this->title = 'Художники';
+
 $this->registerJs(<<<JS
     let searchFormData = [];
     let filtersFormData = [];

@@ -7,6 +7,8 @@ use common\widgets\SwiperWidget;
  * @var $model Artist
  */
 
+$this->title = $model->name;
+
 ?>
 
 <div class="artist">

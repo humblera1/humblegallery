@@ -10,8 +10,11 @@ use yii\web\View;
  */
 
 $user = Yii::$app->user->identity;
+$currentUsername = Yii::$app->request->get('username');
 
-$isOwner = $user && ($user->username === Yii::$app->request->get('username'));
+$isOwner = $user && ($user->username === $currentUsername);
+
+$this->title = $currentUsername;
 
 ?>
 

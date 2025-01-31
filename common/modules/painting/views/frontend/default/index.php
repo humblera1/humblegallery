@@ -17,6 +17,8 @@ use yii\web\View;
  * @var $dataProvider ActiveDataProvider
  */
 
+$this->title = 'Галерея';
+
 ?>
 <div class="paintings">
     <?= FilterWidget::widget([

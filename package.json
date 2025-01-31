@@ -24,7 +24,10 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "imagesloaded": "^5.0.0",
-    "swiper": "^11.1.15"
+    "mini-css-extract-plugin": "^2.9.2",
+    "swiper": "^11.1.15",
+    "terser-webpack-plugin": "^5.3.11"
   }
 }

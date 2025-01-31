@@ -1,12 +1,14 @@
 const path = require('path');
+const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 
-// объект конфигурации
 module.exports = {
     entry: './frontend/web/js/main.js',
     output: {
-        filename: 'bundle.js',
         chunkFilename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'frontend/web/js/dist'),
+        publicPath: '/js/dist/',
     },
     externals: {
         jquery: 'jQuery',
@@ -24,20 +26,23 @@ module.exports = {
                 },
             },
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/,
                 use: [
                     process.env.NODE_ENV !== 'production'
                         ? 'style-loader'
                         : MiniCssExtractPlugin.loader,
-
-                    // 'postcss-loader', // Поддержка старых браузеров
                     'css-loader',
                     'sass-loader',
                 ],
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: [
+                    process.env.NODE_ENV !== 'production'
+                        ? 'style-loader'
+                        : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                ],
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -46,15 +51,13 @@ module.exports = {
                     filename: '[name][ext]',
                     publicPath: '/fonts/'
                 },
-            }
+            },
         ],
     },
-    // optimization: {
-    //     splitChunks: {
-    //         chunks: 'all',
-    //         name: false,
-    //     },
-    // },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin()],
+    },
     resolve: {
         alias: {
             '@modules': path.resolve(__dirname, 'frontend/web/js/modules/'),
@@ -65,17 +68,10 @@ module.exports = {
             '@fonts': path.resolve(__dirname, 'common/web/fonts')
         },
     },
-    // npm install --save-dev mini-css-extract-plugin
-    // plugins: [
-    //     new MiniCssExtractPlugin({
-    //         filename: '[name].[contenthash].css',
-    //     }),
-    // ],
-    // devServer: {
-    //     contentBase: path.resolve(__dirname, 'web'),
-    //     compress: true,
-    //     port: 9000,
-    //     hot: true,
-    //     open: true,
-    // },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css',
+        }),
+        new CleanWebpackPlugin(),
+    ],
 };

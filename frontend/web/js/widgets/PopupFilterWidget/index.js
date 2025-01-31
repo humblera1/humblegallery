@@ -1,6 +1,6 @@
 import * as styles from './styles.scss';
 
-export default class PopupFilterWidget {
+export default new class PopupFilterWidget {
     constructor() {
         this.popup = $('.filter-widget__popup');
 
@@ -84,4 +84,4 @@ export default class PopupFilterWidget {
     togglePopup() {
         this.popup.toggleClass('active');
     }
-}
+}()

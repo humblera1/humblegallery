@@ -3,9 +3,11 @@ import 'swiper/swiper-bundle.css';
 import { Navigation } from 'swiper/modules';
 import * as styles from './styles.scss';
 
-export default class SwiperWidget {
+export default new class SwiperWidget {
     constructor() {
-        this.init();
+        if ($('#swiper-widget').length > 0) {
+            this.init();
+        }
     }
 
     init() {
@@ -27,4 +29,4 @@ export default class SwiperWidget {
             console.error('Swiper container or navigation button not found');
         }
     }
-}
+}()

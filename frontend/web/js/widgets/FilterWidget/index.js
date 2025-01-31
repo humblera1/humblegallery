@@ -1,15 +1,17 @@
 import * as styles from './styles.scss';
 
-export default class FilterManager {
+export default new class FilterManager {
     constructor() {
-        this.sections = $('.filter-section');
-        this.items = $('.filter-item');
-        this.reset = $('.filter-section__minus');
-        this.open = $('.filter-section__basement');
-        this.form = $('#filter-widget-form');
-        this.resetAllButton = $('#reset-all-filters');
+        if ($('#filter-widget').length > 0) {
+            this.sections = $('.filter-section');
+            this.items = $('.filter-item');
+            this.reset = $('.filter-section__minus');
+            this.open = $('.filter-section__basement');
+            this.form = $('#filter-widget-form');
+            this.resetAllButton = $('#reset-all-filters');
 
-        this.init();
+            this.init();
+        }
     }
 
     init() {
@@ -107,4 +109,4 @@ export default class FilterManager {
 
         $section.find('.filter-section__badge span').text(count);
     }
-}
+}()

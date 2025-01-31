@@ -1,10 +1,12 @@
 import * as styles from './styles.scss';
 
-export default class SearchWidget {
+export default new class SearchWidget {
     constructor() {
-        this.form = $('#search-widget-form');
+        if ($('#search-widget').length > 0) {
+            this.form = $('#search-widget-form');
 
-        this.init();
+            this.init();
+        }
     }
 
     init() {
@@ -16,4 +18,4 @@ export default class SearchWidget {
 
         $(document).trigger('search:applied', [$(event.currentTarget).serializeArray()]);
     }
-}
+}()

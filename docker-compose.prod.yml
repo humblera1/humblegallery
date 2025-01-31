@@ -1,27 +1,23 @@
 services:
-  # NGINX
   nginx:
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
-    image: nginx:alpine
-#    restart: always
+    image: nginx:1.27.3-alpine
     networks:
       - web
     ports:
       - ${FRONTEND_PORT}:80
       - ${BACKEND_PORT}:88
     volumes:
-      - ./:/var/www
-      - ./docker/nginx:/etc/nginx/conf.d/
+      - uploads_data:/var/www/common/uploads
+      - ./docker/nginx/prod:/etc/nginx/conf.d/
 
-  # FPM
   app:
     container_name: ${COMPOSE_PROJECT_NAME}-app
     build:
       context: ./
-      dockerfile: ./docker/php/Dockerfile
+      dockerfile: ./docker/php/prod.Dockerfile
     volumes:
-      - ./:/var/www
-      - vendor_data:/var/www/vendor
+      - uploads_data:/var/www/common/uploads
     env_file:
       - .env
     networks:
@@ -29,22 +25,16 @@ services:
       - web
     depends_on:
       - mysql
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
-
-  # MYSQL
   mysql:
     container_name: ${COMPOSE_PROJECT_NAME}-mysql
-    image: mysql:latest
+    image: mysql:9.2.0
     environment:
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3336:3306"
     volumes:
       - db-data:/var/lib/mysql
     networks:
@@ -52,8 +42,8 @@ services:
 
 networks:
   internal:
-    # internal: true
+    internal: true
   web:
 volumes:
   db-data:
-  vendor_data:
+  uploads_data:

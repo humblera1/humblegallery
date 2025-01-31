@@ -51,3 +51,5 @@ frontend/web/js/dist/
 # Ignore runtime cache and logs
 /console/runtime/*
 !/console/runtime/.gitignore
+
+/github/workflows

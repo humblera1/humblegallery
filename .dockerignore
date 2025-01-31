@@ -1,0 +1,53 @@
+# Ignore Yii console commands
+/yii
+/yii_test
+/yii_test.bat
+
+# Ignore IDE project files
+.idea
+nbproject
+.buildpath
+.project
+.settings
+
+# Ignore system files
+Thumbs.db
+.DS_Store
+
+# Ignore Composer vendor directory
+/vendor
+
+# Ignore Node modules
+/node_modules
+
+# Ignore Composer and PHPUnit executables
+composer.phar
+phpunit.phar
+
+# Ignore local PHPUnit config
+/phpunit.xml
+
+# Ignore Vagrant runtime
+/.vagrant
+
+# Ignore generated files
+/frontend/web/index.php
+/frontend/web/index-test.php
+/frontend/web/robots.txt
+/backend/web/index.php
+/backend/web/index-test.php
+/backend/web/robots.txt
+
+# Ignore Webpack output
+frontend/web/js/dist/
+
+# Ignore uploads
+/common/uploads
+
+# Ignore environment files
+.env
+.qodo
+
+# Ignore runtime cache and logs
+/console/runtime/*
+!/console/runtime/.gitignore

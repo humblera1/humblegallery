@@ -11,7 +11,7 @@ $params = array_merge(
 );
 
 return [
-    'name' => 'HUMBLEGALLERY',
+    'name' => 'HG',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',

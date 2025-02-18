@@ -7,6 +7,7 @@ use common\components\Image;
 use Yii;
 use yii\base\Behavior;
 use yii\base\Model;
+use yii\base\ModelEvent;
 use yii\db\BaseActiveRecord;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
@@ -117,44 +118,48 @@ class FileSaveBehavior extends Behavior
         }
     }
 
-    public function beforeSave(): bool
+    public function beforeSave(ModelEvent $event): void
     {
         $model = $this->owner;
         $file = $model->{$this->fileAttribute};
 
         // If no new file is uploaded, return result of removing/renaming the existing file
         if (!$file) {
-            return $this->runWatchers();
+            if (!$this->runWatchers()) {
+                $event->isValid = false;
+            }
+
+            return;
         }
 
         if (!$this->checkDir()) {
             $model->addError($this->fileAttribute, 'Provided directory is not writable: ' . $this->directoryPath);
+            $event->isValid = false;
 
-            return false;
+            return;
         }
 
         if ($this->withThumbnail && !$this->checkThumbnailDir()) {
             $model->addError($this->fileAttribute, 'Provided directory for thumbnails is not writable: ' . $this->thumbnailDirectoryPath);
+            $event->isValid = false;
 
-            return false;
+            return;
         }
 
         // remove old file
         if ($this->removeOldFile && !$this->removeFile()) {
             $model->addError($this->fileAttribute, 'Failed to remove old file.');
+            $event->isValid = false;
 
-            return false;
+            return;
         }
 
         $this->tempFilePath = $this->saveTempFile($file);
 
         if (!$this->tempFilePath) {
             $model->addError($this->fileAttribute, 'Failed to save file temporarily.');
-
-            return false;
+            $event->isValid = false;
         }
-
-        return true;
     }
 
     public function afterSave(): void
@@ -257,6 +262,18 @@ class FileSaveBehavior extends Behavior
         if (!is_dir($path)) {
             try {
                 FileHelper::createDirectory($path);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        // If directory is not writable, attempt to update its permissions
+        if (!is_writable($path)) {
+            try {
+                // Attempt to change permissions to full access (read, write, execute for all)
+                if (!chmod($path, 0777)) {
+                    return false;
+                }
             } catch (\Exception $e) {
                 return false;
             }

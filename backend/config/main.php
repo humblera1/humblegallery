@@ -16,9 +16,7 @@ use yii\widgets\DetailView;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
-    require __DIR__ . '/../../common/config/params-local.php',
     require __DIR__ . '/params.php',
-    require __DIR__ . '/params-local.php'
 );
 
 return [
@@ -92,7 +90,8 @@ return [
             'datetimeFormat' => 'php:Y-m-d H:i:s',
         ],
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'csrfParam' => env('BACKEND_CSRF_PARAM'),
+            'cookieValidationKey' => env('BACKEND_COOKIE_VALIDATION_KEY'),
         ],
         'user' => [
             'identityClass' => 'common\models\Admin',

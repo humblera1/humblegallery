@@ -11,9 +11,7 @@ use yii\caching\FileCache;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
-    require __DIR__ . '/../../common/config/params-local.php',
     require __DIR__ . '/params.php',
-    require __DIR__ . '/params-local.php'
 );
 
 $rules = require __DIR__ . '/rules.php';
@@ -74,7 +72,8 @@ return [
     ],
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'csrfParam' => env('FRONTEND_CSRF_PARAM'),
+            'cookieValidationKey' => env('FRONTEND_COOKIE_VALIDATION_KEY'),
         ],
         'user' => [
             'identityClass' => User::class,

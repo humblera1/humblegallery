@@ -1,11 +1,18 @@
 server {
-    listen 88;
-    server_name backend.example.com;
+    listen 80;
+    server_name admin.humblegallery.ru www.admin.humblegallery.ru;
+
+    # Redirect HTTP to HTTPS
+    return 301 https://$host$request_uri;
 
     root /var/www/backend/web;
     index index.php index.html;
 
     location / {
+        # Allow access from environment variable
+        if ($remote_addr != ${ALLOWED_ADMIN_IP}) {
+            return 403;
+        }
         try_files $uri $uri/ /index.php?$args;
     }
 
@@ -23,12 +30,6 @@ server {
     location ~ /\.ht {
         deny all;
     }
-
-    # Restrict access to admin panel by IP
-    #location / {
-    #    allow 192.168.1.100;  # Replace with your allowed IP address
-    #    deny all;
-    #}
 
     # Enable Gzip compression
     gzip on;

@@ -4,10 +4,10 @@ use common\components\filters\SelfHealingUrlFilter;
 use notamedia\sentry\SentryTarget;
 use yii\i18n\I18N;
 use yii\i18n\PhpMessageSource;
+use yii\symfonymailer\Mailer;
 
 $params = array_merge(
     require __DIR__ . '/params.php',
-    require __DIR__ . '/params-local.php'
 );
 
 return [
@@ -27,19 +27,30 @@ return [
         ],
     ],
     'components' => [
-        'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
-                [
-                    'class' => SentryTarget::class,
-                    'dsn' => $params['sentry.dsn'],
-                    'levels' => ['error', 'warning'],
-                    'context' => true,
-                    'except' => [
-                        'yii\web\HttpException:404',
-                    ],
-                ],
-            ]
+        'db' => [
+            'class' => \yii\db\Connection::class,
+            'dsn' => sprintf(
+                'mysql:host=%s;dbname=%s',
+                env('MYSQL_HOST', 'localhost'),
+                env('MYSQL_DATABASE', 'yii2advanced')
+            ),
+            'username' => env('MYSQL_USER'),
+            'password' => env('MYSQL_PASSWORD'),
+            'charset' => env('MYSQL_CHARSET', 'utf8'),
+        ],
+        'mailer' => [
+            'class' => Mailer::class,
+            'viewPath' => '@common/mail',
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => env('SMTP_CLASS', 'Swift_SmtpTransport'),
+                'scheme' => env('SMTP_SCHEME', 'smtp'),
+                'host' => env('SMTP_HOST'),
+                'username' => env('SMTP_USERNAME'),
+                'password' => env('SMTP_PASSWORD'),
+                'port' => env('SMTP_PORT', '2525'),
+                'encryption' => env('SMTP_ENCRYPTION', 'tls'),
+            ],
         ],
         'cache' => [
             'class' => \yii\caching\FileCache::class,

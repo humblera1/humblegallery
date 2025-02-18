@@ -1,5 +1,4 @@
 # Ignore Yii console commands
-/yii
 /yii_test
 /yii_test.bat
 
@@ -31,25 +30,21 @@ phpunit.phar
 /.vagrant
 
 # Ignore generated files
-/frontend/web/index.php
 /frontend/web/index-test.php
-/frontend/web/robots.txt
-/backend/web/index.php
 /backend/web/index-test.php
-/backend/web/robots.txt
 
 # Ignore Webpack output
-frontend/web/js/dist/
-
-# Ignore uploads
-/common/uploads
+# frontend/web/js/dist/
 
 # Ignore environment files
 .env
+.env.dist
 .qodo
 
 # Ignore runtime cache and logs
 /console/runtime/*
 !/console/runtime/.gitignore
 
-/github/workflows
+/.github/workflows
+
+.git

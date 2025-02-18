@@ -69,4 +69,9 @@ COPY --from=php-build /var/www /var/www
 COPY --from=node-build /var/www/frontend/web/js/dist /var/www/frontend/web/js/dist
 COPY --from=node-build /var/www/frontend/web/css /var/www/frontend/web/css
 
+RUN chown -R phpuser:phpuser /var/www
+
+# Switch to non-root user before starting the php-fpm process
+USER phpuser
+
 ENTRYPOINT ["php-fpm"]

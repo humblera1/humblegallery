@@ -26,11 +26,11 @@ module.exports = {
                 },
             },
             {
+                // Always use MiniCssExtractPlugin.loader to generate a final CSS file,
+                // which you can then include via an Asset Bundle in Yii2.
                 test: /\.s[ac]ss$/,
                 use: [
-                    process.env.NODE_ENV !== 'production'
-                        ? 'style-loader'
-                        : MiniCssExtractPlugin.loader,
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'sass-loader',
                 ],
@@ -38,9 +38,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    process.env.NODE_ENV !== 'production'
-                        ? 'style-loader'
-                        : MiniCssExtractPlugin.loader,
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                 ],
             },
@@ -70,7 +68,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css',
+            filename: 'main.css'
         }),
         new CleanWebpackPlugin(),
     ],

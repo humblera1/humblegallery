@@ -39,8 +39,5 @@ phpunit.phar
 /frontend/web/index-test.php
 /backend/web/index-test.php
 
-# uploads
-/common/uploads
-
 .env
 .qodo

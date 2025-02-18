@@ -14,6 +14,10 @@ class FrontendAsset extends AssetBundle
         'main.js',
     ];
 
+    public $css = [
+        'main.css',
+    ];
+
     public $depends = [
         YiiAsset::class,
     ];

@@ -10,6 +10,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx/dev:/etc/nginx/conf.d/
+      - uploads_data:/var/www/common/uploads
 
   app-dev:
     container_name: ${COMPOSE_PROJECT_NAME}-app-dev
@@ -18,6 +19,7 @@ services:
       dockerfile: ./docker/php/dev.Dockerfile
     volumes:
       - ./:/var/www
+      - uploads_data:/var/www/common/uploads
     env_file:
       - .env
     networks:
@@ -27,6 +29,7 @@ services:
       - mysql-dev
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    command: sh /var/www/docker/start.sh
 
   webpack-dev:
     container_name: ${COMPOSE_PROJECT_NAME}-webpack-dev

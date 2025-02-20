@@ -1,7 +1,6 @@
-<div style="text-align: center;">
-  <br />  
-  <img src="https://humblegallery.ru/favicon.png" alt="HumbleGallery Logo" />
-  <h1>HumbleGallery</h1>
+<div align="center">
+    <img src="https://humblegallery.ru/favicon.png" alt="HumbleGallery Logo" style="width:75px; height: 75px" />
+    <h1>HumbleGallery</h1>
 </div>
 
 HumbleGallery — это онлайн галерея, в которой пользователи могут:
@@ -140,7 +139,7 @@ BACKEND_COOKIE_VALIDATION_KEY=backend-cookie-validation-key
 ## 5. dev.Dockerfile, start.sh
 
 ### dev.Dockerfile
-Данный файл содержит инструкции для сборки контейнера app-dev в режиме разработки. В нём обычно:
+Данный файл содержит инструкции для сборки контейнера app-dev в режиме разработки. В нём:
 - Устанавливаются PHP и необходимые расширения.
 - Настраиваются параметры PHP (включая отладочные настройки).
 - Подготавливается структура контейнера для монтирования локальных директорий (см. раздел volumes в docker-compose.dev.yml).
@@ -157,7 +156,7 @@ BACKEND_COOKIE_VALIDATION_KEY=backend-cookie-validation-key
     - Устанавливает правильные права и владельца для папки uploads (тоже user: www-data), чтобы внутри контейнера можно было корректно загружать файлы.
 
 3. Установка зависимостей Composer
-    - Если директория vendor не существует, запускается команда composer install --no-interaction --prefer-dist, которая установит необходимые библиотеки для проекта.
+    - Если директория vendor не существует, запускается команда `composer install --no-interaction --prefer-dist`, которая установит необходимые библиотеки для проекта.
 
 4. Запуск php-fpm
     - Выполняется docker-php-entrypoint php-fpm --nodaemonize, что обеспечивает корректный запуск и работу PHP-FPM в контейнере с учётом всех загруженных php.ini и доп. конфигураций.
@@ -172,14 +171,14 @@ BACKEND_COOKIE_VALIDATION_KEY=backend-cookie-validation-key
     - Убедитесь, что файл `docker/php/conf.d/xdebug.ini` содержит актуальные настройки, включая порт отладки (по умолчанию 9001).
 
 2. **Создайте новый сервер в PhpStorm**
-    1. В PhpStorm перейдите в «Settings» → «Languages & Frameworks» → «PHP» → «Servers».
+    1. В PhpStorm перейдите в «Settings» → «PHP» → «Servers».
     2. Нажмите «+», чтобы добавить новый сервер.
-    3. В поле «Name» введите точное значение serverName, используемое Xdebug (`app-dev`), чтобы PhpStorm мог сопоставлять входящие запросы к правильному серверу.
+    3. В поле «Name» введите точное значение serverName, используемое Xdebug (по умолчанию `app-dev`), чтобы PhpStorm мог сопоставлять входящие запросы к правильному серверу.
     4. В поле «Host» укажите «localhost» (или IP-адрес, по которому вы обращаетесь к приложению).
     5. В поле «Port» укажите порт, на котором доступно приложение (например, 8080 для фронтенда или 8888 для бэкенда).
-    6. Установите «Use path mappings», если ваша структура исходных файлов на локальной машине (host) отличается от структуры внутри контейнера. При необходимости добавьте соответствующие маппинги:
+    6. Установите «Use path mappings», добавьте соответствующие маппинги:
         - Локальный путь
-        - Путь в контейнере`/var/www/`
+        - Путь в контейнере `/var/www/`
 
 3. **Настройка Debug в PhpStorm**
     - В разделе «Settings» → «PHP» → «Debug» убедитесь, что:
@@ -196,8 +195,6 @@ BACKEND_COOKIE_VALIDATION_KEY=backend-cookie-validation-key
     - Запустите приложение в контейнерах и убедитесь, что PhpStorm слушает отладочные подключения (кнопка «Start Listening for PHP Debug Connections»).
     - Откройте вашу страницу (например, http://localhost:8080/ или http://localhost:8880/), где вы хотите отлаживать.
     - Если всё настроено корректно, PhpStorm перехватит выполнение при достижении брейкпоинта.
-
-
     
 ## **Webpack**
 
@@ -206,7 +203,7 @@ BACKEND_COOKIE_VALIDATION_KEY=backend-cookie-validation-key
 
 # Запуск в режиме production
 
-Для развёртывания проекта в production-окружении вы можете воспользоваться файлом `docker-compose.prod.yml`, в котором описана конфигурация контейнеров для рабочего (production) режима.
+Для развёртывания проекта в production-окружении используется файл `docker-compose.prod.yml`, в котором описана конфигурация контейнеров для рабочего (production) режима.
 
 1. **Общие требования**
     - Убедитесь, что Docker и Docker Compose установлены и запущены.
@@ -249,7 +246,7 @@ Traefik работает как SSL-терминатор, после чего п
 
 # Деплой
 
-Ниже описаны основные шаги, которые выполняет данный GitHub Actions Workflow для деплоя приложения:
+Ниже описаны основные шаги, которые выполняет GitHub Actions Workflow (`.github/workflows/main.yml`) для деплоя приложения:
 
 ## Событие запуска
 

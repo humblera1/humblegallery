@@ -14,9 +14,23 @@ use yii\widgets\Pjax;
  * @var string $pjaxId
  */
 
+$class = $containerClass . " loading";
+
+$this->registerCss(<<<CSS
+#masonry-widget {
+    opacity: 1;
+    visibility: visible;
+    transition: all 500ms ease;
+}
+
+#masonry-widget.loading {
+    opacity: 0;
+    visibility: hidden;
+}
+CSS);
 ?>
 
-<section id='masonry-widget' class="<?= $containerClass ?>" data-pjax-id="<?= $pjaxId ?>">
+<section id='masonry-widget' class="<?= $class ?>" data-pjax-id="<?= $pjaxId ?>">
     <?php Pjax::begin(['id' => $pjaxId, 'enablePushState' => false]) ?>
     <?= ListView::widget([
         'dataProvider' => $provider,

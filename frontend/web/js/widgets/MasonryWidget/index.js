@@ -22,6 +22,10 @@ export default new class MasonryWidget {
         this.modal = $('#modal-collections');
         this.pjaxId = this.widget.data('pjax-id');
 
+        $(this.widget).on('pjax:beforeSend', () => {
+            this.hideContent()
+        });
+
         this.initMasonry();
         this.bindEvents();
     }
@@ -43,6 +47,9 @@ export default new class MasonryWidget {
             });
 
             this.updateContainerHeight();
+
+            // после инициализации мы можем убрать класс loading
+            this.showContent();
         });
 
         // Дожидаемся загрузки контента в Pjax
@@ -54,8 +61,18 @@ export default new class MasonryWidget {
                 this.widget.masonry();
 
                 this.updateContainerHeight();
+
+                this.showContent()
             });
         });
+    }
+
+    showContent() {
+        this.widget.removeClass('loading');
+    }
+
+    hideContent() {
+        this.widget.addClass('loading');
     }
 
     updateContainerHeight() {

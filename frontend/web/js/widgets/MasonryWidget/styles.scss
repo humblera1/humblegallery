@@ -15,7 +15,9 @@
     .card {
         cursor: pointer;
         position: relative;
+        display: block;
         width: 250px;
+        max-width: 250px;
         margin: 10px;
 
         &__actions {

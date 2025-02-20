@@ -57,7 +57,7 @@ class ResendVerificationEmailForm extends Model
                     ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                     ['verifyLink' => $verifyLink]
                 )
-                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['senderName']])
                 ->setTo($this->email)
                 ->setSubject(Yii::$app->name . '. ' . 'Подтверждение почты.')
                 ->send();

@@ -51,7 +51,7 @@ class PasswordResetRequestForm extends Model
                     ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                     ['resetLink' => $resetLink]
                 )
-                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['senderName']])
                 ->setTo($this->email)
                 ->setSubject(Yii::$app->name . '. ' . 'Сброс пароля.')
                 ->send();

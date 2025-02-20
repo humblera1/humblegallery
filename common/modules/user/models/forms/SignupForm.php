@@ -117,11 +117,29 @@ class SignupForm extends Model
         $user->service->generateAuthKey();
         $user->service->generateVerificationToken();
 
-        if ($user->save() && $this->sendEmail($user)) {
-            return Yii::$app->user->login($user, Yii::$app->params['user.loginDuration']);
+        $transaction = Yii::$app->db->beginTransaction();
+
+        $success = $user->save();
+
+        if (!$success) {
+            $transaction->rollBack();
+
+            return false;
         }
 
-        return false;
+        $success = $this->sendEmail($user);
+
+        if (!$success) {
+            $this->addError('email', 'Не удалось отправить письмо с подтверждением.');
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $transaction->commit();
+
+        return Yii::$app->user->login($user, Yii::$app->params['user.loginDuration']);
     }
 
     /**
@@ -142,7 +160,7 @@ class SignupForm extends Model
                     'username' => $user->username,
                 ]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->params['senderName']])
             ->setTo($this->email)
             ->setSubject(Yii::$app->name . '. ' . 'Регистрация.')
             ->send();

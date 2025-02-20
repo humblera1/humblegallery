@@ -325,7 +325,7 @@ class FileSaveBehavior extends Behavior
             return false;
         }
 
-        return false;
+        return true;
     }
 
     protected function needToRemove(): bool

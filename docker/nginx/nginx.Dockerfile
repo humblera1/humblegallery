@@ -16,6 +16,5 @@ COPY ./backend/web/index.php /var/www/backend/web/index.php
 
 # Копируем кастомный файл конфигурации Nginx
 COPY ./docker/nginx/prod /etc/nginx/conf.d/
-COPY ./docker/nginx/templates /etc/nginx/templates/
 
 EXPOSE 80

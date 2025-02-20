@@ -29,7 +29,8 @@ services:
       - mysql-dev
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    command: sh /var/www/docker/start.sh
+    # convert the file from DOS (CRLF) to UNIX (LF) line endings
+    command: sh -c "dos2unix /var/www/docker/start.sh && sh /var/www/docker/start.sh"
 
   webpack-dev:
     container_name: ${COMPOSE_PROJECT_NAME}-webpack-dev

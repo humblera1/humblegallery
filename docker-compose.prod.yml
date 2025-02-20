@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/nginx/nginx.Dockerfile
-    image: ${DOCKER_USERNAME}/${COMPOSE_PROJECT_NAME}:nginx-${COMMIT_TAG}}
+    image: ${DOCKER_USERNAME}/${COMPOSE_PROJECT_NAME}:nginx-${COMMIT_TAG}
     networks:
       - web
       - traefik_net

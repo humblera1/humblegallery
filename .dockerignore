@@ -34,7 +34,7 @@ phpunit.phar
 /backend/web/index-test.php
 
 # Ignore Webpack output
-# frontend/web/js/dist/
+frontend/web/js/dist/
 
 # Ignore environment files
 .env

@@ -39,5 +39,8 @@ phpunit.phar
 /frontend/web/index-test.php
 /backend/web/index-test.php
 
+# Ignore Webpack output
+frontend/web/js/dist/
+
 .env
 .qodo

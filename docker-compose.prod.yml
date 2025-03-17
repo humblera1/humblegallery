@@ -6,7 +6,7 @@ services:
       dockerfile: ./docker/nginx/nginx.Dockerfile
     image: ${DOCKER_USERNAME}/${COMPOSE_PROJECT_NAME}:nginx-${COMMIT_TAG}
     networks:
-      - web
+      - web_network
       - traefik_net
     volumes:
       - scripts_data:/var/www/frontend/web/js/dist
@@ -26,6 +26,8 @@ services:
       - "traefik.http.routers.humblegallery-secure.rule=Host(`humblegallery.ru`) || Host(`www.humblegallery.ru`) || Host(`admin.humblegallery.ru`) || Host(`www.admin.humblegallery.ru`)"
       - "traefik.http.routers.humblegallery-secure.entrypoints=websecure"
       - "traefik.http.routers.humblegallery-secure.tls.certresolver=myresolver"
+    depends_on:
+      - app
 
   app:
     container_name: ${COMPOSE_PROJECT_NAME}-app
@@ -41,14 +43,14 @@ services:
     env_file:
       - .env
     networks:
-      - internal
-      - web
+      - db_network
+      - web_network
     depends_on:
       - mysql
 
   mysql:
     container_name: ${COMPOSE_PROJECT_NAME}-mysql
-    image: mysql:9.2.0
+    image: mysql:8.0.0
     environment:
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -56,18 +58,19 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - db-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     networks:
-      - internal
+      - db_network
+    mem_limit: 512m
 
 networks:
-  web:
-  internal:
+  web_network:
+  db_network:
     internal: true
   traefik_net:
     external: true
 volumes:
-  db-data:
+  mysql_data:
   uploads_data:
   scripts_data:
   backend_assets_data:

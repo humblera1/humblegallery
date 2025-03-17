@@ -11,6 +11,8 @@ services:
       - ./:/var/www
       - ./docker/nginx/dev:/etc/nginx/conf.d/
       - uploads_data:/var/www/common/uploads
+    depends_on:
+      - app-dev
 
   app-dev:
     container_name: ${COMPOSE_PROJECT_NAME}-app-dev

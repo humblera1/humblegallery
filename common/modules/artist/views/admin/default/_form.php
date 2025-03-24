@@ -51,27 +51,21 @@ $imageSrc = $model->isNewRecord ? '' : $model->service->getImage();
 
         <div class="datepicker-container">
             <?= $form->field($model, 'born')->widget(DatePicker::class, [
-                'options' => [
-                    'id' => 'born',
-                    'value' => $model->born ? Yii::$app->formatter->asDate($model->born, 'php:d.m.Y') : null,
-                ],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'minViewMode'=>'years',
                     'format' => 'yyyy',
+                    'startView' => 3,
                     'orientation' => 'bottom',
                 ],
             ]) ?>
 
             <?= $form->field($model, 'died')->widget(DatePicker::class, [
-                'options' => [
-                    'id' => 'died',
-                    'value' => $model->died ? Yii::$app->formatter->asDate($model->died, 'php:d.m.Y') : null,
-                ],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'minViewMode'=>'years',
                     'format' => 'yyyy',
+                    'startView' => 3,
                     'orientation' => 'bottom',
                 ],
             ]) ?>

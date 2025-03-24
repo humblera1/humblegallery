@@ -32,8 +32,8 @@ class ArtistService extends Service
     {
         $model = $this->model;
 
-        $bornYear = $model->born ? (new DateTime($model->born))->format('Y') : null;
-        $diedYear = $model->died ? (new DateTime($model->died))->format('Y') : null;
+        $bornYear = $model->born;
+        $diedYear = $model->died;
 
         if ($bornYear && $diedYear) {
             return "$bornYear — $diedYear";

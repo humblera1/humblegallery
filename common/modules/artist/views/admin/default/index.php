@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             [
                 'attribute' => 'born',
-                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'born',
                     'layout' => '{picker}{input}{remove}',
@@ -56,7 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'died',
-                'format' => ['date', 'php:d.m.Y'],
                 'filter' => DatePicker::widget([
                     'attribute' => 'died',
                     'layout' => '{picker}{input}{remove}',

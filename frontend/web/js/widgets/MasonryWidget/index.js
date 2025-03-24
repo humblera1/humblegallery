@@ -38,7 +38,7 @@ export default new class MasonryWidget {
             this.reloadContent(data);
         });
 
-        $(document).on('DOMContentLoaded', () => {
+        imagesLoaded(this.widget[0], () => {
             $(this.widget).masonry({
                 columnWidth: '.card',
                 itemSelector: '.card',
@@ -46,10 +46,8 @@ export default new class MasonryWidget {
                 percentPosition: true
             });
 
-            imagesLoaded(this.widget[0], () => {
-                this.updateContainerHeight();
-                this.showContent();
-            });
+            this.updateContainerHeight();
+            this.showContent();
         });
 
         // Дожидаемся загрузки контента в Pjax

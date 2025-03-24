@@ -20,7 +20,7 @@ $this->registerCss(<<<CSS
 #masonry-widget {
     opacity: 1;
     visibility: visible;
-    transition: all 500ms ease;
+    transition: all 250ms ease;
 }
 
 #masonry-widget.loading {

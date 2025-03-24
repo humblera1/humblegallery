@@ -42,11 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'born',
             'died',
             'description',
-            'image_path',
-            'rating',
-            'created_at',
-            'updated_at',
-            'is_deleted',
+//            'rating',
+            [
+                'attribute' => 'created_at',
+                'value' => Yii::$app->formatter->asDatetime($model->created_at),
+            ],
+            [
+                'attribute' => 'updated_at',
+                'value' => Yii::$app->formatter->asDatetime($model->updated_at),
+            ],
+            'is_deleted:boolean',
         ],
     ]) ?>
     </div>

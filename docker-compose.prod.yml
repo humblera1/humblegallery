@@ -59,6 +59,12 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - internal
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
 
 networks:
   web:

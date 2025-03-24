@@ -50,10 +50,6 @@ export default new class MasonryWidget {
             this.showContent();
         });
 
-        // $(document).on('DOMContentLoaded', () => {
-        //
-        // });
-
         // Дожидаемся загрузки контента в Pjax
         $(this.widget).on('pjax:success', () => {
             this.bindEvents();

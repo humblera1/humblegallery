@@ -61,7 +61,12 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - db_network
-    mem_limit: 512m
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
 
 networks:
   web_network:

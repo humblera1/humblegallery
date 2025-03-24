@@ -46,10 +46,10 @@ export default new class MasonryWidget {
                 percentPosition: true
             });
 
-            this.updateContainerHeight();
-
-            // после инициализации мы можем убрать класс loading
-            this.showContent();
+            imagesLoaded(this.widget[0], () => {
+                this.updateContainerHeight();
+                this.showContent();
+            });
         });
 
         // Дожидаемся загрузки контента в Pjax
@@ -61,7 +61,6 @@ export default new class MasonryWidget {
                 this.widget.masonry();
 
                 this.updateContainerHeight();
-
                 this.showContent()
             });
         });

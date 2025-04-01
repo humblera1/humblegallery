@@ -16,6 +16,14 @@ chmod 666 "$XDEBUG_LOG"
 # Ensure correct ownership and permissions for uploads directory
 chown www-data:www-data /var/www/common/uploads && chmod 755 /var/www/common/uploads
 
+# Ensure correct ownership and permissions for runtime directory
+chown www-data:www-data /var/www/frontend/runtime /var/www/backend/runtime \
+&& chmod 755 /var/www/frontend/runtime /var/www/backend/runtime
+
+# Ensure correct ownership and permissions for assets directory
+chown www-data:www-data /var/www/backend/web/assets /var/www/frontend/web/assets \
+&& chmod 755 /var/www/backend/web/assets /var/www/frontend/web/assets
+
 # Install Composer dependencies if vendor directory does not exist,
 # ensuring that vendor/autoload.php is available.
 if [ ! -d vendor ]; then

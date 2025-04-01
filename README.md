@@ -81,7 +81,7 @@ HumbleGallery — это онлайн галерея, в которой поль
 COMPOSE_PROJECT_NAME=humblegallery
 FRONTEND_PORT=8080
 BACKEND_PORT=8880
-MYSQL_HOST=mysql
+MYSQL_HOST=mysql-dev
 MYSQL_ROOT_PASSWORD=root_password
 MYSQL_DATABASE=database_name
 MYSQL_USER=your_database_user
